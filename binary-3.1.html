@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3.1: Binary Basics – IGCSE Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e; --paper: #fdf8f0;
+    --yellow: #ffd166; --coral: #ef476f; --teal: #06d6a0;
+    --blue: #118ab2; --purple: #7b2d8b; --orange: #f77f00; --green: #2d6a4f;
+    --light-yellow: #fff9c4; --light-coral: #fce4ec; --light-teal: #e0f7f2;
+    --light-blue: #e3f2fd; --light-purple: #f3e5f5; --light-green: #d8f3dc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); font-family: 'Patrick Hand', cursive; color: var(--ink); overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(transparent,transparent 31px,rgba(100,149,237,0.15) 31px,rgba(100,149,237,0.15) 32px);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; top: 0; left: 70px; bottom: 0; width: 2px;
+    background: rgba(239,71,111,0.3); pointer-events: none; z-index: 0;
+  }
+  .page-wrap { max-width: 960px; margin: 0 auto; padding: 20px 30px 60px 90px; position: relative; z-index: 1; }
+  @media(max-width:600px){ .page-wrap{padding:20px 16px 60px 16px;} body::after{display:none;} }
+
+  .hero { text-align: center; padding: 40px 0 20px; }
+  .hero-title {
+    font-family: 'Permanent Marker', cursive; font-size: 2.8rem; color: var(--ink);
+    text-shadow: 3px 3px 0 var(--teal); letter-spacing: 2px; transform: rotate(-1.5deg);
+    display: inline-block; position: relative;
+  }
+  .hero-title::after { content: ''; position: absolute; bottom: -8px; left: 0; right: 0; height: 4px; background: var(--blue); border-radius: 2px; }
+  .hero-sub { font-family: 'Caveat', cursive; font-size: 1.4rem; color: var(--blue); margin-top: 18px; }
+
+  .tabs-nav { display: flex; gap: 8px; flex-wrap: wrap; margin: 28px 0 20px; justify-content: center; }
+  .tab-btn {
+    font-family: 'Caveat', cursive; font-size: 1.1rem; font-weight: 700;
+    padding: 8px 18px; border: 3px solid var(--ink); border-radius: 6px;
+    background: white; cursor: pointer; transition: all 0.2s; box-shadow: 3px 3px 0 var(--ink);
+  }
+  .tab-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  .tab-btn.active { background: var(--blue); color: white; transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+  .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .tip-box {
+    background: var(--light-yellow); border: 2px solid var(--yellow); border-left: 5px solid var(--orange);
+    border-radius: 6px; padding: 12px 16px; margin: 12px 0; font-family: 'Kalam', cursive; font-size: 0.95rem;
+  }
+
+  .btn {
+    font-family: 'Caveat', cursive; font-size: 1.1rem; font-weight: 700;
+    padding: 9px 22px; border: 2.5px solid var(--ink); border-radius: 8px;
+    cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: all 0.15s;
+  }
+  .btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-teal { background: var(--teal); color: var(--ink); border-color: #059669; box-shadow: 3px 3px 0 #059669; }
+
+  .def-box { border: 2px solid; border-radius: 8px; padding: 12px 14px 10px; margin: 12px 0; position: relative; padding-top: 22px; font-size: 0.92rem; line-height: 1.55; }
+  .def-label { position: absolute; top: -11px; left: 12px; color: white; font-family: 'Caveat', cursive; font-size: 0.8rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+
+  .notes-sec { margin-bottom: 14px; border: 2.5px solid var(--ink); border-radius: 10px; overflow: hidden; box-shadow: 4px 4px 0 var(--ink); }
+  .notes-hdr { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+  .notes-title { font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: white; }
+  .notes-tog { font-family: 'Caveat', cursive; font-size: 1.2rem; color: white; transition: transform 0.3s; }
+  .notes-bdy { display: none; padding: 18px 20px; background: white; font-family: 'Patrick Hand', cursive; font-size: 0.95rem; line-height: 1.65; }
+  .notes-bdy.open { display: block; animation: fadeIn 0.25s ease; }
+
+  .subh { font-family: 'Permanent Marker', cursive; font-size: 1.05rem; margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
+  .subh::after { content: ''; flex: 1; height: 2px; background: currentColor; opacity: 0.2; }
+
+  .act-card { border: 3px solid var(--ink); border-radius: 12px; overflow: hidden; margin-bottom: 22px; box-shadow: 5px 5px 0 var(--ink); }
+  .act-hdr { padding: 13px 18px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid var(--ink); }
+  .act-icon { font-size: 1.8rem; }
+  .act-title { font-family: 'Permanent Marker', cursive; font-size: 1.25rem; }
+  .act-bdy { background: white; padding: 18px; font-size: 0.95rem; line-height: 1.6; }
+
+  .binary-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  .binary-table th { background: var(--blue); color: white; font-family: 'Permanent Marker', cursive; padding: 10px 13px; text-align: left; }
+  .binary-table td { padding: 9px 13px; border-bottom: 1px solid #e5e5e5; vertical-align: top; }
+  .binary-table tr:nth-child(even) td { background: #f9f9f9; }
+
+  .converter-box { background: #f9f9f9; border: 2px solid var(--blue); border-radius: 10px; padding: 16px; margin: 16px 0; }
+  .converter-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+  .converter-input { border: 2px solid var(--ink); padding: 8px 12px; border-radius: 6px; font-family: monospace; font-size: 0.95rem; }
+  .converter-button { padding: 8px 16px; background: var(--teal); border: 2px solid #059669; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Permanent Marker', cursive; font-size: 1rem; color: var(--ink);
+    text-decoration: none; border: 2.5px solid var(--ink); border-radius: 8px;
+    padding: 8px 18px; background: var(--light-yellow); box-shadow: 3px 3px 0 var(--ink);
+    margin: 20px 0 10px; transform: rotate(-0.5deg); transition: all 0.15s;
+  }
+  .back-btn:hover {
+    transform: translate(-2px,-2px) rotate(-0.5deg); box-shadow: 5px 5px 0 var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <a href="binary-home.html" class="back-btn">← Back to Binary Home</a>
+
+  <div class="hero">
+    <h1 class="hero-title">💻 Topic 3.1: Binary Basics</h1>
+    <p class="hero-sub">Understanding how computers represent data</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="mindmap">🗺 Mind Map</button>
+    <button class="tab-btn" data-tab="notes">📖 Topic Notes</button>
+    <button class="tab-btn" data-tab="quiz">⚡ Quick Quiz</button>
+    <button class="tab-btn" data-tab="activities">✏️ Activities</button>
+    <button class="tab-btn" data-tab="exam">📝 Exam Questions</button>
+  </div>
+
+  <!-- MIND MAP TAB -->
+  <div class="tab-panel active" id="tab-mindmap">
+    <div style="border: 3px solid var(--ink); border-radius: 12px; padding: 24px; background: #fffdf5; box-shadow: 6px 6px 0 var(--ink);">
+      <h2 style="font-family: 'Permanent Marker', cursive; font-size: 2rem; text-align: center; margin-bottom: 20px;">Binary Representation Mind Map</h2>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        <div style="border: 2.5px solid var(--blue); border-radius: 10px; padding: 16px;">
+          <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--blue); margin-bottom: 12px;">🖥 Why Binary?</div>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Computers use electrical signals (ON/OFF)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              ON = 1, OFF = 0
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              All data is binary at the lowest level
+            </li>
+          </ul>
+        </div>
+
+        <div style="border: 2.5px solid var(--teal); border-radius: 10px; padding: 16px;">
+          <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--teal); margin-bottom: 12px;">📊 What Binary Represents</div>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Numbers (integers, decimals)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Text (using ASCII/Unicode)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Sound (sampled amplitudes)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Graphics (pixel colors)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Instructions (programs)
+            </li>
+          </ul>
+        </div>
+
+        <div style="border: 2.5px solid var(--orange); border-radius: 10px; padding: 16px;">
+          <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--orange); margin-bottom: 12px;">🔢 Binary to Denary</div>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Each bit = power of 2
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              128, 64, 32, 16, 8, 4, 2, 1
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Add up the values where bit = 1
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Range 0–255 in 8 bits
+            </li>
+          </ul>
+        </div>
+
+        <div style="border: 2.5px solid var(--purple); border-radius: 10px; padding: 16px;">
+          <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--purple); margin-bottom: 12px;">🔢 Denary to Binary</div>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Repeatedly divide by 2
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Track remainders (0 or 1)
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Read remainders bottom to top
+            </li>
+            <li style="margin: 8px 0; padding-left: 20px; position: relative;">
+              <span style="position: absolute; left: 0;">•</span>
+              Pad with zeros to 8 bits
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="background: var(--light-yellow); border: 2px solid var(--yellow); border-radius: 8px; padding: 16px; margin-top: 20px; text-align: center; font-family: 'Kalam', cursive; font-size: 1rem;">
+        <strong>Key Point:</strong> Binary is how computers store EVERYTHING — numbers, text, images, sound, instructions. It's the universal language of computing.
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES TAB -->
+  <div class="tab-panel" id="tab-notes">
+
+    <div class="notes-sec">
+      <div class="notes-hdr" onclick="toggleSection(this)" style="background: linear-gradient(135deg, var(--blue), #0d6efd);">
+        <div class="notes-title">3.1.1 — Why Computers Use Binary</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>A computer is an electronic device. At its most basic level, a computer uses <strong>electrical signals</strong> to store and process information.</p>
+        <p style="margin-top: 10px;">An electrical signal can be in one of two states:</p>
+        <ul style="margin: 12px 0 12px 20px;">
+          <li><strong>ON</strong> (high voltage) = represented as 1</li>
+          <li><strong>OFF</strong> (low voltage) = represented as 0</li>
+        </ul>
+        <p>This is why computers use the <strong>binary number system</strong> — it has only two digits: <strong>0 and 1</strong>. Each 0 or 1 is called a <strong>bit</strong> (binary digit).</p>
+
+        <div class="def-box" style="border-color: var(--blue);">
+          <span class="def-label" style="background: var(--blue);">DEFINITION</span>
+          <p><strong>Bit</strong>: A binary digit — either 0 or 1. The smallest unit of information in a computer.<br><br>
+          <strong>Byte</strong>: A group of 8 bits. The standard unit for measuring computer storage.</p>
+        </div>
+
+        <div class="tip-box">
+          💡 <strong>Why not use denary (base-10)?</strong> Representing 10 different voltage levels would be much harder to distinguish reliably. With just two levels (ON/OFF), signals are clear, distinct, and less prone to error.
+        </div>
+
+        <h3 class="subh">🎯 What Does Binary Represent?</h3>
+        <p>Binary is the universal representation for ALL data in a computer:</p>
+        <ul style="margin: 12px 0 12px 20px;">
+          <li><strong>Numbers:</strong> Integers and decimals are stored as binary</li>
+          <li><strong>Text:</strong> Letters are encoded as binary (ASCII, Unicode)</li>
+          <li><strong>Images:</strong> Each pixel's color is a binary number</li>
+          <li><strong>Sound:</strong> Audio samples are binary numbers</li>
+          <li><strong>Instructions:</strong> CPU instructions are binary codes</li>
+        </ul>
+        <p style="margin-top: 10px;">This is fundamental: <strong>Everything a computer stores or processes is binary.</strong></p>
+      </div>
+    </div>
+
+    <div class="notes-sec">
+      <div class="notes-hdr" onclick="toggleSection(this)" style="background: linear-gradient(135deg, var(--orange), #fb923c);">
+        <div class="notes-title">3.1.2 — Binary to Denary Conversion</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>The <strong>denary number system</strong> is what we use daily — it has 10 digits (0–9) and is base-10. Each position represents a power of 10.</p>
+        <p style="margin-top: 10px;">Similarly, in <strong>binary (base-2)</strong>, each position represents a power of 2.</p>
+
+        <h3 class="subh">🔢 Powers of 2 (for 8 bits):</h3>
+        <table class="binary-table">
+          <tr>
+            <th>Bit Position</th>
+            <th>Power of 2</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>7 (leftmost)</td>
+            <td>2<sup>7</sup></td>
+            <td>128</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>2<sup>6</sup></td>
+            <td>64</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>2<sup>5</sup></td>
+            <td>32</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>2<sup>4</sup></td>
+            <td>16</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>2<sup>3</sup></td>
+            <td>8</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2<sup>2</sup></td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>2<sup>1</sup></td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>0 (rightmost)</td>
+            <td>2<sup>0</sup></td>
+            <td>1</td>
+          </tr>
+        </table>
+
+        <h3 class="subh">📋 How to Convert Binary to Denary:</h3>
+        <div style="background: var(--light-blue); border-left: 4px solid var(--blue); padding: 12px 16px; border-radius: 4px; margin: 12px 0;">
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 8px;"><strong>Example: 10110101 → ?</strong></p>
+          <p>1. Write the powers of 2 above each bit:</p>
+          <div style="font-family: monospace; background: white; padding: 8px; margin: 8px 0; border-radius: 4px;">
+            128  64  32  16   8   4   2   1<br>
+            1    0   1   1    0   1   0   1
+          </div>
+          <p>2. Where there's a 1, add up that power of 2:</p>
+          <div style="font-family: monospace; background: white; padding: 8px; margin: 8px 0; border-radius: 4px;">
+            128 + 32 + 16 + 4 + 1 = 181
+          </div>
+          <p><strong>Answer: 10110101 in binary = 181 in denary</strong></p>
+        </div>
+
+        <div class="tip-box">
+          ✏️ <strong>Quick tip:</strong> Remember the powers: 128, 64, 32, 16, 8, 4, 2, 1. If you memorize these, binary conversion becomes quick!
+        </div>
+      </div>
+    </div>
+
+    <div class="notes-sec">
+      <div class="notes-hdr" onclick="toggleSection(this)" style="background: linear-gradient(135deg, var(--purple), #d946ef);">
+        <div class="notes-title">3.1.3 — Denary to Binary Conversion</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Converting FROM denary TO binary uses the <strong>"divide by 2" method</strong>:</p>
+
+        <h3 class="subh">📋 How to Convert Denary to Binary:</h3>
+        <div style="background: var(--light-purple); border-left: 4px solid var(--purple); padding: 12px 16px; border-radius: 4px; margin: 12px 0;">
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 12px;"><strong>Example: 181 → ?</strong></p>
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 8px;">Repeatedly divide by 2, tracking the remainder (0 or 1):</p>
+          <div style="font-family: monospace; background: white; padding: 12px; margin: 8px 0; border-radius: 4px; line-height: 2;">
+            181 ÷ 2 = 90 remainder <strong>1</strong><br>
+            90 ÷ 2 = 45 remainder <strong>0</strong><br>
+            45 ÷ 2 = 22 remainder <strong>1</strong><br>
+            22 ÷ 2 = 11 remainder <strong>0</strong><br>
+            11 ÷ 2 = 5 remainder <strong>1</strong><br>
+            5 ÷ 2 = 2 remainder <strong>1</strong><br>
+            2 ÷ 2 = 1 remainder <strong>0</strong><br>
+            1 ÷ 2 = 0 remainder <strong>1</strong>
+          </div>
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 8px;">Read remainders from <strong>bottom to top</strong>: <strong>10110101</strong></p>
+          <p><strong>Answer: 181 in denary = 10110101 in binary</strong></p>
+        </div>
+
+        <div class="tip-box">
+          ✏️ <strong>Common mistake:</strong> Reading the remainders from top to bottom instead of bottom to top. Always read from bottom to top!
+        </div>
+
+        <h3 class="subh">📐 Using Powers of 2 Method (Alternative):</h3>
+        <div style="background: var(--light-yellow); border-left: 4px solid var(--yellow); padding: 12px 16px; border-radius: 4px; margin: 12px 0;">
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 8px;"><strong>Example: 181 → ?</strong></p>
+          <p style="font-family: 'Kalam', cursive;">1. Find the largest power of 2 that fits: 128 fits in 181 → put 1 in position 7</p>
+          <p style="font-family: 'Kalam', cursive;">2. Remainder: 181 − 128 = 53</p>
+          <p style="font-family: 'Kalam', cursive;">3. Next power: 64 doesn't fit in 53 → put 0 in position 6</p>
+          <p style="font-family: 'Kalam', cursive;">4. Continue: 32 fits → remainder 21 → 16 fits → remainder 5 → 8 doesn't fit → 4 fits → remainder 1 → 2 doesn't fit → 1 fits</p>
+          <p style="font-family: 'Kalam', cursive; font-weight: bold; margin-top: 10px;">Result: 10110101</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUIZ TAB -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="background: var(--light-blue); border: 2px solid var(--blue); border-radius: 10px; padding: 16px;">
+      <p style="font-family: 'Kalam', cursive; color: var(--blue);"><strong>Quiz coming soon!</strong> Test your understanding of binary conversion with interactive questions.</p>
+    </div>
+  </div>
+
+  <!-- ACTIVITIES TAB -->
+  <div class="tab-panel" id="tab-activities">
+
+    <div class="act-card">
+      <div class="act-hdr" style="background: var(--light-blue);">
+        <span class="act-icon">🔄</span>
+        <div>
+          <div class="act-title" style="color: var(--blue);">Activity 1 — Binary to Denary Converter</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="converter-box">
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 12px;"><strong>Enter an 8-bit binary number (e.g., 10110101):</strong></p>
+          <div class="converter-row">
+            <input type="text" id="binary-input" class="converter-input" placeholder="e.g., 10110101" maxlength="8">
+            <button class="converter-button" onclick="convertBinary()">Convert →</button>
+          </div>
+          <div id="binary-output" style="margin-top: 12px; font-family: 'Caveat', cursive; font-size: 1.2rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="act-card">
+      <div class="act-hdr" style="background: var(--light-yellow);">
+        <span class="act-icon">🔢</span>
+        <div>
+          <div class="act-title" style="color: var(--orange);">Activity 2 — Denary to Binary Converter</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="converter-box">
+          <p style="font-family: 'Kalam', cursive; margin-bottom: 12px;"><strong>Enter a denary number (0–255):</strong></p>
+          <div class="converter-row">
+            <input type="number" id="denary-input" class="converter-input" placeholder="e.g., 181" min="0" max="255">
+            <button class="converter-button" onclick="convertDenary()">Convert →</button>
+          </div>
+          <div id="denary-output" style="margin-top: 12px; font-family: 'Caveat', cursive; font-size: 1.2rem;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EXAM QUESTIONS TAB -->
+  <div class="tab-panel" id="tab-exam">
+    <div class="tip-box">📝 <strong>Exam Questions — Section 3.1:</strong> Write your answer below and self-mark using the mark scheme. Examiners value precision and technical vocabulary!</div>
+
+    <div style="border: 2px solid var(--blue); border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+      <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--blue); margin-bottom: 12px;">Question 1 (Easy) [2 marks]</div>
+      <p style="margin-bottom: 12px;">Explain why computers use binary to represent all data and instructions.</p>
+      <textarea style="width: 100%; height: 100px; border: 2px solid #ccc; border-radius: 6px; padding: 10px; font-family: 'Patrick Hand', cursive;" placeholder="Write your answer..."></textarea>
+      <button class="btn btn-teal" onclick="alert('Mark scheme: Computers use binary because: (1) electrical signals are either ON (1) or OFF (0), (2) two states are reliable and distinct, (3) it matches the binary system perfectly.')" style="margin-top: 10px;">👁 Show Mark Scheme</button>
+    </div>
+
+    <div style="border: 2px solid var(--teal); border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+      <div style="font-family: 'Permanent Marker', cursive; font-size: 1.1rem; color: var(--teal); margin-bottom: 12px;">Question 2 (Medium) [3 marks]</div>
+      <p style="margin-bottom: 12px;">Convert the binary number 11010110 to denary. Show your working.</p>
+      <textarea style="width: 100%; height: 120px; border: 2px solid #ccc; border-radius: 6px; padding: 10px; font-family: 'Patrick Hand', cursive;" placeholder="Show your working..."></textarea>
+      <button class="btn btn-teal" onclick="alert('Mark scheme: Powers of 2: 128+64+32+16+8+4+2+1 = 214. 11010110 = 128+64+16+4+2 = 214 (1 mark for correct working, 1 for correct answer, 1 for clarity)')" style="margin-top: 10px;">👁 Show Mark Scheme</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Toggle notes sections
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  const toggle = header.querySelector('.notes-tog');
+  toggle.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+// Converters
+function convertBinary() {
+  const input = document.getElementById('binary-input').value;
+  if (!/^[01]{1,8}$/.test(input)) {
+    document.getElementById('binary-output').innerHTML = '<span style="color: red;">Please enter a valid 8-bit binary number (0s and 1s only).</span>';
+    return;
+  }
+  let denary = 0;
+  const powers = [128, 64, 32, 16, 8, 4, 2, 1];
+  for (let i = 0; i < input.length; i++) {
+    if (input[i] === '1') {
+      denary += powers[i];
+    }
+  }
+  document.getElementById('binary-output').innerHTML = `<strong>${input} (binary) = ${denary} (denary)</strong>`;
+}
+
+function convertDenary() {
+  const input = parseInt(document.getElementById('denary-input').value);
+  if (isNaN(input) || input < 0 || input > 255) {
+    document.getElementById('denary-output').innerHTML = '<span style="color: red;">Please enter a number between 0 and 255.</span>';
+    return;
+  }
+  let binary = input.toString(2).padStart(8, '0');
+  document.getElementById('denary-output').innerHTML = `<strong>${input} (denary) = ${binary} (binary)</strong>`;
+}
+</script>
+
+</body>
+</html>

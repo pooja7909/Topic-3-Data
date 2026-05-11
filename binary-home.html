@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3: Binary – IGCSE Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e; --paper: #fdf8f0;
+    --yellow: #ffd166; --coral: #ef476f; --teal: #06d6a0;
+    --blue: #118ab2; --purple: #7b2d8b; --orange: #f77f00; --green: #2d6a4f;
+    --light-yellow: #fff9c4; --light-coral: #fce4ec; --light-teal: #e0f7f2;
+    --light-blue: #e3f2fd; --light-purple: #f3e5f5; --light-green: #d8f3dc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(135deg, var(--paper) 0%, #fffbf0 100%);
+    font-family: 'Patrick Hand', cursive;
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(transparent,transparent 31px,rgba(100,149,237,0.08) 31px,rgba(100,149,237,0.08) 32px);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; top: 0; left: 70px; bottom: 0; width: 2px;
+    background: rgba(239,71,111,0.15); pointer-events: none; z-index: 0;
+  }
+
+  .page-wrap { max-width: 1000px; margin: 0 auto; padding: 40px 30px 60px 90px; position: relative; z-index: 1; }
+  @media(max-width:600px){
+    .page-wrap { padding: 30px 16px 60px 16px; }
+    body::after { display: none; }
+  }
+
+  /* HERO SECTION */
+  .hero {
+    text-align: center;
+    padding: 60px 0 40px;
+    margin-bottom: 40px;
+  }
+  .hero-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 3.5rem;
+    color: var(--ink);
+    text-shadow: 4px 4px 0 var(--teal);
+    letter-spacing: 2px;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+    position: relative;
+  }
+  .hero-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    border-radius: 3px;
+  }
+  .hero-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--blue);
+    margin-top: 20px;
+  }
+  .hero-description {
+    font-family: 'Kalam', cursive;
+    font-size: 1.05rem;
+    color: #555;
+    margin-top: 16px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* IMPORTANCE BANNER */
+  .imp-banner {
+    margin-bottom: 40px;
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: rotate(-0.5deg);
+    transition: transform 0.3s;
+  }
+  .imp-banner:hover {
+    transform: rotate(-0.5deg) translateY(-2px);
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .imp-header {
+    background: linear-gradient(135deg, var(--orange), #e74c3c);
+    color: white;
+    padding: 16px 24px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .imp-icon { font-size: 2rem; }
+  .imp-body {
+    display: none;
+    background: white;
+    padding: 24px;
+    font-family: 'Kalam', cursive;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+  }
+  .imp-body.open { display: block; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* TOPIC GRID */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  @media(max-width:600px) {
+    .topics-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+
+  /* TOPIC CARD */
+  .topic-card {
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 5px 5px 0 var(--ink);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transform: rotate(0.5deg);
+  }
+  .topic-card:hover {
+    transform: rotate(0.5deg) translateY(-6px);
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+
+  .topic-header {
+    padding: 20px;
+    color: white;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topic-header.t31 { background: linear-gradient(135deg, #118ab2, #0d6efd); }
+  .topic-header.t32 { background: linear-gradient(135deg, #059669, #10b981); }
+  .topic-header.t33 { background: linear-gradient(135deg, #f77f00, #fb923c); }
+  .topic-header.t34 { background: linear-gradient(135deg, #7b2d8b, #d946ef); }
+
+  .topic-icon { font-size: 2rem; }
+  .topic-title { flex: 1; }
+  .topic-code {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 700;
+  }
+
+  .topic-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topic-name {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .topic-description {
+    font-family: 'Kalam', cursive;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+
+  .topic-subtopics {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 16px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 3px solid;
+  }
+
+  .topic-subtopics.t31 { border-color: #118ab2; background: var(--light-blue); color: #0d6efd; }
+  .topic-subtopics.t32 { border-color: #059669; background: var(--light-teal); color: #059669; }
+  .topic-subtopics.t33 { border-color: #f77f00; background: #fff3e0; color: #f77f00; }
+  .topic-subtopics.t34 { border-color: #7b2d8b; background: var(--light-purple); color: #7b2d8b; }
+
+  .topic-link {
+    display: inline-block;
+    text-decoration: none;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 10px 20px;
+    border: 2.5px solid var(--ink);
+    border-radius: 10px;
+    background: white;
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.2s;
+    text-align: center;
+    width: 100%;
+  }
+  .topic-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .topic-link:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  .topic-link.t31 { background: var(--light-blue); border-color: #118ab2; color: #118ab2; }
+  .topic-link.t32 { background: var(--light-teal); border-color: #059669; color: #059669; }
+  .topic-link.t33 { background: #fff3e0; border-color: #f77f00; color: #f77f00; }
+  .topic-link.t34 { background: var(--light-purple); border-color: #7b2d8b; color: #7b2d8b; }
+
+  /* LEARNING PATH */
+  .learning-path {
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+    margin-bottom: 40px;
+    transform: rotate(-0.3deg);
+  }
+
+  .path-header {
+    background: linear-gradient(135deg, var(--green), #1a4a28);
+    color: white;
+    padding: 16px 24px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.3rem;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .path-body {
+    background: white;
+    padding: 24px;
+  }
+
+  .step-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .step-num {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.3rem;
+    font-weight: 700;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .step-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    max-width: 100px;
+    color: var(--ink);
+  }
+
+  .step-arrow {
+    color: #bbb;
+    font-size: 1.8rem;
+    margin: 0 12px;
+  }
+
+  @media(max-width:700px) {
+    .step-arrow { transform: rotate(90deg); margin: 12px 0; }
+    .step-flow { flex-direction: column; }
+  }
+
+  /* OVERVIEW SECTION */
+  .overview-section {
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+    margin-bottom: 40px;
+    transform: rotate(-0.5deg);
+  }
+
+  .overview-header {
+    background: var(--ink);
+    color: white;
+    padding: 16px 24px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.3rem;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .overview-body {
+    display: none;
+    background: white;
+    padding: 24px;
+  }
+
+  .overview-body.open { display: block; }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .overview-item {
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 16px;
+    background: #f9f9f9;
+  }
+
+  .overview-item-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .overview-item-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .overview-item-desc {
+    font-family: 'Kalam', cursive;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* SKILLS CHECKLIST */
+  .skills-section {
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+    background: white;
+    margin-bottom: 40px;
+    transform: rotate(0.3deg);
+  }
+
+  .skills-header {
+    background: linear-gradient(135deg, var(--coral), #e74c3c);
+    color: white;
+    padding: 16px 24px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.3rem;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .skills-body {
+    display: none;
+    background: white;
+    padding: 24px;
+  }
+
+  .skills-body.open { display: block; }
+
+  .skill-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .skill-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  .skill-check {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--teal);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light-teal);
+    color: #059669;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .skill-text {
+    font-family: 'Kalam', cursive;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 30px 0;
+    border-top: 2px dashed #ccc;
+    margin-top: 60px;
+  }
+
+  .footer-text {
+    font-family: 'Kalam', cursive;
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 16px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1rem;
+    color: var(--ink);
+    text-decoration: none;
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px 20px;
+    background: var(--light-yellow);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.2s;
+    transform: rotate(-0.5deg);
+  }
+
+  .back-btn:hover {
+    transform: translate(-2px, -2px) rotate(-0.5deg);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- BACK BUTTON -->
+  <a href="index.html" class="back-btn">← Back to Home</a>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-title">💾 Data Topic 3: Binary</div>
+    <div class="hero-subtitle">IGCSE Computer Science Edexcel 4CP01</div>
+    <div class="hero-description">
+      Master binary representation, number systems, arithmetic operations, and hexadecimal notation.
+      Explore how computers store and manipulate all data — from numbers to text to graphics.
+    </div>
+  </div>
+
+  <!-- WHY BINARY MATTERS -->
+  <div class="imp-banner">
+    <div class="imp-header" onclick="toggleImpBanner(this)">
+      <span class="imp-icon">⚡</span>
+      <span>Why Does Binary Matter?</span>
+      <span style="margin-left: auto; font-size: 1.2rem;">▼</span>
+    </div>
+    <div class="imp-body">
+      <p style="margin-bottom: 12px;">
+        <strong>Binary is the language of computers.</strong> Everything stored in a computer — whether it's a number, text, sound, image, or instruction — is represented as binary (1s and 0s) at the lowest level. Understanding binary is fundamental to understanding how computers work.
+      </p>
+      <p style="margin-bottom: 12px;">
+        <strong>3.1 Binary Basics:</strong> Learn why computers use binary, and how to convert between binary and denary (decimal) numbers. Understand that computers represent everything — numbers, text, sounds, graphics — and all instructions as binary.
+      </p>
+      <p style="margin-bottom: 12px;">
+        <strong>3.2 Signed & Unsigned Integers:</strong> Discover how computers represent both positive numbers (unsigned) and negative numbers (signed). Explore sign and magnitude, and two's complement — crucial for understanding modern computing.
+      </p>
+      <p style="margin-bottom: 12px;">
+        <strong>3.3 Binary Arithmetic:</strong> Master binary addition, shifts (logical and arithmetic), and the concept of overflow. These operations power every calculation a computer performs.
+      </p>
+      <p>
+        <strong>3.4 Hexadecimal:</strong> See why hexadecimal notation makes binary easier for humans to read, and learn to convert between hexadecimal and binary rapidly — a skill essential for memory addressing and color codes.
+      </p>
+    </div>
+  </div>
+
+  <!-- LEARNING PATH -->
+  <div class="learning-path">
+    <div class="path-header">
+      <span>🛤️ Recommended Learning Order</span>
+    </div>
+    <div class="path-body">
+      <div class="step-flow">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-label">Binary Basics</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-label">Signed & Unsigned</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-label">Arithmetic & Overflow</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-label">Hexadecimal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPIC CARDS -->
+  <div class="topics-grid">
+
+    <!-- 3.1 BINARY -->
+    <div class="topic-card">
+      <div class="topic-header t31">
+        <span class="topic-icon">💻</span>
+        <div>
+          <div class="topic-title">Binary Basics</div>
+          <div class="topic-code">3.1</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Understanding Binary Representation</div>
+        <div class="topic-description">
+          Discover why computers use binary, how to convert between binary and denary (0–255), and how binary represents everything — numbers, text, sound, graphics, and instructions.
+        </div>
+        <div class="topic-subtopics t31">
+          📌 3.1.1 · 3.1.2 · 3.1.3
+        </div>
+        <a href="binary-3.1.html" class="topic-link t31">Explore Topic 3.1 →</a>
+      </div>
+    </div>
+
+    <!-- 3.2 SIGNED & UNSIGNED -->
+    <div class="topic-card">
+      <div class="topic-header t32">
+        <span class="topic-icon">±</span>
+        <div>
+          <div class="topic-title">Signed & Unsigned Integers</div>
+          <div class="topic-code">3.2</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Representing Negative Numbers</div>
+        <div class="topic-description">
+          Learn how computers represent positive (unsigned) and negative (signed) integers. Master sign and magnitude, and two's complement — the standard method used by modern computers.
+        </div>
+        <div class="topic-subtopics t32">
+          📌 3.2.1 · 3.2.2 · 3.2.3
+        </div>
+        <a href="binary-3.2.html" class="topic-link t32">Explore Topic 3.2 →</a>
+      </div>
+    </div>
+
+    <!-- 3.3 ARITHMETIC -->
+    <div class="topic-card">
+      <div class="topic-header t33">
+        <span class="topic-icon">➕</span>
+        <div>
+          <div class="topic-title">Binary Arithmetic & Overflow</div>
+          <div class="topic-code">3.3</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Operations & Shifts</div>
+        <div class="topic-description">
+          Master binary addition, left and right shifts (logical and arithmetic), and understand the critical concept of overflow — when a number becomes too large to store.
+        </div>
+        <div class="topic-subtopics t33">
+          📌 3.3.1 · 3.3.2 · 3.3.3
+        </div>
+        <a href="binary-3.3.html" class="topic-link t33">Explore Topic 3.3 →</a>
+      </div>
+    </div>
+
+    <!-- 3.4 HEXADECIMAL -->
+    <div class="topic-card">
+      <div class="topic-header t34">
+        <span class="topic-icon">🔤</span>
+        <div>
+          <div class="topic-title">Hexadecimal Notation</div>
+          <div class="topic-code">3.4</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Human-Readable Binary</div>
+        <div class="topic-description">
+          Understand why hexadecimal (base-16) makes binary easier for humans to read and write. Learn rapid conversion between hexadecimal, binary, and denary.
+        </div>
+        <div class="topic-subtopics t34">
+          📌 3.4.1 · 3.4.2 · 3.4.3
+        </div>
+        <a href="binary-3.4.html" class="topic-link t34">Explore Topic 3.4 →</a>
+      </div>
+    </div>
+
+    <!-- DATA REPRESENTATION 3.2 -->
+    <div class="topic-card">
+      <div class="topic-header" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">
+        <span class="topic-icon">🔤</span>
+        <div>
+          <div class="topic-title">Data Representation</div>
+          <div class="topic-code">3.2</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Characters, Images & Sound</div>
+        <div class="topic-description">
+          Learn how computers encode characters (ASCII & Unicode), represent bitmap images (pixels, resolution, colour depth), and digitise sound (sampling, bit depth, aliasing).
+        </div>
+        <div class="topic-subtopics" style="border-color:#e74c3c;background:#fce4ec;color:#e74c3c">
+          📌 3.2.1 · 3.2.2 · 3.2.3 · 3.2.4
+        </div>
+        <a href="data-3.2.html" class="topic-link" style="background:#fce4ec;border-color:#e74c3c;color:#e74c3c">Explore Data 3.2 →</a>
+      </div>
+    </div>
+
+    <!-- DATA STORAGE & COMPRESSION 3.3 -->
+    <div class="topic-card">
+      <div class="topic-header" style="background:linear-gradient(135deg,#f77f00,#fb923c)">
+        <span class="topic-icon">💾</span>
+        <div>
+          <div class="topic-title">Data Storage & Compression</div>
+          <div class="topic-code">3.3</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Units, File Sizes & Compression</div>
+        <div class="topic-description">
+          Master storage units (bit, byte, KiB, MiB, GiB, TiB), understand lossless vs lossy compression (JPEG, MP3), learn run-length encoding, and calculate file sizes.
+        </div>
+        <div class="topic-subtopics" style="border-color:#f77f00;background:#fff3e0;color:#f77f00">
+          📌 3.3.1 · 3.3.2 · 3.3.3 · 3.3.4
+        </div>
+        <a href="data-3.3.html" class="topic-link" style="background:#fff3e0;border-color:#f77f00;color:#f77f00">Explore Data 3.3 →</a>
+      </div>
+    </div>
+
+    <!-- ENCRYPTION 3.4 -->
+    <div class="topic-card">
+      <div class="topic-header" style="background:linear-gradient(135deg,#7b2d8b,#9333ea)">
+        <span class="topic-icon">🔐</span>
+        <div>
+          <div class="topic-title">Encryption</div>
+          <div class="topic-code">3.4</div>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-name">Ciphers & Data Security</div>
+        <div class="topic-description">
+          Understand why data needs encryption, and learn how four historical ciphers work: Pigpen, Caesar, Vigenere, and Rail Fence.
+        </div>
+        <div class="topic-subtopics" style="border-color:#7b2d8b;background:#f3e5f5;color:#7b2d8b">
+          📌 3.4.1 · 3.4.2
+        </div>
+        <a href="data-3.4.html" class="topic-link" style="background:#f3e5f5;border-color:#7b2d8b;color:#7b2d8b">Explore Data 3.4 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KEY CONCEPTS OVERVIEW -->
+  <div class="overview-section">
+    <div class="overview-header" onclick="toggleOverview(this)">
+      <span>🎯</span>
+      <span>Key Concepts at a Glance</span>
+      <span style="margin-left: auto; font-size: 1.2rem;">▼</span>
+    </div>
+    <div class="overview-body">
+      <div class="overview-grid">
+        <div class="overview-item">
+          <div class="overview-item-icon">💾</div>
+          <div class="overview-item-title">Binary</div>
+          <div class="overview-item-desc">Base-2 number system using only 1s and 0s. Fundamental to all computer storage and processing.</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">🔢</div>
+          <div class="overview-item-title">Denary</div>
+          <div class="overview-item-desc">Base-10 (decimal) number system we use daily. Binary numbers convert to/from denary.</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">↔️</div>
+          <div class="overview-item-title">Conversion</div>
+          <div class="overview-item-desc">Converting between binary, denary, and hexadecimal. Essential for understanding data representation.</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">±</div>
+          <div class="overview-item-title">Signed Integers</div>
+          <div class="overview-item-desc">Representing negative numbers. Two's complement is the modern standard (allows arithmetic to work correctly).</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">➕</div>
+          <div class="overview-item-title">Binary Arithmetic</div>
+          <div class="overview-item-desc">Addition and shifts in binary. Left shift = multiply by 2; right shift = divide by 2.</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">⚠️</div>
+          <div class="overview-item-title">Overflow</div>
+          <div class="overview-item-desc">When a result is too large to fit in the allocated bits. Critical for understanding computation limits.</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">🔤</div>
+          <div class="overview-item-title">Hexadecimal</div>
+          <div class="overview-item-desc">Base-16 system (0-9, A-F). More compact than binary; one hex digit = 4 binary digits (nibble).</div>
+        </div>
+        <div class="overview-item">
+          <div class="overview-item-icon">🎨</div>
+          <div class="overview-item-title">Color Codes</div>
+          <div class="overview-item-desc">Web colors use hexadecimal (e.g., #FF5733). RGB values from 00–FF per channel.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEARNING OUTCOMES -->
+  <div class="skills-section">
+    <div class="skills-header" onclick="toggleSkills(this)">
+      <span>✅</span>
+      <span>What You Will Learn</span>
+      <span style="margin-left: auto; font-size: 1.2rem;">▼</span>
+    </div>
+    <div class="skills-body">
+      <div class="skill-list">
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Why computers use binary to represent all data and instructions</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Convert binary numbers to denary and vice versa (0–255)</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Understand unsigned integers (0–255 in 8-bit)</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Represent signed integers using sign and magnitude, and two's complement</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Perform binary addition correctly and identify when overflow occurs</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Understand logical shifts (move bits, fill with 0s) vs arithmetic shifts (preserve sign bit)</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Know why hexadecimal is used (compact, human-readable, maps to binary easily)</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Convert between hexadecimal, binary, and denary rapidly</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Apply these concepts to real-world examples (memory addressing, color codes, error detection)</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-check">✓</div>
+          <div class="skill-text">Answer exam questions using precise technical vocabulary (mark scheme friendly)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-text">Data Topic 3: Binary is fundamental to all of Computer Science. Master these concepts, and the rest becomes clear!</div>
+    <div class="footer-text" style="font-size: 0.9rem; color: #999;">Last updated: 2026</div>
+  </div>
+
+</div>
+
+<script>
+function toggleImpBanner(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  const icon = header.querySelector('span:last-child');
+  icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function toggleOverview(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  const icon = header.querySelector('span:last-child');
+  icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function toggleSkills(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  const icon = header.querySelector('span:last-child');
+  icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+</script>
+
+</body>
+</html>

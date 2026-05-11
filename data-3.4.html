@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3.4: Encryption – IGCSE Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1a2e;--paper:#fdf8f0;--yellow:#ffd166;--coral:#ef476f;--teal:#06d6a0;--blue:#118ab2;--purple:#7b2d8b;--orange:#f77f00;--green:#2d6a4f;--light-yellow:#fff9c4;--light-coral:#fce4ec;--light-teal:#e0f7f2;--light-blue:#e3f2fd;--light-purple:#f3e5f5;--light-green:#d8f3dc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);font-family:'Patrick Hand',cursive;color:var(--ink);overflow-x:hidden}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(100,149,237,0.15) 31px,rgba(100,149,237,0.15) 32px);pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;top:0;left:70px;bottom:0;width:2px;background:rgba(239,71,111,0.3);pointer-events:none;z-index:0}
+  .page-wrap{max-width:960px;margin:0 auto;padding:20px 30px 60px 90px;position:relative;z-index:1}
+  @media(max-width:600px){.page-wrap{padding:20px 16px 60px 16px}body::after{display:none}}
+
+  .hero{text-align:center;padding:40px 0 20px}
+  .hero-title{font-family:'Permanent Marker',cursive;font-size:2.6rem;color:var(--ink);text-shadow:3px 3px 0 var(--teal);letter-spacing:2px;transform:rotate(-1.5deg);display:inline-block;position:relative}
+  .hero-title::after{content:'';position:absolute;bottom:-8px;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:2px}
+  .hero-sub{font-family:'Caveat',cursive;font-size:1.4rem;color:var(--blue);margin-top:18px}
+
+  .tabs-nav{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 20px;justify-content:center}
+  .tab-btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:8px 18px;border:3px solid var(--ink);border-radius:6px;background:white;cursor:pointer;transition:all .2s;box-shadow:3px 3px 0 var(--ink)}
+  .tab-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .tab-btn.active{background:var(--blue);color:white;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+  .tab-panel{display:none;animation:fadeIn .3s ease}
+  .tab-panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  .tip-box{background:var(--light-yellow);border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:12px 16px;margin:12px 0;font-family:'Kalam',cursive;font-size:.95rem}
+  .btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:9px 22px;border:2.5px solid var(--ink);border-radius:8px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:all .15s}
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .btn-primary{background:var(--ink);color:white}
+  .btn-teal{background:var(--teal);color:var(--ink);border-color:#059669;box-shadow:3px 3px 0 #059669}
+  .tag{display:inline-block;padding:2px 9px;border-radius:4px;font-family:'Caveat',cursive;font-size:.85rem;font-weight:700;border:1.5px solid;margin-right:4px}
+  .tag-hard{color:var(--coral);border-color:var(--coral);background:var(--light-coral)}
+  .tag-med{color:var(--orange);border-color:var(--orange);background:#fff3e0}
+  .tag-easy{color:#059669;border-color:var(--teal);background:var(--light-teal)}
+
+  .def-box{border:2px solid;border-radius:8px;padding:12px 14px 10px;margin:12px 0;position:relative;padding-top:22px;font-size:.92rem;line-height:1.55}
+  .def-label{position:absolute;top:-11px;left:12px;color:white;font-family:'Caveat',cursive;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:20px}
+
+  .notes-sec{margin-bottom:14px;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .notes-hdr{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+  .notes-title{font-family:'Permanent Marker',cursive;font-size:1.1rem;color:white}
+  .notes-tog{font-family:'Caveat',cursive;font-size:1.2rem;color:white;transition:transform .3s}
+  .notes-bdy{display:none;padding:18px 20px;background:white;font-family:'Patrick Hand',cursive;font-size:.95rem;line-height:1.65}
+  .notes-bdy.open{display:block;animation:fadeIn .25s ease}
+  .subh{font-family:'Permanent Marker',cursive;font-size:1.05rem;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .subh::after{content:'';flex:1;height:2px;background:currentColor;opacity:.2}
+  .hl-b{color:var(--blue);font-weight:700}.hl-t{color:#059669;font-weight:700}
+  .hl-c{color:var(--coral);font-weight:700}.hl-p{color:var(--purple);font-weight:700}
+  .hl-o{color:var(--orange);font-weight:700}.hl-g{color:var(--green);font-weight:700}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:580px){.g2{grid-template-columns:1fr}}
+  .n-card{border:2.5px solid;border-radius:10px;overflow:hidden;margin:10px 0}
+  .n-card-hdr{padding:8px 14px;font-family:'Permanent Marker',cursive;font-size:1rem;color:white}
+  .n-card-bdy{padding:12px 14px;background:white;font-size:.92rem;line-height:1.55}
+  .nl{display:flex;align-items:flex-start;gap:9px;margin:6px 0;font-size:.92rem;line-height:1.5}
+  .nd{width:24px;height:24px;border-radius:50%;color:white;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .notes-tip{background:#fff9c4;border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:10px 14px;margin:12px 0 4px;font-size:.9rem;font-family:'Kalam',cursive}
+
+  .cmp-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+  .cmp-tbl th{background:var(--ink);color:white;font-family:'Permanent Marker',cursive;padding:10px 13px;text-align:left}
+  .cmp-tbl td{padding:9px 13px;border-bottom:1px solid #e5e5e5;vertical-align:top}
+  .cmp-tbl tr:nth-child(even) td{background:#f9f9f9}
+
+  .ig-wrap{background:#fffdf5;border:3px solid var(--ink);border-radius:12px;padding:28px;box-shadow:6px 6px 0 var(--ink)}
+  .ig-title{font-family:'Permanent Marker',cursive;font-size:2rem;text-align:center;margin-bottom:20px}
+  .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:600px){.ig-grid{grid-template-columns:1fr}}
+  .ig-sec{border:2.5px solid var(--ink);border-radius:10px;padding:16px;background:white;position:relative}
+  .ig-label{font-family:'Permanent Marker',cursive;font-size:1.05rem;position:absolute;top:-13px;left:14px;background:white;padding:0 8px}
+  .ig-item{display:flex;align-items:flex-start;gap:9px;margin:7px 0;font-family:'Kalam',cursive;font-size:.92rem;line-height:1.4}
+  .ig-dot{width:20px;height:20px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .highlight-box{background:var(--light-teal);border:2.5px solid var(--ink);border-radius:8px;padding:12px 16px;margin:16px 0;font-family:'Kalam',cursive;font-size:1rem;text-align:center;transform:rotate(-.3deg)}
+
+  .imp-banner{margin-bottom:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .imp-header{background:var(--blue);color:white;padding:10px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem;display:flex;align-items:center;gap:10px;cursor:pointer}
+  .imp-body{display:none;background:white}
+  .imp-body.open{display:block;animation:fadeIn .3s ease}
+  .imp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .imp-cell{padding:14px 16px;border-right:2px solid #eee;border-bottom:2px solid #eee}
+  .imp-cell-title{font-family:'Permanent Marker',cursive;font-size:.95rem;margin-bottom:6px}
+  .imp-cell p{font-family:'Kalam',cursive;font-size:.88rem;line-height:1.5}
+  .imp-footer{background:#fff9c4;border-top:2px solid var(--ink);padding:10px 16px;font-family:'Kalam',cursive;font-size:.88rem;display:flex;align-items:center;gap:8px}
+
+  .act-card{border:3px solid var(--ink);border-radius:12px;overflow:hidden;margin-bottom:22px;box-shadow:5px 5px 0 var(--ink)}
+  .act-hdr{padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--ink)}
+  .act-icon{font-size:1.8rem}
+  .act-title{font-family:'Permanent Marker',cursive;font-size:1.25rem}
+  .act-bdy{background:white;padding:18px;font-size:.95rem;line-height:1.6}
+
+  .cipher-box{background:#f9f9f9;border:2px solid var(--ink);border-radius:10px;padding:16px;margin:12px 0}
+  .cipher-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .cipher-input{border:2px solid var(--ink);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:.95rem;flex:1;min-width:150px}
+  .cipher-label{font-family:'Kalam',cursive;font-size:.95rem;font-weight:700;min-width:80px}
+  .cipher-output{background:white;border:2px solid var(--blue);border-radius:8px;padding:10px 14px;font-family:monospace;font-size:1.05rem;min-height:36px;word-break:break-all;margin:8px 0}
+
+  .pigpen-grid{display:inline-grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:8px 0}
+  .pigpen-cell{width:60px;height:60px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Permanent Marker',cursive;font-size:1.1rem;position:relative;background:white}
+  .pigpen-cell.dot::after{content:'';position:absolute;width:8px;height:8px;background:var(--ink);border-radius:50%}
+
+  .rail-fence-vis{margin:12px 0;overflow-x:auto}
+  .rail-row{display:flex;gap:4px;margin:4px 0;min-height:32px;align-items:center}
+  .rail-char{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:.85rem;font-weight:700;border:1px solid #ccc;border-radius:4px;background:white}
+  .rail-char.active{background:var(--teal);color:white;border-color:#059669}
+  .rail-char.empty{background:#f5f5f5;color:#ccc}
+
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:500px){.match-grid{grid-template-columns:1fr}}
+  .match-item{padding:10px 13px;border:2.5px solid var(--ink);border-radius:8px;font-family:'Patrick Hand',cursive;font-size:.88rem;cursor:pointer;background:white;box-shadow:2px 2px 0 var(--ink);transition:all .15s;min-height:46px;display:flex;align-items:center}
+  .match-item:hover{transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .match-item.sel{background:var(--yellow);border-color:var(--orange)}
+  .match-item.ok{background:#e0faf1;border-color:var(--teal);pointer-events:none}
+  .match-item.bad{background:var(--light-coral);border-color:var(--coral);animation:shake .3s}
+
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .word{padding:5px 13px;background:white;border:2px solid var(--ink);border-radius:20px;font-family:'Caveat',cursive;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:all .15s}
+  .word:hover:not(.used){background:var(--light-yellow)}
+  .word.sel{background:var(--yellow);border-color:var(--orange)}
+  .word.used{opacity:.35;pointer-events:none;text-decoration:line-through}
+  .fill-para{line-height:2.6;font-size:.95rem;padding:14px;background:#fafafa;border:2px solid #ddd;border-radius:8px}
+  .blank{display:inline-block;min-width:90px;border-bottom:2.5px solid var(--blue);padding:2px 8px;font-family:'Caveat',cursive;font-size:.98rem;font-weight:700;text-align:center;margin:0 3px;cursor:pointer;transition:all .15s;border-radius:4px 4px 0 0}
+  .blank:hover{background:rgba(255,209,102,.25)}
+  .blank.filled{color:var(--blue)}
+  .blank.sel-b{background:rgba(255,209,102,.4);border-color:var(--orange)}
+  .blank.ok{background:var(--light-teal);color:#059669;border-color:#059669}
+  .blank.bad{background:var(--light-coral);color:var(--coral);border-color:var(--coral)}
+
+  .tf-card{border:2px solid var(--ink);border-radius:10px;padding:14px 16px;margin:10px 0;background:white}
+  .tf-q{font-family:'Kalam',cursive;font-size:.97rem;margin-bottom:10px;line-height:1.5}
+  .tf-btns{display:flex;gap:10px}
+  .tf-btn{font-family:'Caveat',cursive;font-size:1rem;font-weight:700;padding:6px 20px;border:2px solid var(--ink);border-radius:20px;cursor:pointer;transition:all .15s;background:white}
+  .tf-btn:hover{background:var(--light-yellow)}
+  .tf-btn.correct{background:var(--teal);color:white;border-color:#059669}
+  .tf-btn.wrong{background:var(--coral);color:white;border-color:#c0392b}
+  .tf-btn:disabled{cursor:default}
+  .tf-exp{display:none;margin-top:8px;padding:8px 12px;border-radius:6px;font-family:'Kalam',cursive;font-size:.88rem}
+  .tf-exp.show{display:block}
+
+  .q-prog-wrap{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .q-prog-bar{flex:1;height:14px;background:#e0e0e0;border:2px solid var(--ink);border-radius:20px;overflow:hidden}
+  .q-prog-fill{height:100%;background:var(--teal);border-radius:20px;transition:width .4s}
+  .q-score{font-family:'Permanent Marker',cursive;font-size:1.1rem;background:var(--yellow);border:2px solid var(--ink);padding:4px 12px;border-radius:20px}
+  .q-card{border:3px solid var(--ink);border-radius:12px;padding:22px;background:white;box-shadow:5px 5px 0 var(--ink)}
+  .q-num{font-family:'Permanent Marker',cursive;font-size:.9rem;color:var(--teal);margin-bottom:8px}
+  .q-text{font-family:'Caveat',cursive;font-size:1.35rem;font-weight:600;margin-bottom:16px;line-height:1.4}
+  .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  @media(max-width:480px){.q-opts{grid-template-columns:1fr}}
+  .q-opt{padding:11px 14px;border:2.5px solid var(--ink);border-radius:8px;background:white;font-family:'Patrick Hand',cursive;font-size:.98rem;cursor:pointer;transition:all .15s;text-align:left;box-shadow:2px 2px 0 var(--ink)}
+  .q-opt:hover:not(:disabled){transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .q-opt.correct{background:var(--teal)!important;color:white;border-color:#059669;box-shadow:none}
+  .q-opt.wrong{background:var(--coral)!important;color:white;border-color:#c0392b;box-shadow:none;animation:shake .3s}
+  .q-opt:disabled{cursor:default}
+  .q-fb{margin-top:12px;padding:10px 14px;border-radius:8px;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:600;border:2px solid;display:none}
+  .q-fb.show{display:block}
+  .q-fb.fb-ok{background:#e0faf1;border-color:var(--teal);color:#059669}
+  .q-fb.fb-no{background:var(--light-coral);border-color:var(--coral);color:var(--coral)}
+  .q-result{text-align:center;padding:30px}
+  .q-result h2{font-family:'Permanent Marker',cursive;font-size:2.5rem;margin-bottom:10px}
+  .big-score{font-family:'Permanent Marker',cursive;font-size:4rem;color:var(--teal)}
+
+  .eq-wrap{margin-bottom:26px;border:2.5px solid var(--ink);border-radius:10px;background:white;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+  .eq-hdr{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink)}
+  .eq-hdr.c1{background:var(--light-teal)}.eq-hdr.c2{background:var(--light-blue)}.eq-hdr.c3{background:var(--light-purple)}
+  .eq-hdr.c4{background:#fff3e0}.eq-hdr.c5{background:var(--light-yellow)}.eq-hdr.c6{background:var(--light-coral)}
+  .eq-num{font-family:'Permanent Marker',cursive;font-size:1.05rem}
+  .eq-marks{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;background:var(--ink);color:white;padding:2px 10px;border-radius:20px}
+  .eq-bdy{padding:14px 16px}
+  .eq-txt{font-size:1.02rem;line-height:1.6;margin-bottom:12px}
+  .eq-ctx{background:#f5f5f5;border-left:4px solid var(--blue);padding:10px 14px;margin-bottom:12px;font-size:.93rem;line-height:1.5;border-radius:0 6px 6px 0;font-style:italic;font-family:'Kalam',cursive}
+  .ans-ta{width:100%;border:1.5px solid #b0bec5;border-radius:6px;background:transparent;font-family:'Patrick Hand',cursive;font-size:.95rem;padding:8px;outline:none;resize:vertical;min-height:80px}
+  .show-ms{font-family:'Caveat',cursive;font-size:1rem;padding:6px 16px;border:2px solid var(--purple);border-radius:20px;background:white;color:var(--purple);cursor:pointer;margin-top:10px;transition:all .15s}
+  .show-ms:hover{background:var(--purple);color:white}
+  .ms{display:none;margin-top:10px;background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:12px 16px;font-size:.93rem;line-height:1.6}
+  .ms.show{display:block;animation:fadeIn .3s ease}
+  .ms ul{padding-left:20px;margin-top:6px}
+  .ms li{margin:4px 0}
+  .ms-lbl{font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:6px}
+
+  .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--ink);text-decoration:none;border:2.5px solid var(--ink);border-radius:8px;padding:8px 18px;background:var(--light-yellow);box-shadow:3px 3px 0 var(--ink);margin:20px 0 10px;transform:rotate(-.5deg);transition:all .15s}
+  .back-btn:hover{transform:translate(-2px,-2px) rotate(-.5deg);box-shadow:5px 5px 0 var(--ink)}
+
+  .caesar-wheel{display:inline-block;border:3px solid var(--ink);border-radius:50%;width:200px;height:200px;position:relative;margin:12px}
+  .caesar-ring{position:absolute;border:2px solid;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .caesar-outer{top:5px;left:5px;right:5px;bottom:5px;border-color:var(--blue)}
+  .caesar-inner{top:35px;left:35px;right:35px;bottom:35px;border-color:var(--coral)}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <a href="binary-home.html" class="back-btn">← Back to Binary Home</a>
+
+  <div class="hero">
+    <h1 class="hero-title">🔐 Topic 3.4: Encryption</h1>
+    <p class="hero-sub">Keeping data secret with ciphers</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="mindmap">🗺 Mind Map</button>
+    <button class="tab-btn" data-tab="notes">📖 Topic Notes</button>
+    <button class="tab-btn" data-tab="quiz">⚡ Quick Quiz</button>
+    <button class="tab-btn" data-tab="activities">✏️ Activities</button>
+    <button class="tab-btn" data-tab="exam">📝 Exam Questions</button>
+  </div>
+
+  <!-- ════════════ MIND MAP ════════════ -->
+  <div class="tab-panel active" id="tab-mindmap">
+
+    <div class="imp-banner">
+      <div class="imp-header" onclick="toggleImp(this)">
+        🔐 Why Does Encryption Matter? <span style="margin-left:auto;font-family:'Caveat',cursive;font-size:1rem;font-weight:normal" class="tog">▼ expand</span>
+      </div>
+      <div class="imp-body">
+        <div class="imp-grid">
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--blue)">🔒 Protecting Data</div><p>When data is sent over a network or stored on a device, it could be intercepted or stolen. Encryption scrambles it so only authorised people can read it.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:#059669">🔑 The Key Principle</div><p>Encryption converts plaintext into ciphertext using an algorithm and a key. Without the key, the ciphertext is meaningless. With the key, it can be decrypted back to plaintext.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--coral)">📜 Historical Ciphers</div><p>The Pigpen, Caesar, Vigenere and Rail Fence ciphers are historical methods. They are no longer secure by modern standards, but they teach the fundamental principles of encryption.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--purple)">⚠️ Modern Encryption</div><p>Today we use complex mathematical algorithms (AES, RSA) with long keys. The ciphers in this topic are for learning — they would be trivially easy to break with modern computers.</p></div>
+        </div>
+        <div class="imp-footer">✏️ <strong>Key concept:</strong> Plaintext + encryption algorithm + key = ciphertext. Ciphertext + decryption algorithm + key = plaintext. The algorithm can be public; the key must be secret.</div>
+      </div>
+    </div>
+
+    <div class="ig-wrap">
+      <div class="ig-title">🔐 Encryption — Big Picture</div>
+      <div class="highlight-box"><strong>Plaintext</strong> → [Encryption algorithm + Key] → <strong>Ciphertext</strong> → [Decryption algorithm + Key] → <strong>Plaintext</strong></div>
+
+      <div class="ig-grid">
+        <!-- Why encrypt -->
+        <div class="ig-sec" style="border-color:var(--blue)">
+          <span class="ig-label" style="color:var(--blue)">🔒 Why Encrypt?</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">1</div><div>Protect data from unauthorised access</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">2</div><div>Keep data confidential during transmission</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">3</div><div>Comply with data protection laws (GDPR)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">4</div><div>Prevent identity theft and fraud</div></div>
+          </div>
+        </div>
+
+        <!-- Key terms -->
+        <div class="ig-sec" style="border-color:var(--coral)">
+          <span class="ig-label" style="color:var(--coral)">🔑 Key Terms</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">P</div><div><strong>Plaintext</strong>: original, readable message</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">C</div><div><strong>Ciphertext</strong>: encrypted, unreadable message</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">K</div><div><strong>Key</strong>: secret value used to encrypt/decrypt</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">A</div><div><strong>Algorithm</strong>: the method/cipher used</div></div>
+          </div>
+        </div>
+
+        <!-- Four ciphers -->
+        <div class="ig-sec" style="border-color:var(--purple)">
+          <span class="ig-label" style="color:var(--purple)">📜 Four Ciphers</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">1</div><div><strong>Pigpen</strong>: symbols replace letters</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">2</div><div><strong>Caesar</strong>: shift letters by a fixed amount</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">3</div><div><strong>Vigenere</strong>: shift by a keyword (polyalphabetic)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">4</div><div><strong>Rail Fence</strong>: write in zigzag rows, read across</div></div>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div class="ig-sec" style="border-color:#059669">
+          <span class="ig-label" style="color:#059669">⚠️ Cipher Security</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">!</div><div>All four ciphers are <strong>easily broken</strong> by modern standards</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">!</div><div>Caesar: only 25 possible keys — trivial brute force</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">!</div><div>Vigenere: vulnerable to frequency analysis</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">!</div><div>They teach <strong>principles</strong>, not practical security</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison table -->
+      <div style="margin-top:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:white;box-shadow:4px 4px 0 var(--ink)">
+        <div style="background:var(--ink);color:white;padding:12px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem">📊 Four Ciphers — Side by Side</div>
+        <div style="overflow-x:auto">
+          <table class="cmp-tbl">
+            <tr><th></th><th style="color:var(--blue)">Pigpen</th><th style="color:var(--coral)">Caesar</th><th style="color:var(--purple)">Vigenere</th><th style="color:#059669">Rail Fence</th></tr>
+            <tr><td><strong>Type</strong></td><td>Substitution</td><td>Substitution</td><td>Polyalphabetic</td><td>Transposition</td></tr>
+            <tr><td><strong>How it works</strong></td><td>Replace letters with symbols</td><td>Shift alphabet by key</td><td>Shift by keyword letters</td><td>Rearrange letter order</td></tr>
+            <tr><td><strong>Key</strong></td><td>The grid (shared)</td><td>Shift value (1–25)</td><td>A keyword</td><td>Number of rails</td></tr>
+            <tr><td><strong>Key space</strong></td><td>1 possible grid</td><td>25 possible keys</td><td>Many (depends on word)</td><td>Limited (rails)</td></tr>
+            <tr><td><strong>Security</strong></td><td>Very low</td><td>Very low</td><td>Low–medium</td><td>Very low</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ NOTES ════════════ -->
+  <div class="tab-panel" id="tab-notes">
+
+    <!-- 3.4.1 Need for encryption -->
+    <div class="notes-sec" id="ns1">
+      <div class="notes-hdr" onclick="toggleSection('ns1')" style="background:linear-gradient(135deg,#118ab2,#0d6efd)">
+        <div class="notes-title">3.4.1 — The Need for Data Encryption</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>When data is stored or transmitted, it may be <strong>intercepted</strong> by unauthorised parties. <strong class="hl-b">Encryption</strong> protects data by converting it into a form that is unreadable without the correct key.</p>
+
+        <div class="def-box" style="border-color:var(--blue)">
+          <span class="def-label" style="background:var(--blue)">KEY DEFINITIONS</span>
+          <p><strong class="hl-b">Encryption</strong> — the process of converting plaintext into ciphertext so that it cannot be read without the correct key.<br><br>
+          <strong class="hl-b">Plaintext</strong> — the original, readable message or data before encryption.<br><br>
+          <strong class="hl-b">Ciphertext</strong> — the encrypted, unreadable message produced after encryption.<br><br>
+          <strong class="hl-b">Decryption</strong> — the process of converting ciphertext back into plaintext using the correct key.<br><br>
+          <strong class="hl-b">Key</strong> — a secret value used by the encryption algorithm to encrypt and decrypt data.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--blue)">🔒 Why Do We Need Encryption?</h4>
+        <div class="g2">
+          <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--blue);margin-bottom:6px">Data in Transit</div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>Emails, messages, online banking</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>Data passes through many networks</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>Could be intercepted at any point</div></div>
+          </div>
+          <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--blue);margin-bottom:6px">Data at Rest</div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>Hard drives, USB sticks, phones</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>Device could be lost or stolen</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>Encryption prevents unauthorised access</div></div>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--blue)">🔑 Two Types of Encryption</h4>
+        <div class="g2">
+          <div class="n-card" style="border-color:var(--blue)">
+            <div class="n-card-hdr" style="background:var(--blue)">Symmetric Encryption</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>Same key encrypts and decrypts</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>Both parties must share the key secretly</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>Caesar, Vigenere, Rail Fence are symmetric</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">4</span><div>Problem: how do you share the key safely?</div></div>
+            </div>
+          </div>
+          <div class="n-card" style="border-color:var(--purple)">
+            <div class="n-card-hdr" style="background:var(--purple)">Asymmetric Encryption</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--purple)">1</span><div>Two keys: public key + private key</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">2</span><div>Public key encrypts, private key decrypts</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">3</span><div>Public key can be shared openly</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">4</span><div>Used for HTTPS, secure email (not in this topic)</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> All four ciphers in this topic (Pigpen, Caesar, Vigenere, Rail Fence) are <strong>symmetric</strong> — the same key is used to encrypt and decrypt. They are historical ciphers for learning principles, not for real security.</div>
+      </div>
+    </div>
+
+    <!-- 3.4.2 Pigpen Cipher -->
+    <div class="notes-sec" id="ns2">
+      <div class="notes-hdr" onclick="toggleSection('ns2')" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <div class="notes-title">3.4.2a — Pigpen Cipher</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>The <strong class="hl-t">Pigpen cipher</strong> (also called the Freemason's cipher) is a <strong>substitution cipher</strong> that replaces each letter with a symbol based on its position in a grid.</p>
+
+        <div class="def-box" style="border-color:#059669">
+          <span class="def-label" style="background:#059669">DEFINITION</span>
+          <p><strong class="hl-t">Pigpen cipher</strong> — a substitution cipher that replaces each letter with a symbol derived from the part of the grid that contains the letter. The shape of the symbol matches the section of the grid.</p>
+        </div>
+
+        <h4 class="subh" style="color:#059669">📐 How the Grids Work</h4>
+        <p>There are two grids and two X-shaped grids. Each letter is replaced by the shape of the section it sits in:</p>
+
+        <div style="background:var(--light-teal);border:2px solid #059669;border-radius:10px;padding:16px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:#059669;margin-bottom:12px">Grid 1 (no dots) — Letters A–I:</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;max-width:200px;margin:0 auto 16px">
+            <div style="border:2px solid var(--ink);border-right:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">A</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">B</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">C</div>
+            <div style="border:2px solid var(--ink);border-right:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">D</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);border-right:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">E</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">F</div>
+            <div style="border:2px solid var(--ink);border-right:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">G</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);border-right:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">H</div>
+            <div style="border:2px solid var(--ink);border-left:1px solid var(--ink);border-top:1px solid var(--ink);padding:8px;text-align:center;font-family:'Permanent Marker',cursive">I</div>
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.88rem;color:#555;text-align:center">Each letter's symbol = the shape of its grid section (e.g. A = left & bottom walls, C = right & bottom walls)</div>
+        </div>
+
+        <div style="background:var(--light-teal);border:2px solid #059669;border-radius:10px;padding:16px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:#059669;margin-bottom:12px">Grid 2 (with dots) — Letters J–R:</div>
+          <p style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Same grid shapes but with a <strong>dot</strong> inside each symbol to distinguish them from Grid 1 letters.</p>
+        </div>
+
+        <div style="background:var(--light-teal);border:2px solid #059669;border-radius:10px;padding:16px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:#059669;margin-bottom:12px">X Grids — Letters S–Z:</div>
+          <p style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Two X-shaped grids (with and without dots) hold the remaining letters S–Z. Each section of the X corresponds to a letter.</p>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> The Pigpen cipher has only one possible key (the standard grid). It is a <strong>substitution cipher</strong> — each letter always maps to the same symbol. This makes it vulnerable to frequency analysis.</div>
+      </div>
+    </div>
+
+    <!-- Caesar Cipher -->
+    <div class="notes-sec" id="ns3">
+      <div class="notes-hdr" onclick="toggleSection('ns3')" style="background:linear-gradient(135deg,var(--coral),#e74c3c)">
+        <div class="notes-title">3.4.2b — Caesar Cipher</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>The <strong class="hl-c">Caesar cipher</strong> is a <strong>substitution cipher</strong> where each letter in the plaintext is shifted a fixed number of positions along the alphabet. The shift value is the <strong>key</strong>.</p>
+
+        <div class="def-box" style="border-color:var(--coral)">
+          <span class="def-label" style="background:var(--coral)">DEFINITION</span>
+          <p><strong class="hl-c">Caesar cipher</strong> — a substitution cipher where each letter is replaced by a letter a fixed number of positions down the alphabet. The shift value (1–25) is the key.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--coral)">🔄 How It Works</h4>
+        <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--coral);margin-bottom:10px">Encryption (shift of 3):</div>
+          <div style="font-family:monospace;font-size:.95rem;text-align:center;margin:8px 0;letter-spacing:2px">
+            <div>Plain:  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>
+            <div style="color:var(--coral);font-weight:700">Cipher: D E F G H I J K L M N O P Q R S T U V W X Y Z A B C</div>
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555;margin-top:8px">
+            <strong>HELLO</strong> with key 3 → <strong>KHOOR</strong><br>
+            H→K, E→H, L→O, L→O, O→R
+          </div>
+        </div>
+
+        <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--coral);margin-bottom:10px">Decryption (shift back by 3):</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">
+            To decrypt, shift each letter <strong>backwards</strong> by the key value.<br>
+            <strong>KHOOR</strong> with key 3 → K-3=H, H-3=E, O-3=L, O-3=L, R-3=O → <strong>HELLO</strong>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--coral)">⚠️ Weaknesses of Caesar Cipher</h4>
+        <div class="g2">
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Only 25 Possible Keys</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">1</span><div>A shift of 0 or 26 = no change</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">2</span><div>Only 25 useful shift values</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">3</span><div>Trivial to try all 25 (brute force)</div></div>
+          </div>
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Frequency Analysis</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">1</span><div>Each letter always maps to the same letter</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">2</span><div>E is the most common letter in English</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">3</span><div>Find the most common cipher letter = likely E</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> The Caesar cipher is a <strong>monoalphabetic substitution cipher</strong> — each plaintext letter always maps to the same ciphertext letter. This makes it vulnerable to both brute force (only 25 keys) and frequency analysis.</div>
+      </div>
+    </div>
+
+    <!-- Vigenere Cipher -->
+    <div class="notes-sec" id="ns4">
+      <div class="notes-hdr" onclick="toggleSection('ns4')" style="background:linear-gradient(135deg,var(--purple),#d946ef)">
+        <div class="notes-title">3.4.2c — Vigenere Cipher</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>The <strong class="hl-p">Vigenere cipher</strong> is a <strong>polyalphabetic substitution cipher</strong>. It uses a keyword to determine a different Caesar shift for each letter, making it much harder to break than the Caesar cipher.</p>
+
+        <div class="def-box" style="border-color:var(--purple)">
+          <span class="def-label" style="background:var(--purple)">DEFINITION</span>
+          <p><strong class="hl-p">Vigenere cipher</strong> — a polyalphabetic substitution cipher that uses a keyword to apply a different Caesar shift to each letter of the plaintext. Each letter of the keyword determines the shift for the corresponding plaintext letter.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">🔄 How It Works</h4>
+        <div style="background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:10px">Step-by-step (keyword: KEY):</div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">1</span><div>Write the plaintext: <strong>HELLO</strong></div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">2</span><div>Repeat the keyword: <strong>KEYKE</strong></div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">3</span><div>Convert keyword letters to shift values: K=10, E=4, Y=24</div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">4</span><div>Shift each plaintext letter by the corresponding key letter's position (A=0, B=1, ... Z=25)</div></div>
+        </div>
+
+        <div style="background:white;border:2px solid var(--purple);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:10px">Worked Example — Keyword: KEY</div>
+          <table class="cmp-tbl" style="margin:0">
+            <tr><th>Position</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+            <tr><td><strong>Plaintext</strong></td><td>H</td><td>E</td><td>L</td><td>L</td><td>O</td></tr>
+            <tr><td><strong>Keyword</strong></td><td>K</td><td>E</td><td>Y</td><td>K</td><td>E</td></tr>
+            <tr><td><strong>Shift (A=0)</strong></td><td>10</td><td>4</td><td>24</td><td>10</td><td>4</td></tr>
+            <tr><td><strong>Ciphertext</strong></td><td>R</td><td>I</td><td>J</td><td>V</td><td>S</td></tr>
+          </table>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555;margin-top:8px">
+            H(7) + K(10) = 17 = R &nbsp;|&nbsp; E(4) + E(4) = 8 = I &nbsp;|&nbsp; L(11) + Y(24) = 35 mod 26 = 9 = J<br>
+            L(11) + K(10) = 21 = V &nbsp;|&nbsp; O(14) + E(4) = 18 = S<br>
+            <strong>HELLO → RIJVS</strong>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">📊 Vigenere Square (Tabula Recta)</h4>
+        <p>The Vigenere cipher can be visualised using a <strong>Vigenere square</strong> — a 26x26 grid where each row is the alphabet shifted by one more position. To encrypt, find the row for the key letter and the column for the plaintext letter.</p>
+
+        <h4 class="subh" style="color:var(--purple)">⚠️ Why Vigenere Is Stronger Than Caesar</h4>
+        <div class="g2">
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Advantages</div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Different shift for each letter position</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Same plaintext letter can map to different ciphertext letters</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Simple frequency analysis does not work</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Many more possible keys than Caesar</div></div>
+          </div>
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Weaknesses</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Keyword repeats — creates patterns</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Kasiski examination can find keyword length</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Once keyword length is known, each position is just a Caesar cipher</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Still breakable with modern techniques</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> The Vigenere cipher is <strong>polyalphabetic</strong> — the same plaintext letter can encrypt to different ciphertext letters depending on its position. This is the key difference from Caesar (monoalphabetic). Know the formula: C = (P + K) mod 26 for encryption, P = (C - K) mod 26 for decryption.</div>
+      </div>
+    </div>
+
+    <!-- Rail Fence Cipher -->
+    <div class="notes-sec" id="ns5">
+      <div class="notes-hdr" onclick="toggleSection('ns5')" style="background:linear-gradient(135deg,var(--orange),#fb923c)">
+        <div class="notes-title">3.4.2d — Rail Fence Cipher</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>The <strong class="hl-o">Rail Fence cipher</strong> is a <strong>transposition cipher</strong>. Unlike substitution ciphers that replace letters, it rearranges the order of the letters by writing them in a zigzag pattern across "rails" (rows), then reading them off row by row.</p>
+
+        <div class="def-box" style="border-color:var(--orange)">
+          <span class="def-label" style="background:var(--orange)">DEFINITION</span>
+          <p><strong class="hl-o">Rail Fence cipher</strong> — a transposition cipher that writes the plaintext in a zigzag pattern across a number of rails (rows), then reads the letters off each rail in order to produce the ciphertext. The number of rails is the key.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--orange)">🔄 How It Works (3 rails)</h4>
+        <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--orange);margin-bottom:10px">Encryption of "WE ARE DISCOVERED" with 3 rails:</div>
+          <div style="font-family:monospace;font-size:1rem;letter-spacing:4px;line-height:2">
+            <div>W . . . A . . . D . . . V . . .</div>
+            <div>. E . R . I . C . E . E . R . .</div>
+            <div>. . A . . . S . . . O . . . D .</div>
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555;margin-top:10px">
+            Read row 1: <strong>W A D V</strong><br>
+            Read row 2: <strong>E R I C E E R</strong><br>
+            Read row 3: <strong>A S O D</strong><br>
+            Ciphertext: <strong>WADVERICEERASOD</strong>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--orange)">🔓 Decryption</h4>
+        <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">
+            To decrypt: work out how many letters go on each rail, fill in the letters from the ciphertext row by row, then read off in zigzag order.<br><br>
+            <strong>Key insight:</strong> The Rail Fence cipher does NOT change which letters appear — it only changes their <strong>order</strong>. This is what makes it a <strong>transposition</strong> cipher, not a substitution cipher.
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--orange)">⚠️ Weaknesses</h4>
+        <div class="g2">
+          <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--orange);margin-bottom:6px">Very Few Keys</div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">1</span><div>Key = number of rails (2, 3, 4...)</div></div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">2</span><div>Only a few practical values</div></div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">3</span><div>Easy to try all possibilities (brute force)</div></div>
+          </div>
+          <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--orange);margin-bottom:6px">Same Letters</div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">1</span><div>All original letters are present</div></div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">2</span><div>Frequency analysis of letters is useless</div></div>
+            <div class="nl"><span class="nd" style="background:var(--orange)">3</span><div>But pattern analysis of positions can help</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> The Rail Fence cipher is a <strong>transposition cipher</strong> — it rearranges the order of letters, not the letters themselves. This is fundamentally different from Pigpen, Caesar and Vigenere, which are all <strong>substitution ciphers</strong>. Know the difference!</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ QUIZ ════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div class="q-prog-wrap">
+      <div class="q-prog-bar"><div class="q-prog-fill" id="qprog" style="width:0%"></div></div>
+      <div class="q-score">Score: <span id="qscore">0</span>/<span id="qtotal">15</span></div>
+    </div>
+    <div id="quiz-area">
+      <div class="q-card">
+        <div class="q-num" id="qnum">Question 1 of 15</div>
+        <div class="q-text" id="qtext"></div>
+        <div class="q-opts" id="qopts"></div>
+        <div class="q-fb" id="qfb"></div>
+        <div style="text-align:right;margin-top:14px"><button class="btn btn-teal" id="qnext" onclick="nextQ()" style="display:none">Next Question →</button></div>
+      </div>
+    </div>
+    <div id="quiz-result" style="display:none">
+      <div class="q-result">
+        <h2>Topic 3.4 Complete!</h2>
+        <div class="big-score" id="qfinal"></div>
+        <p style="font-family:'Kalam',cursive;font-size:1rem;margin:12px 0 20px" id="qmsg"></p>
+        <button class="btn btn-primary" onclick="restartQuiz()">↺ Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ ACTIVITIES ════════════ -->
+  <div class="tab-panel" id="tab-activities">
+
+    <!-- Activity 1: Caesar Cipher Tool -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-coral)">
+        <span class="act-icon">🔄</span>
+        <div>
+          <div class="act-title" style="color:var(--coral)">Activity 1 — Caesar Cipher Tool</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Encrypt or decrypt text with any shift value</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="cipher-box">
+          <div class="cipher-row">
+            <span class="cipher-label">Plaintext:</span>
+            <input type="text" id="caesar-plain" class="cipher-input" placeholder="Enter text..." value="HELLO">
+          </div>
+          <div class="cipher-row">
+            <span class="cipher-label">Shift (key):</span>
+            <input type="number" id="caesar-shift" class="cipher-input" min="1" max="25" value="3" style="max-width:80px">
+            <button class="btn btn-teal" onclick="caesarEncrypt()">Encrypt →</button>
+            <button class="btn btn-primary" onclick="caesarDecrypt()">← Decrypt</button>
+          </div>
+          <div class="cipher-row">
+            <span class="cipher-label">Ciphertext:</span>
+            <div class="cipher-output" id="caesar-result" style="flex:1"></div>
+          </div>
+        </div>
+        <div style="font-family:'Kalam',cursive;font-size:.85rem;color:#777;margin-top:8px">Try: Encrypt "COMPUTER" with shift 5, then decrypt it back. Try shift 13 (ROT13) — encrypting twice gives the original!</div>
+      </div>
+    </div>
+
+    <!-- Activity 2: Vigenere Cipher Tool -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-purple)">
+        <span class="act-icon">🔑</span>
+        <div>
+          <div class="act-title" style="color:var(--purple)">Activity 2 — Vigenere Cipher Tool</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Encrypt or decrypt with a keyword</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="cipher-box">
+          <div class="cipher-row">
+            <span class="cipher-label">Plaintext:</span>
+            <input type="text" id="vig-plain" class="cipher-input" placeholder="Enter text..." value="HELLO">
+          </div>
+          <div class="cipher-row">
+            <span class="cipher-label">Keyword:</span>
+            <input type="text" id="vig-key" class="cipher-input" placeholder="Enter keyword..." value="KEY" style="max-width:150px">
+            <button class="btn btn-teal" onclick="vigEncrypt()">Encrypt →</button>
+            <button class="btn btn-primary" onclick="vigDecrypt()">← Decrypt</button>
+          </div>
+          <div class="cipher-row">
+            <span class="cipher-label">Ciphertext:</span>
+            <div class="cipher-output" id="vig-result" style="flex:1"></div>
+          </div>
+        </div>
+        <div style="font-family:'Kalam',cursive;font-size:.85rem;color:#777;margin-top:8px">Try: Encrypt "IGCSE" with keyword "SCIENCE". Notice how the two E's encrypt to different letters — that's polyalphabetic!</div>
+      </div>
+    </div>
+
+    <!-- Activity 3: Rail Fence Visualiser -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:#fff3e0">
+        <span class="act-icon">🚂</span>
+        <div>
+          <div class="act-title" style="color:var(--orange)">Activity 3 — Rail Fence Visualiser</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">See how the zigzag pattern works</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="cipher-box">
+          <div class="cipher-row">
+            <span class="cipher-label">Plaintext:</span>
+            <input type="text" id="rf-plain" class="cipher-input" placeholder="Enter text..." value="WEAREDISCOVERED">
+          </div>
+          <div class="cipher-row">
+            <span class="cipher-label">Rails:</span>
+            <input type="number" id="rf-rails" class="cipher-input" min="2" max="6" value="3" style="max-width:80px">
+            <button class="btn btn-teal" onclick="railFenceEncrypt()">Encrypt →</button>
+          </div>
+          <div class="rail-fence-vis" id="rf-visual"></div>
+          <div class="cipher-row">
+            <span class="cipher-label">Ciphertext:</span>
+            <div class="cipher-output" id="rf-result" style="flex:1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 4: Match -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-teal)">
+        <span class="act-icon">🔗</span>
+        <div>
+          <div class="act-title" style="color:#059669">Activity 4 — Match Ciphers to Properties</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="match-grid">
+          <div id="match-left"></div>
+          <div id="match-right"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <button class="btn" onclick="resetMatch()" style="background:white">↺ Reset</button>
+          <span id="match-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 5: Fill in the Blanks -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-yellow)">
+        <span class="act-icon">✍️</span>
+        <div>
+          <div class="act-title" style="color:var(--orange)">Activity 5 — Fill in the Blanks</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="word-bank" id="word-bank"></div>
+        <div class="fill-para" id="fill-para"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn btn-primary" onclick="checkFill()">✓ Check</button>
+          <button class="btn btn-teal" onclick="revealFill()">👁 Reveal</button>
+          <button class="btn" onclick="resetFill()" style="background:white">↺ Reset</button>
+          <span id="fill-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal);align-self:center"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 6: True/False -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-coral)">
+        <span class="act-icon">🧠</span>
+        <div>
+          <div class="act-title" style="color:var(--coral)">Activity 6 — True or False?</div>
+        </div>
+      </div>
+      <div class="act-bdy" id="tf-area"></div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ EXAM QUESTIONS ════════════ -->
+  <div class="tab-panel" id="tab-exam">
+    <div class="tip-box">📝 <strong>Exam Questions — Section 3.4:</strong> Write your answer, then reveal the mark scheme. Use precise technical vocabulary — "substitution", "transposition", "polyalphabetic", "brute force".</div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c1"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 1</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">State what is meant by the term 'encryption'.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>The process of converting plaintext into ciphertext (1)</li>
+          <li>So that it cannot be read without the correct key (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c2"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 2</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain the difference between plaintext and ciphertext.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>Plaintext is the original, readable message (1)</li>
+          <li>Ciphertext is the encrypted, unreadable message produced after encryption (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c3"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 3</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Encrypt the word "CAT" using a Caesar cipher with a shift of 5. Show your working.</div>
+        <textarea class="ans-ta" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>C + 5 = H, A + 5 = F, T + 5 = Y (1 mark for working)</li>
+          <li>Ciphertext: HFY (1 mark for answer)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c4"><div class="eq-num"><span class="tag tag-med">MED</span> Question 4</div><div class="eq-marks">[3 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain why the Caesar cipher is easy to break using brute force.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 3):</div><ul>
+          <li>The Caesar cipher only has 25 possible keys (shift values 1–25) (1)</li>
+          <li>Brute force means trying every possible key (1)</li>
+          <li>With only 25 possibilities, it is trivial to try them all (1)</li>
+          <li>A computer could try all 25 keys in a fraction of a second (1)</li>
+          <li>The correct key is easily identified because it produces readable text (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c5"><div class="eq-num"><span class="tag tag-med">MED</span> Question 5</div><div class="eq-marks">[4 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain how the Vigenere cipher works. In your answer, explain why it is harder to break than the Caesar cipher.</div>
+        <textarea class="ans-ta" style="min-height:130px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 4):</div><ul>
+          <li>The Vigenere cipher uses a keyword to determine a different Caesar shift for each letter (1)</li>
+          <li>Each letter of the keyword determines the shift for the corresponding plaintext letter (1)</li>
+          <li>It is a polyalphabetic cipher — the same plaintext letter can map to different ciphertext letters (1)</li>
+          <li>This means simple frequency analysis does not work (1)</li>
+          <li>There are many more possible keys than the Caesar cipher (1)</li>
+          <li>However, the keyword repeats, creating patterns that can be exploited (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c6"><div class="eq-num"><span class="tag tag-med">MED</span> Question 6</div><div class="eq-marks">[3 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain the difference between a substitution cipher and a transposition cipher. Give a named example of each.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>Substitution cipher: each letter is replaced by a different letter/symbol (1) — e.g. Caesar, Vigenere, Pigpen (1)</li>
+          <li>Transposition cipher: the letters are rearranged into a different order (1) — e.g. Rail Fence (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c1"><div class="eq-num"><span class="tag tag-hard">HARD</span> Question 7</div><div class="eq-marks">[4 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-ctx">A message has been encrypted using a Caesar cipher. The ciphertext begins: "KHOOR".</div>
+        <div class="eq-txt">(a) Decrypt this message, showing your working. (b) Explain two reasons why the Caesar cipher is not suitable for modern encryption.</div>
+        <textarea class="ans-ta" style="min-height:140px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>(a) Shift of 3: K-3=H, H-3=E, O-3=L, O-3=L, R-3=O → "HELLO" (2 marks: 1 for working, 1 for answer)</li>
+          <li>(b) Reason 1: Only 25 possible keys, so trivial to break by brute force (1)</li>
+          <li>Reason 2: Monoalphabetic — each letter always maps to the same cipher letter, so vulnerable to frequency analysis (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c2"><div class="eq-num"><span class="tag tag-hard">HARD</span> Question 8</div><div class="eq-marks">[5 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Encrypt the message "DATA" using: (a) a Caesar cipher with shift 4, (b) a Vigenere cipher with keyword "KEY", and (c) a Rail Fence cipher with 2 rails. Show your working for each.</div>
+        <textarea class="ans-ta" style="min-height:160px" placeholder="Show your working for each cipher..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>(a) Caesar shift 4: D+4=H, A+4=E, T+4=X, A+4=E → <strong>HEXE</strong> (2 marks: 1 working, 1 answer)</li>
+          <li>(b) Vigenere with KEY: D(3)+K(10)=N(13), A(0)+E(4)=E(4), T(19)+Y(24)=17=R, A(0)+K(10)=K(10) → <strong>NERK</strong> (2 marks: 1 working, 1 answer)</li>
+          <li>(c) Rail Fence 2 rails: Row 1: D_T_ → DT, Row 2: _A_A → AA → <strong>DTAA</strong> (1 mark)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c3"><div class="eq-num"><span class="tag tag-hard">HARD</span> Question 9</div><div class="eq-marks">[6 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Compare the security of the Caesar cipher, the Vigenere cipher, and the Rail Fence cipher. In your answer, explain: (a) the type of each cipher, (b) the key space of each, (c) which is the most secure and why, and (d) why none of them are suitable for modern encryption.</div>
+        <textarea class="ans-ta" style="min-height:180px" placeholder="Write your extended answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 6):</div><ul>
+          <li>(a) Caesar: monoalphabetic substitution / Vigenere: polyalphabetic substitution / Rail Fence: transposition (1)</li>
+          <li>(b) Caesar: only 25 possible keys / Vigenere: many possible keys (depends on keyword length) / Rail Fence: very few possible keys (number of rails) (1)</li>
+          <li>(c) Vigenere is the most secure because it is polyalphabetic — the same plaintext letter can map to different ciphertext letters, making frequency analysis much harder (1)</li>
+          <li>Caesar is the weakest — only 25 keys, trivial brute force, and frequency analysis works perfectly (1)</li>
+          <li>Rail Fence is also very weak — few keys, and all original letters are present in the ciphertext (1)</li>
+          <li>(d) None are suitable for modern encryption because they can all be broken easily with computers — modern encryption uses complex mathematical algorithms with very large key spaces (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ══ TABS ══
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+function toggleSection(id){
+  const bdy=document.getElementById(id).querySelector('.notes-bdy');
+  const tog=document.getElementById(id).querySelector('.notes-tog');
+  const open=bdy.classList.toggle('open');
+  tog.style.transform=open?'rotate(180deg)':'';
+}
+
+function toggleImp(hdr){
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+  const tog=hdr.querySelector('.tog');
+  tog.textContent=body.classList.contains('open')?'▲ collapse':'▼ expand';
+}
+
+function toggleMS(btn){
+  const ms=btn.nextElementSibling;
+  const showing=ms.classList.toggle('show');
+  btn.textContent=showing?'🙈 Hide Mark Scheme':'👁 Show Mark Scheme';
+}
+
+// ══════════════════
+// ACTIVITY 1: CAESAR CIPHER
+// ══════════════════
+function caesarShift(text,shift){
+  return text.toUpperCase().split('').map(c=>{
+    if(c>='A'&&c<='Z'){const code=c.charCodeAt(0)-65;return String.fromCharCode(((code+shift+26)%26)+65)}
+    return c;
+  }).join('');
+}
+function caesarEncrypt(){
+  const text=document.getElementById('caesar-plain').value;
+  const shift=parseInt(document.getElementById('caesar-shift').value)||0;
+  document.getElementById('caesar-result').textContent=caesarShift(text,shift);
+}
+function caesarDecrypt(){
+  const text=document.getElementById('caesar-plain').value;
+  const shift=parseInt(document.getElementById('caesar-shift').value)||0;
+  document.getElementById('caesar-result').textContent=caesarShift(text,-shift);
+}
+
+// ══════════════════
+// ACTIVITY 2: VIGENERE CIPHER
+// ══════════════════
+function vigShift(text,keyword,encrypt){
+  const t=text.toUpperCase().replace(/[^A-Z]/g,'');
+  const k=keyword.toUpperCase().replace(/[^A-Z]/g,'');
+  if(!k)return'Enter a keyword';
+  let result='';
+  for(let i=0;i<t.length;i++){
+    const tc=t.charCodeAt(i)-65;
+    const kc=k.charCodeAt(i%k.length)-65;
+    const shifted=encrypt?(tc+kc)%26:((tc-kc)+26)%26;
+    result+=String.fromCharCode(shifted+65);
+  }
+  return result;
+}
+function vigEncrypt(){
+  const text=document.getElementById('vig-plain').value;
+  const key=document.getElementById('vig-key').value;
+  document.getElementById('vig-result').textContent=vigShift(text,key,true);
+}
+function vigDecrypt(){
+  const text=document.getElementById('vig-plain').value;
+  const key=document.getElementById('vig-key').value;
+  document.getElementById('vig-result').textContent=vigShift(text,key,false);
+}
+
+// ══════════════════
+// ACTIVITY 3: RAIL FENCE
+// ══════════════════
+function railFenceEncrypt(){
+  const text=document.getElementById('rf-plain').value.toUpperCase().replace(/[^A-Z]/g,'');
+  const rails=parseInt(document.getElementById('rf-rails').value)||2;
+  if(!text){document.getElementById('rf-result').textContent='';return}
+  // Build zigzag
+  const fence=Array.from({length:rails},()=>[]);
+  let rail=0,dir=1;
+  for(let i=0;i<text.length;i++){
+    fence[rail].push({char:text[i],pos:i});
+    if(rail===0)dir=1;
+    if(rail===rails-1)dir=-1;
+    rail+=dir;
+  }
+  // Visual
+  const vis=document.getElementById('rf-visual');
+  vis.innerHTML='';
+  fence.forEach((row,r)=>{
+    const rowDiv=document.createElement('div');rowDiv.className='rail-row';
+    let line='';
+    for(let i=0;i<text.length;i++){
+      const found=row.find(x=>x.pos===i);
+      if(found){
+        line+=`<span class="rail-char active">${found.char}</span>`;
+      }else{
+        line+=`<span class="rail-char empty">.</span>`;
+      }
+    }
+    rowDiv.innerHTML=`<span style="font-family:'Caveat',cursive;font-size:.85rem;width:60px;display:inline-block">Rail ${r+1}:</span>${line}`;
+    vis.appendChild(rowDiv);
+  });
+  // Read off
+  let cipher='';
+  fence.forEach(row=>{row.forEach(x=>{cipher+=x.char})});
+  document.getElementById('rf-result').textContent=cipher;
+}
+
+// ══════════════════
+// ACTIVITY 4: MATCH
+// ══════════════════
+const matchPairs=[
+  {left:'Pigpen',right:'Substitution cipher using symbol grids'},
+  {left:'Caesar',right:'Substitution cipher shifting letters by a fixed amount'},
+  {left:'Vigenere',right:'Polyalphabetic cipher using a keyword'},
+  {left:'Rail Fence',right:'Transposition cipher using zigzag rows'},
+  {left:'Plaintext',right:'The original readable message'},
+  {left:'Ciphertext',right:'The encrypted unreadable message'},
+  {left:'Key',right:'Secret value used to encrypt and decrypt'},
+  {left:'Brute force',right:'Trying every possible key until one works'},
+];
+let matchSel=null,matchScore=0;
+function buildMatch(){
+  matchSel=null;matchScore=0;
+  const left=document.getElementById('match-left'),right=document.getElementById('match-right');
+  left.innerHTML='';right.innerHTML='';
+  const shuffRight=[...matchPairs].sort(()=>Math.random()-0.5);
+  matchPairs.forEach((p,i)=>{
+    const l=document.createElement('div');l.className='match-item';l.textContent=p.left;l.dataset.pair=i;l.onclick=()=>handleMatch(l,'left');left.appendChild(l);
+  });
+  shuffRight.forEach(p=>{
+    const r=document.createElement('div');r.className='match-item';r.textContent=p.right;r.dataset.pair=matchPairs.indexOf(p);r.onclick=()=>handleMatch(r,'right');right.appendChild(r);
+  });
+  document.getElementById('match-score').textContent='';
+}
+function handleMatch(el,side){
+  if(el.classList.contains('ok'))return;
+  if(!matchSel){
+    document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));
+    el.classList.add('sel');matchSel={el,side};
+  }else{
+    if(matchSel.side===side){document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');matchSel={el,side};return}
+    const a=matchSel.el,b=el;
+    if(a.dataset.pair===b.dataset.pair){
+      a.classList.remove('sel');a.classList.add('ok');b.classList.add('ok');matchScore++;
+      const sc=document.getElementById('match-score');
+      sc.textContent=matchScore===matchPairs.length?'All matched!':`${matchScore}/${matchPairs.length} matched`;
+      sc.style.color=matchScore===matchPairs.length?'var(--teal)':'var(--blue)';
+    }else{
+      a.classList.add('bad');b.classList.add('bad');
+      setTimeout(()=>{a.classList.remove('bad','sel');b.classList.remove('bad')},600);
+    }
+    matchSel=null;
+  }
+}
+function resetMatch(){buildMatch()}
+buildMatch();
+
+// ══════════════════
+// ACTIVITY 5: FILL BLANKS
+// ══════════════════
+const fillWords=['encryption','plaintext','ciphertext','key','substitution','transposition','polyalphabetic','brute force','frequency analysis','symmetric'];
+const fillAnswers={B0:'encryption',B1:'plaintext',B2:'ciphertext',B3:'key',B4:'substitution',B5:'transposition',B6:'polyalphabetic',B7:'brute force',B8:'frequency analysis',B9:'symmetric'};
+let fillState={};Object.keys(fillAnswers).forEach(k=>fillState[k]='');
+let fillSel=null;
+
+const fillTemplate=`<span class="blank" data-b="B0">__B0__</span> converts readable data into an unreadable form. The original message is called <span class="blank" data-b="B1">__B1__</span>, and the encrypted result is <span class="blank" data-b="B2">__B2__</span>. A secret <span class="blank" data-b="B3">__B3__</span> is needed to encrypt and decrypt. A <span class="blank" data-b="B4">__B4__</span> cipher replaces each letter with a different one. A <span class="blank" data-b="B5">__B5__</span> cipher rearranges the order of letters. The Vigenere cipher is <span class="blank" data-b="B6">__B6__</span> because it uses multiple shifts. The Caesar cipher can be broken by <span class="blank" data-b="B7">__B7__</span> (trying all 25 keys) or <span class="blank" data-b="B8">__B8__</span> (looking at letter patterns). All four ciphers in this topic are <span class="blank" data-b="B9">__B9__</span> — the same key encrypts and decrypts.`;
+
+function buildFill(){
+  const wb=document.getElementById('word-bank');wb.innerHTML='';
+  fillWords.forEach(w=>{
+    const d=document.createElement('span');d.className='word';d.textContent=w;d.dataset.word=w;
+    d.onclick=()=>{
+      if(!fillSel)return;
+      const prev=Object.keys(fillState).find(k=>fillState[k]===w);
+      if(prev)fillState[prev]='';
+      fillState[fillSel]=w;
+      document.querySelectorAll('.word').forEach(x=>x.classList.remove('sel'));
+      fillSel=null;renderFill();
+    };
+    wb.appendChild(d);
+  });
+  renderFill();
+}
+function renderFill(){
+  const wrap=document.getElementById('fill-para');
+  let html=fillTemplate;
+  Object.keys(fillAnswers).forEach(k=>{html=html.replace(`__${k}__`,fillState[k]||'&nbsp;&nbsp;&nbsp;')});
+  wrap.innerHTML=html;
+  wrap.querySelectorAll('.blank').forEach(b=>{
+    const k=b.dataset.b;
+    if(fillState[k])b.classList.add('filled');
+    if(fillSel===k)b.classList.add('sel-b');
+    b.onclick=()=>{fillSel=k;wrap.querySelectorAll('.blank').forEach(x=>x.classList.remove('sel-b'));b.classList.add('sel-b')};
+  });
+  document.querySelectorAll('#word-bank .word').forEach(w=>{
+    w.classList.toggle('used',Object.values(fillState).includes(w.dataset.word));
+  });
+}
+function checkFill(){
+  let ok=0;
+  Object.keys(fillAnswers).forEach(k=>{
+    const b=document.querySelector(`#fill-para [data-b="${k}"]`);if(!b)return;
+    if(fillState[k]===fillAnswers[k]){b.classList.add('ok');b.classList.remove('bad');ok++}
+    else if(fillState[k]){b.classList.add('bad');b.classList.remove('ok')}
+  });
+  const sc=document.getElementById('fill-score');
+  sc.textContent=`${ok}/10`;sc.style.color=ok===10?'var(--teal)':'var(--coral)';
+}
+function revealFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]=fillAnswers[k]);renderFill();checkFill()}
+function resetFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]='');fillSel=null;renderFill();document.getElementById('fill-score').textContent=''}
+buildFill();
+
+// ══════════════════
+// ACTIVITY 6: TRUE/FALSE
+// ══════════════════
+const tfItems=[
+  {q:'The Caesar cipher has 26 possible keys.',ans:false,exp:'False. A shift of 0 (or 26) gives the original text, so there are only 25 useful keys (shifts 1–25).'},
+  {q:'The Vigenere cipher is a polyalphabetic substitution cipher.',ans:true,exp:'True! It uses a keyword to apply different Caesar shifts to each letter position, making it polyalphabetic.'},
+  {q:'The Rail Fence cipher is a substitution cipher.',ans:false,exp:'False. The Rail Fence cipher is a transposition cipher — it rearranges the order of letters, not the letters themselves.'},
+  {q:'In symmetric encryption, the same key is used to encrypt and decrypt.',ans:true,exp:'True! All four ciphers in this topic (Pigpen, Caesar, Vigenere, Rail Fence) use symmetric encryption.'},
+  {q:'Frequency analysis can easily break the Vigenere cipher.',ans:false,exp:'False. Simple frequency analysis does not work on Vigenere because it is polyalphabetic — the same letter can map to different cipher letters. However, advanced techniques (Kasiski examination) can break it.'},
+  {q:'The Pigpen cipher uses a grid of symbols to replace letters.',ans:true,exp:'True! Each letter is replaced by the shape of the section of the grid it sits in. Some sections have dots to distinguish them.'},
+  {q:'A transposition cipher changes which letters appear in the message.',ans:false,exp:'False. A transposition cipher only rearranges the ORDER of the letters. All the original letters are still present, just in a different order.'},
+  {q:'Brute force is an effective attack against the Caesar cipher.',ans:true,exp:'True! With only 25 possible keys, trying all of them is trivial. The correct key is easily identified because it produces readable English.'},
+];
+function buildTF(){
+  const area=document.getElementById('tf-area');area.innerHTML='';
+  tfItems.forEach((item,i)=>{
+    const div=document.createElement('div');div.className='tf-card';
+    div.innerHTML=`<div class="tf-q">${i+1}. ${item.q}</div>
+      <div class="tf-btns">
+        <button class="tf-btn" onclick="checkTF(this,${i},true)">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,${i},false)">FALSE</button>
+      </div>
+      <div class="tf-exp" id="tf-exp-${i}"></div>`;
+    area.appendChild(div);
+  });
+}
+function checkTF(btn,i,ans){
+  const item=tfItems[i];
+  const btns=btn.closest('.tf-card').querySelectorAll('.tf-btn');
+  btns.forEach(b=>b.disabled=true);
+  const exp=document.getElementById(`tf-exp-${i}`);
+  if(ans===item.ans){
+    btn.classList.add('correct');
+    exp.className='tf-exp show';exp.style.cssText='background:#e0faf1;border-left:4px solid var(--teal)';
+  }else{
+    btn.classList.add('wrong');
+    btns.forEach(b=>{if((b.textContent==='TRUE')===item.ans)b.classList.add('correct')});
+    exp.className='tf-exp show';exp.style.cssText='background:var(--light-coral);border-left:4px solid var(--coral)';
+  }
+  exp.textContent=item.exp;
+}
+buildTF();
+
+// ══════════════════
+// QUIZ
+// ══════════════════
+const questions=[
+  {q:"What is encryption?",opts:["Making data bigger","Converting plaintext to ciphertext using a key","Deleting sensitive data","Compressing a file"],a:1,fb:"Encryption converts plaintext into unreadable ciphertext using an algorithm and key. Only someone with the correct key can decrypt it."},
+  {q:"What is the key in a Caesar cipher?",opts:["The alphabet","The shift value (1-25)","The keyword","The number of rails"],a:1,fb:"The Caesar cipher key is the shift value (1-25). Each letter is shifted this many positions along the alphabet."},
+  {q:"How many possible keys does the Caesar cipher have?",opts:["26","25","1","Infinite"],a:1,fb:"Only 25 useful keys (shifts 1-25). A shift of 0 or 26 gives the original text, so it's not a valid key."},
+  {q:"Which cipher is a transposition cipher?",opts:["Caesar","Vigenere","Rail Fence","Pigpen"],a:2,fb:"Rail Fence is a transposition cipher — it rearranges the order of letters. Caesar, Vigenere and Pigpen are all substitution ciphers."},
+  {q:"What makes the Vigenere cipher polyalphabetic?",opts:["It uses multiple rails","The same plaintext letter can map to different ciphertext letters","It uses symbols instead of letters","It rearranges letter order"],a:1,fb:"Polyalphabetic means different shifts are applied to different positions, so the same plaintext letter can encrypt to different ciphertext letters depending on the keyword."},
+  {q:"Encrypt 'D' using Caesar cipher with shift 3:",opts:["A","G","F","E"],a:1,fb:"D + 3 = G. D is position 3, plus 3 = position 6 = G."},
+  {q:"The Pigpen cipher replaces letters with:",opts:["Numbers","Different letters","Symbols based on grid positions","Shifted letters"],a:2,fb:"The Pigpen cipher replaces each letter with a symbol derived from the shape of the section of the grid that contains the letter."},
+  {q:"What is 'brute force' in the context of encryption?",opts:["A type of cipher","Trying every possible key","Frequency analysis","Using a keyword"],a:1,fb:"Brute force means systematically trying every possible key until the correct one is found. It works easily against Caesar (only 25 keys)."},
+  {q:"In the Vigenere cipher, what determines the shift for each letter?",opts:["The alphabet position of the letter","The corresponding letter of the keyword","A random number","The number of rails"],a:1,fb:"Each letter of the keyword determines the shift for the corresponding plaintext letter. The keyword repeats to match the plaintext length."},
+  {q:"What type of cipher is the Pigpen cipher?",opts:["Transposition","Polyalphabetic substitution","Monoalphabetic substitution","Block cipher"],a:2,fb:"Pigpen is a monoalphabetic substitution cipher — each letter always maps to the same symbol. It's not polyalphabetic because there's only one grid."},
+  {q:"In a Rail Fence cipher with 3 rails, the key is:",opts:["A keyword","The number 3 (rails)","A shift value","A symbol grid"],a:1,fb:"The key for a Rail Fence cipher is the number of rails. This determines the zigzag pattern used to arrange the letters."},
+  {q:"Which attack works against ALL monoalphabetic substitution ciphers?",opts:["Brute force only","Frequency analysis","Rainbow tables","SQL injection"],a:1,fb:"Frequency analysis works against all monoalphabetic ciphers because each letter always maps to the same cipher letter/symbol. The most common cipher letter likely represents E."},
+  {q:"All four ciphers in this topic are examples of:",opts:["Asymmetric encryption","Symmetric encryption","Hashing","Public key cryptography"],a:1,fb:"All four (Pigpen, Caesar, Vigenere, Rail Fence) are symmetric — the same key is used to encrypt and decrypt. Asymmetric encryption uses separate public/private keys."},
+  {q:"Encrypt 'HELLO' with Vigenere keyword 'KEY':",opts:["RIJVS","KHOOR","WADVE","DTAAE"],a:0,fb:"H(7)+K(10)=R, E(4)+E(4)=I, L(11)+Y(24)=J(35mod26=9), L(11)+K(10)=V, O(14)+E(4)=S. Result: RIJVS."},
+  {q:"Why is the Rail Fence cipher weak?",opts:["It changes which letters appear","It has very few possible keys (number of rails)","It uses complex mathematics","It requires a long keyword"],a:1,fb:"The Rail Fence cipher has very few possible keys (just the number of rails), making brute force trivial. Also, all original letters are present in the ciphertext."},
+];
+
+let qIndex=0,qScore=0;
+document.getElementById('qtotal').textContent=questions.length;
+
+function loadQ(){
+  if(qIndex>=questions.length){showResult();return}
+  const q=questions[qIndex];
+  document.getElementById('qnum').textContent=`Question ${qIndex+1} of ${questions.length}`;
+  document.getElementById('qtext').textContent=q.q;
+  const fb=document.getElementById('qfb');fb.className='q-fb';fb.textContent='';
+  document.getElementById('qnext').style.display='none';
+  const opts=document.getElementById('qopts');opts.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');btn.className='q-opt';btn.textContent=opt;
+    btn.onclick=()=>{
+      if(btn.disabled)return;
+      opts.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+      if(i===q.a){btn.classList.add('correct');qScore++;document.getElementById('qscore').textContent=qScore;fb.className='q-fb show fb-ok';fb.textContent='Correct! '+q.fb}
+      else{btn.classList.add('wrong');opts.querySelectorAll('.q-opt')[q.a].classList.add('correct');fb.className='q-fb show fb-no';fb.textContent=q.fb}
+      const pct=((qIndex+1)/questions.length)*100;
+      document.getElementById('qprog').style.width=pct+'%';
+      document.getElementById('qnext').style.display='inline-block';
+    };
+    opts.appendChild(btn);
+  });
+}
+function nextQ(){qIndex++;loadQ()}
+function showResult(){
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-result').style.display='block';
+  document.getElementById('qfinal').textContent=`${qScore}/${questions.length}`;
+  const pct=qScore/questions.length;
+  document.getElementById('qmsg').textContent=pct<0.5?'Keep revising! Work through the Notes tab carefully.':pct<0.75?'Good effort! Review the explanations for questions you missed.':pct<0.9?'Strong performance! Almost there.':'Excellent! You have mastered Topic 3.4.';
+}
+function restartQuiz(){qIndex=0;qScore=0;document.getElementById('qscore').textContent='0';document.getElementById('qprog').style.width='0%';document.getElementById('quiz-result').style.display='none';document.getElementById('quiz-area').style.display='block';loadQ()}
+loadQ();
+</script>
+</body>
+</html>

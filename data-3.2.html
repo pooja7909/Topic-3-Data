@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3.2: Data Representation – IGCSE Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a1a2e;--paper:#fdf8f0;
+    --yellow:#ffd166;--coral:#ef476f;--teal:#06d6a0;
+    --blue:#118ab2;--purple:#7b2d8b;--orange:#f77f00;--green:#2d6a4f;
+    --light-yellow:#fff9c4;--light-coral:#fce4ec;--light-teal:#e0f7f2;
+    --light-blue:#e3f2fd;--light-purple:#f3e5f5;--light-green:#d8f3dc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);font-family:'Patrick Hand',cursive;color:var(--ink);overflow-x:hidden}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(100,149,237,0.15) 31px,rgba(100,149,237,0.15) 32px);pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;top:0;left:70px;bottom:0;width:2px;background:rgba(239,71,111,0.3);pointer-events:none;z-index:0}
+  .page-wrap{max-width:960px;margin:0 auto;padding:20px 30px 60px 90px;position:relative;z-index:1}
+  @media(max-width:600px){.page-wrap{padding:20px 16px 60px 16px}body::after{display:none}}
+
+  .hero{text-align:center;padding:40px 0 20px}
+  .hero-title{font-family:'Permanent Marker',cursive;font-size:2.6rem;color:var(--ink);text-shadow:3px 3px 0 var(--teal);letter-spacing:2px;transform:rotate(-1.5deg);display:inline-block;position:relative}
+  .hero-title::after{content:'';position:absolute;bottom:-8px;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:2px}
+  .hero-sub{font-family:'Caveat',cursive;font-size:1.4rem;color:var(--blue);margin-top:18px}
+
+  .tabs-nav{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 20px;justify-content:center}
+  .tab-btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:8px 18px;border:3px solid var(--ink);border-radius:6px;background:white;cursor:pointer;transition:all .2s;box-shadow:3px 3px 0 var(--ink)}
+  .tab-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .tab-btn.active{background:var(--blue);color:white;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .tab-btn[data-tab="mindmap"].active{background:var(--blue)}
+  .tab-btn[data-tab="notes"].active{background:var(--green)}
+  .tab-btn[data-tab="quiz"].active{background:#059669}
+  .tab-btn[data-tab="activities"].active{background:var(--orange)}
+  .tab-btn[data-tab="exam"].active{background:var(--purple)}
+
+  .tab-panel{display:none;animation:fadeIn .3s ease}
+  .tab-panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  .tip-box{background:var(--light-yellow);border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:12px 16px;margin:12px 0;font-family:'Kalam',cursive;font-size:.95rem}
+  .btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:9px 22px;border:2.5px solid var(--ink);border-radius:8px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:all .15s}
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .btn-primary{background:var(--ink);color:white}
+  .btn-teal{background:var(--teal);color:var(--ink);border-color:#059669;box-shadow:3px 3px 0 #059669}
+  .tag{display:inline-block;padding:2px 9px;border-radius:4px;font-family:'Caveat',cursive;font-size:.85rem;font-weight:700;border:1.5px solid;margin-right:4px}
+  .tag-hard{color:var(--coral);border-color:var(--coral);background:var(--light-coral)}
+  .tag-med{color:var(--orange);border-color:var(--orange);background:#fff3e0}
+  .tag-easy{color:#059669;border-color:var(--teal);background:var(--light-teal)}
+
+  .def-box{border:2px solid;border-radius:8px;padding:12px 14px 10px;margin:12px 0;position:relative;padding-top:22px;font-size:.92rem;line-height:1.55}
+  .def-label{position:absolute;top:-11px;left:12px;color:white;font-family:'Caveat',cursive;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:20px}
+
+  .notes-sec{margin-bottom:14px;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .notes-hdr{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+  .notes-title{font-family:'Permanent Marker',cursive;font-size:1.1rem;color:white}
+  .notes-tog{font-family:'Caveat',cursive;font-size:1.2rem;color:white;transition:transform .3s}
+  .notes-bdy{display:none;padding:18px 20px;background:white;font-family:'Patrick Hand',cursive;font-size:.95rem;line-height:1.65}
+  .notes-bdy.open{display:block;animation:fadeIn .25s ease}
+  .subh{font-family:'Permanent Marker',cursive;font-size:1.05rem;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .subh::after{content:'';flex:1;height:2px;background:currentColor;opacity:.2}
+  .hl-b{color:var(--blue);font-weight:700}.hl-t{color:#059669;font-weight:700}
+  .hl-c{color:var(--coral);font-weight:700}.hl-p{color:var(--purple);font-weight:700}
+  .hl-o{color:var(--orange);font-weight:700}.hl-g{color:var(--green);font-weight:700}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:580px){.g2{grid-template-columns:1fr}}
+  .n-card{border:2.5px solid;border-radius:10px;overflow:hidden;margin:10px 0}
+  .n-card-hdr{padding:8px 14px;font-family:'Permanent Marker',cursive;font-size:1rem;color:white}
+  .n-card-bdy{padding:12px 14px;background:white;font-size:.92rem;line-height:1.55}
+  .nl{display:flex;align-items:flex-start;gap:9px;margin:6px 0;font-size:.92rem;line-height:1.5}
+  .nd{width:24px;height:24px;border-radius:50%;color:white;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .notes-tip{background:#fff9c4;border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:10px 14px;margin:12px 0 4px;font-size:.9rem;font-family:'Kalam',cursive}
+  .notes-eg{background:#f5f5f5;border-left:4px solid var(--blue);padding:8px 12px;margin:8px 0;border-radius:0 6px 6px 0;font-size:.88rem;font-style:italic;font-family:'Kalam',cursive}
+
+  .cmp-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+  .cmp-tbl th{background:var(--ink);color:white;font-family:'Permanent Marker',cursive;padding:10px 13px;text-align:left}
+  .cmp-tbl td{padding:9px 13px;border-bottom:1px solid #e5e5e5;vertical-align:top}
+  .cmp-tbl tr:nth-child(even) td{background:#f9f9f9}
+
+  .ig-wrap{background:#fffdf5;border:3px solid var(--ink);border-radius:12px;padding:28px;box-shadow:6px 6px 0 var(--ink)}
+  .ig-title{font-family:'Permanent Marker',cursive;font-size:2rem;text-align:center;margin-bottom:20px}
+  .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:600px){.ig-grid{grid-template-columns:1fr}}
+  .ig-sec{border:2.5px solid var(--ink);border-radius:10px;padding:16px;background:white;position:relative}
+  .ig-label{font-family:'Permanent Marker',cursive;font-size:1.05rem;position:absolute;top:-13px;left:14px;background:white;padding:0 8px}
+  .ig-item{display:flex;align-items:flex-start;gap:9px;margin:7px 0;font-family:'Kalam',cursive;font-size:.92rem;line-height:1.4}
+  .ig-dot{width:20px;height:20px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .highlight-box{background:var(--light-teal);border:2.5px solid var(--ink);border-radius:8px;padding:12px 16px;margin:16px 0;font-family:'Kalam',cursive;font-size:1rem;text-align:center;transform:rotate(-.3deg)}
+
+  .imp-banner{margin-bottom:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .imp-header{background:var(--blue);color:white;padding:10px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem;display:flex;align-items:center;gap:10px;cursor:pointer}
+  .imp-body{display:none;background:white}
+  .imp-body.open{display:block;animation:fadeIn .3s ease}
+  .imp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .imp-cell{padding:14px 16px;border-right:2px solid #eee;border-bottom:2px solid #eee}
+  .imp-cell-title{font-family:'Permanent Marker',cursive;font-size:.95rem;margin-bottom:6px}
+  .imp-cell p{font-family:'Kalam',cursive;font-size:.88rem;line-height:1.5}
+  .imp-footer{background:#fff9c4;border-top:2px solid var(--ink);padding:10px 16px;font-family:'Kalam',cursive;font-size:.88rem;display:flex;align-items:center;gap:8px}
+
+  .act-card{border:3px solid var(--ink);border-radius:12px;overflow:hidden;margin-bottom:22px;box-shadow:5px 5px 0 var(--ink)}
+  .act-hdr{padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--ink)}
+  .act-icon{font-size:1.8rem}
+  .act-title{font-family:'Permanent Marker',cursive;font-size:1.25rem}
+  .act-bdy{background:white;padding:18px;font-size:.95rem;line-height:1.6}
+
+  .chip-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;padding:12px;background:#f9f9f9;border:2px dashed #ccc;border-radius:8px;min-height:48px}
+  .chip{padding:6px 14px;background:white;border:2px solid var(--ink);border-radius:20px;font-family:'Patrick Hand',cursive;font-size:.9rem;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:all .15s;user-select:none}
+  .chip:hover{transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .chip.chip-ok{background:var(--light-teal);border-color:#059669}
+  .chip.chip-bad{background:var(--light-coral);border-color:var(--coral);animation:shake .3s}
+
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:500px){.match-grid{grid-template-columns:1fr}}
+  .match-item{padding:10px 13px;border:2.5px solid var(--ink);border-radius:8px;font-family:'Patrick Hand',cursive;font-size:.88rem;cursor:pointer;background:white;box-shadow:2px 2px 0 var(--ink);transition:all .15s;min-height:46px;display:flex;align-items:center}
+  .match-item:hover{transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .match-item.sel{background:var(--yellow);border-color:var(--orange)}
+  .match-item.ok{background:#e0faf1;border-color:var(--teal);pointer-events:none}
+  .match-item.bad{background:var(--light-coral);border-color:var(--coral);animation:shake .3s}
+
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .word{padding:5px 13px;background:white;border:2px solid var(--ink);border-radius:20px;font-family:'Caveat',cursive;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:all .15s}
+  .word:hover:not(.used){background:var(--light-yellow)}
+  .word.sel{background:var(--yellow);border-color:var(--orange)}
+  .word.used{opacity:.35;pointer-events:none;text-decoration:line-through}
+  .fill-para{line-height:2.6;font-size:.95rem;padding:14px;background:#fafafa;border:2px solid #ddd;border-radius:8px}
+  .blank{display:inline-block;min-width:90px;border-bottom:2.5px solid var(--blue);padding:2px 8px;font-family:'Caveat',cursive;font-size:.98rem;font-weight:700;text-align:center;margin:0 3px;cursor:pointer;transition:all .15s;border-radius:4px 4px 0 0}
+  .blank:hover{background:rgba(255,209,102,.25)}
+  .blank.filled{color:var(--blue)}
+  .blank.sel-b{background:rgba(255,209,102,.4);border-color:var(--orange)}
+  .blank.ok{background:var(--light-teal);color:#059669;border-color:#059669}
+  .blank.bad{background:var(--light-coral);color:var(--coral);border-color:var(--coral)}
+
+  .tf-card{border:2px solid var(--ink);border-radius:10px;padding:14px 16px;margin:10px 0;background:white}
+  .tf-q{font-family:'Kalam',cursive;font-size:.97rem;margin-bottom:10px;line-height:1.5}
+  .tf-btns{display:flex;gap:10px}
+  .tf-btn{font-family:'Caveat',cursive;font-size:1rem;font-weight:700;padding:6px 20px;border:2px solid var(--ink);border-radius:20px;cursor:pointer;transition:all .15s;background:white}
+  .tf-btn:hover{background:var(--light-yellow)}
+  .tf-btn.correct{background:var(--teal);color:white;border-color:#059669}
+  .tf-btn.wrong{background:var(--coral);color:white;border-color:#c0392b}
+  .tf-btn:disabled{cursor:default}
+  .tf-exp{display:none;margin-top:8px;padding:8px 12px;border-radius:6px;font-family:'Kalam',cursive;font-size:.88rem}
+  .tf-exp.show{display:block}
+
+  .q-prog-wrap{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .q-prog-bar{flex:1;height:14px;background:#e0e0e0;border:2px solid var(--ink);border-radius:20px;overflow:hidden}
+  .q-prog-fill{height:100%;background:var(--teal);border-radius:20px;transition:width .4s}
+  .q-score{font-family:'Permanent Marker',cursive;font-size:1.1rem;background:var(--yellow);border:2px solid var(--ink);padding:4px 12px;border-radius:20px}
+  .q-card{border:3px solid var(--ink);border-radius:12px;padding:22px;background:white;box-shadow:5px 5px 0 var(--ink)}
+  .q-num{font-family:'Permanent Marker',cursive;font-size:.9rem;color:var(--teal);margin-bottom:8px}
+  .q-text{font-family:'Caveat',cursive;font-size:1.35rem;font-weight:600;margin-bottom:16px;line-height:1.4}
+  .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  @media(max-width:480px){.q-opts{grid-template-columns:1fr}}
+  .q-opt{padding:11px 14px;border:2.5px solid var(--ink);border-radius:8px;background:white;font-family:'Patrick Hand',cursive;font-size:.98rem;cursor:pointer;transition:all .15s;text-align:left;box-shadow:2px 2px 0 var(--ink)}
+  .q-opt:hover:not(:disabled){transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .q-opt.correct{background:var(--teal)!important;color:white;border-color:#059669;box-shadow:none}
+  .q-opt.wrong{background:var(--coral)!important;color:white;border-color:#c0392b;box-shadow:none;animation:shake .3s}
+  .q-opt:disabled{cursor:default}
+  .q-fb{margin-top:12px;padding:10px 14px;border-radius:8px;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:600;border:2px solid;display:none}
+  .q-fb.show{display:block}
+  .q-fb.fb-ok{background:#e0faf1;border-color:var(--teal);color:#059669}
+  .q-fb.fb-no{background:var(--light-coral);border-color:var(--coral);color:var(--coral)}
+  .q-result{text-align:center;padding:30px}
+  .q-result h2{font-family:'Permanent Marker',cursive;font-size:2.5rem;margin-bottom:10px}
+  .big-score{font-family:'Permanent Marker',cursive;font-size:4rem;color:var(--teal)}
+
+  .eq-wrap{margin-bottom:26px;border:2.5px solid var(--ink);border-radius:10px;background:white;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+  .eq-hdr{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink)}
+  .eq-hdr.c1{background:var(--light-teal)}.eq-hdr.c2{background:var(--light-blue)}.eq-hdr.c3{background:var(--light-purple)}
+  .eq-hdr.c4{background:#fff3e0}.eq-hdr.c5{background:var(--light-yellow)}.eq-hdr.c6{background:var(--light-coral)}
+  .eq-hdr.c7{background:var(--light-green)}.eq-hdr.c8{background:var(--light-blue)}
+  .eq-num{font-family:'Permanent Marker',cursive;font-size:1.05rem}
+  .eq-marks{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;background:var(--ink);color:white;padding:2px 10px;border-radius:20px}
+  .eq-bdy{padding:14px 16px}
+  .eq-txt{font-size:1.02rem;line-height:1.6;margin-bottom:12px}
+  .eq-ctx{background:#f5f5f5;border-left:4px solid var(--blue);padding:10px 14px;margin-bottom:12px;font-size:.93rem;line-height:1.5;border-radius:0 6px 6px 0;font-style:italic;font-family:'Kalam',cursive}
+  .ans-ta{width:100%;border:1.5px solid #b0bec5;border-radius:6px;background:transparent;font-family:'Patrick Hand',cursive;font-size:.95rem;padding:8px;outline:none;resize:vertical;min-height:80px}
+  .show-ms{font-family:'Caveat',cursive;font-size:1rem;padding:6px 16px;border:2px solid var(--purple);border-radius:20px;background:white;color:var(--purple);cursor:pointer;margin-top:10px;transition:all .15s}
+  .show-ms:hover{background:var(--purple);color:white}
+  .ms{display:none;margin-top:10px;background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:12px 16px;font-size:.93rem;line-height:1.6}
+  .ms.show{display:block;animation:fadeIn .3s ease}
+  .ms ul{padding-left:20px;margin-top:6px}
+  .ms li{margin:4px 0}
+  .ms-lbl{font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:6px}
+
+  .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--ink);text-decoration:none;border:2.5px solid var(--ink);border-radius:8px;padding:8px 18px;background:var(--light-yellow);box-shadow:3px 3px 0 var(--ink);margin:20px 0 10px;transform:rotate(-.5deg);transition:all .15s}
+  .back-btn:hover{transform:translate(-2px,-2px) rotate(-.5deg);box-shadow:5px 5px 0 var(--ink)}
+
+  .pixel-grid{display:inline-grid;gap:1px;background:#ccc;border:2px solid var(--ink);padding:1px;border-radius:4px}
+  .pixel-cell{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-family:monospace;cursor:pointer;transition:all .1s;border:1px solid #eee}
+  .pixel-cell.on{background:var(--ink);color:white}
+  .pixel-cell.off{background:white;color:#ccc}
+
+  .wave-canvas{border:2px solid var(--ink);border-radius:8px;background:white;width:100%;max-width:500px}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <a href="binary-home.html" class="back-btn">← Back to Binary Home</a>
+
+  <div class="hero">
+    <h1 class="hero-title">🔤 Topic 3.2: Data Representation</h1>
+    <p class="hero-sub">How computers encode characters, images & sound</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="mindmap">🗺 Mind Map</button>
+    <button class="tab-btn" data-tab="notes">📖 Topic Notes</button>
+    <button class="tab-btn" data-tab="quiz">⚡ Quick Quiz</button>
+    <button class="tab-btn" data-tab="activities">✏️ Activities</button>
+    <button class="tab-btn" data-tab="exam">📝 Exam Questions</button>
+  </div>
+
+  <!-- ════════════ MIND MAP ════════════ -->
+  <div class="tab-panel active" id="tab-mindmap">
+
+    <div class="imp-banner">
+      <div class="imp-header" onclick="toggleImp(this)">
+        🔤 Why Does Data Representation Matter? <span style="margin-left:auto;font-family:'Caveat',cursive;font-size:1rem;font-weight:normal" class="tog">▼ expand</span>
+      </div>
+      <div class="imp-body">
+        <div class="imp-grid">
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--blue)">🔤 Text Everywhere</div><p>Every email, web page, and document is stored as binary. ASCII and Unicode define how characters map to binary codes — without them, text would be meaningless.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:#059669">🖼 Images Are Numbers</div><p>Every photo on your phone is a grid of pixels, each stored as a binary number. Resolution and colour depth determine quality and file size.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--coral)">🎵 Sound Is Sampled</div><p>Analogue sound waves are converted to binary by sampling at regular intervals. More samples = better quality but bigger files.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--purple)">⚠️ Bits = Limits</div><p>Every binary representation has limits. Fewer bits means lower quality, fewer characters, fewer colours. Understanding these trade-offs is essential.</p></div>
+        </div>
+        <div class="imp-footer">✏️ <strong>Key principle:</strong> All data is binary. The encoding scheme (ASCII, Unicode, bitmap, sampling) gives that binary its meaning. More bits = more detail, but also more storage needed.</div>
+      </div>
+    </div>
+
+    <div class="ig-wrap">
+      <div class="ig-title">🔤 Data Representation — Big Picture</div>
+      <div class="highlight-box">All data is <strong>BINARY</strong> — the encoding scheme gives it meaning: <strong>Characters</strong> (ASCII/Unicode) · <strong>Images</strong> (Bitmap pixels) · <strong>Sound</strong> (Sampled amplitudes)</div>
+
+      <div class="ig-grid">
+        <!-- Characters -->
+        <div class="ig-sec" style="border-color:var(--blue)">
+          <span class="ig-label" style="color:var(--blue)">🔤 Characters: ASCII & Unicode</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">A</div><div><strong>ASCII</strong>: 7-bit code, 128 characters (English letters, digits, symbols)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">U</div><div><strong>Unicode</strong>: 16-bit+, 100,000+ characters (all world languages, emojis)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">→</div><div>Each character = unique binary code (e.g. A = 01000001)</div></div>
+          </div>
+          <div style="margin-top:8px;background:var(--light-blue);border-radius:6px;padding:8px;font-family:'Kalam',cursive;font-size:.82rem">
+            ASCII is a subset of Unicode — the first 128 codes are identical
+          </div>
+        </div>
+
+        <!-- Images -->
+        <div class="ig-sec" style="border-color:#059669">
+          <span class="ig-label" style="color:#059669">🖼 Bitmap Images</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">P</div><div><strong>Pixel</strong>: smallest element of a bitmap image</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">R</div><div><strong>Resolution</strong>: width x height in pixels</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">C</div><div><strong>Colour depth</strong>: bits per pixel (1-bit = 2 colours, 8-bit = 256, 24-bit = 16.7M)</div></div>
+          </div>
+          <div style="margin-top:8px;background:var(--light-teal);border-radius:6px;padding:8px;font-family:'Kalam',cursive;font-size:.82rem">
+            Image size = width x height x colour depth (in bits)
+          </div>
+        </div>
+
+        <!-- Sound -->
+        <div class="ig-sec" style="border-color:var(--coral)">
+          <span class="ig-label" style="color:var(--coral)">🎵 Sound Representation</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">S</div><div><strong>Sampling</strong>: measure amplitude at regular intervals</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">F</div><div><strong>Sampling frequency</strong>: samples per second (Hz)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">R</div><div><strong>Sample resolution</strong>: bits per sample (bit depth)</div></div>
+          </div>
+          <div style="margin-top:8px;background:var(--light-coral);border-radius:6px;padding:8px;font-family:'Kalam',cursive;font-size:.82rem">
+            Higher frequency + resolution = better quality but larger file
+          </div>
+        </div>
+
+        <!-- Limitations -->
+        <div class="ig-sec" style="border-color:var(--purple)">
+          <span class="ig-label" style="color:var(--purple)">⚠️ Limitations of Binary</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">!</div><div>Fewer bits = <strong>lower quality</strong> (fewer colours, lower sound fidelity)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">!</div><div>Low sampling frequency = <strong>aliasing</strong> (loss of detail)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">!</div><div>Low resolution = <strong>pixelation</strong> (blocky images)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">!</div><div>More bits = better quality but <strong>larger file size</strong></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison table -->
+      <div style="margin-top:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:white;box-shadow:4px 4px 0 var(--ink)">
+        <div style="background:var(--ink);color:white;padding:12px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem">📊 Three Data Types — Side by Side</div>
+        <div style="overflow-x:auto">
+          <table class="cmp-tbl">
+            <tr><th></th><th style="color:#a8f0c8">🔤 Characters</th><th style="color:#c9b8ff">🖼 Images</th><th style="color:#ffb3b3">🎵 Sound</th></tr>
+            <tr><td><strong>What is stored</strong></td><td>Binary code per character</td><td>Binary code per pixel</td><td>Binary code per sample</td></tr>
+            <tr><td><strong>Key property</strong></td><td>Character set (ASCII/Unicode)</td><td>Resolution + colour depth</td><td>Sampling freq + bit depth</td></tr>
+            <tr><td><strong>More bits =</strong></td><td>More characters (Unicode)</td><td>More colours / detail</td><td>Better sound fidelity</td></tr>
+            <tr><td><strong>Fewer bits =</strong></td><td>Limited to English (ASCII)</td><td>Pixelation / fewer colours</td><td>Poor quality / aliasing</td></tr>
+            <tr><td><strong>Size formula</strong></td><td>chars x bits per char</td><td>W x H x colour depth</td><td>samples x bit depth</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ NOTES ════════════ -->
+  <div class="tab-panel" id="tab-notes">
+
+    <!-- 3.2.1 ASCII & Unicode -->
+    <div class="notes-sec" id="ns1">
+      <div class="notes-hdr" onclick="toggleSection('ns1')" style="background:linear-gradient(135deg,#118ab2,#0d6efd)">
+        <div class="notes-title">3.2.1 — Character Encoding: ASCII & Unicode</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Computers can only store <strong>binary</strong>. So how do they store text like the letter <strong>A</strong> or the symbol <strong>@</strong>? The answer is <strong>character encoding</strong> — a mapping that assigns a unique binary code to each character.</p>
+
+        <div class="def-box" style="border-color:var(--blue)">
+          <span class="def-label" style="background:var(--blue)">DEFINITIONS</span>
+          <p><strong class="hl-b">Character set</strong> — a defined list of characters recognised by computer hardware and software, each assigned a unique binary code.<br><br>
+          <strong class="hl-b">ASCII</strong> — American Standard Code for Information Interchange. A 7-bit character set with 128 characters.<br><br>
+          <strong class="hl-b">Unicode</strong> — a 16-bit (or more) character set that can represent over 100,000 characters from all world languages.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--blue)">🔤 ASCII (7-bit)</h4>
+        <p>ASCII uses <strong>7 bits</strong> per character, giving <strong>2<sup>7</sup> = 128</strong> possible codes (0–127). It covers:</p>
+        <ul style="margin:8px 0 8px 20px">
+          <li>Codes 0–31: <strong>Control characters</strong> (e.g. carriage return, tab)</li>
+          <li>Codes 32–126: <strong>Printable characters</strong> (space, A–Z, a–z, 0–9, punctuation)</li>
+          <li>Code 127: <strong>Delete</strong></li>
+        </ul>
+
+        <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:12px;margin:12px 0;overflow-x:auto">
+          <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--blue);margin-bottom:8px">ASCII Examples:</div>
+          <table class="cmp-tbl" style="margin:0">
+            <tr><th>Character</th><th>Denary</th><th>Binary (7-bit)</th></tr>
+            <tr><td>A</td><td>65</td><td>1000001</td></tr>
+            <tr><td>B</td><td>66</td><td>1000010</td></tr>
+            <tr><td>a</td><td>97</td><td>1100001</td></tr>
+            <tr><td>0</td><td>48</td><td>0110000</td></tr>
+            <tr><td>@</td><td>64</td><td>1000000</td></tr>
+            <tr><td>Space</td><td>32</td><td>0100000</td></tr>
+          </table>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> Notice that 'A' = 65 and 'a' = 97. Uppercase letters come before lowercase in ASCII. The difference is always 32.</div>
+
+        <h4 class="subh" style="color:var(--blue)">🌍 Unicode (16-bit+)</h4>
+        <p>ASCII only works for English. <strong>Unicode</strong> was created to represent <strong>every language in the world</strong>, plus symbols and emojis.</p>
+
+        <div class="g2">
+          <div class="n-card" style="border-color:var(--blue)">
+            <div class="n-card-hdr" style="background:var(--blue)">ASCII (7-bit)</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>128 characters only</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>English alphabet, digits, symbols</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>1 byte per character (8 bits, MSB = 0)</div></div>
+              <div class="nl"><span class="nd" style="background:var(--blue)">4</span><div>Small file sizes</div></div>
+            </div>
+          </div>
+          <div class="n-card" style="border-color:var(--purple)">
+            <div class="n-card-hdr" style="background:var(--purple)">Unicode (16-bit+)</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--purple)">1</span><div>100,000+ characters</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">2</span><div>All world languages, emojis, symbols</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">3</span><div>2–4 bytes per character</div></div>
+              <div class="nl"><span class="nd" style="background:var(--purple)">4</span><div>Larger file sizes</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Key point:</strong> The first 128 Unicode codes are <strong>identical to ASCII</strong>. ASCII is a subset of Unicode. This means any ASCII text is also valid Unicode.</div>
+      </div>
+    </div>
+
+    <!-- 3.2.2 Bitmap Images -->
+    <div class="notes-sec" id="ns2">
+      <div class="notes-hdr" onclick="toggleSection('ns2')" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <div class="notes-title">3.2.2 — Bitmap Image Representation</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>A <strong class="hl-t">bitmap image</strong> is made up of a grid of tiny squares called <strong>pixels</strong> (picture elements). Each pixel is stored as a binary number representing its colour.</p>
+
+        <div class="def-box" style="border-color:#059669">
+          <span class="def-label" style="background:#059669">DEFINITIONS</span>
+          <p><strong class="hl-t">Pixel</strong> — the smallest identifiable element of a bitmap image. A single square of colour.<br><br>
+          <strong class="hl-t">Resolution</strong> — the number of pixels in an image, expressed as width x height (e.g. 1920 x 1080).<br><br>
+          <strong class="hl-t">Colour depth</strong> — the number of bits used to represent the colour of each pixel.</p>
+        </div>
+
+        <h4 class="subh" style="color:#059669">🎨 Colour Depth</h4>
+        <p>The more bits per pixel, the more colours can be represented:</p>
+        <table class="cmp-tbl">
+          <tr><th>Colour Depth</th><th>Number of Colours</th><th>Example</th></tr>
+          <tr><td>1 bit</td><td>2<sup>1</sup> = 2</td><td>Black & white</td></tr>
+          <tr><td>2 bits</td><td>2<sup>2</sup> = 4</td><td>Simple icons</td></tr>
+          <tr><td>8 bits</td><td>2<sup>8</sup> = 256</td><td>GIF images</td></tr>
+          <tr><td>16 bits</td><td>2<sup>16</sup> = 65,536</td><td>High colour</td></tr>
+          <tr><td>24 bits</td><td>2<sup>24</sup> = 16,777,216</td><td>True colour (photo quality)</td></tr>
+        </table>
+
+        <h4 class="subh" style="color:#059669">📐 Calculating Image File Size</h4>
+        <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:#059669;margin-bottom:8px">File Size Formula:</div>
+          <div style="font-family:monospace;font-size:1.1rem;text-align:center;padding:8px;background:white;border-radius:6px">
+            File size (bits) = Width x Height x Colour Depth
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> A 1920 x 1080 image with 24-bit colour depth:<br>
+            1920 x 1080 x 24 = 49,766,400 bits = 6,220,800 bytes ≈ 5.93 MB
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:#059669">🔍 Resolution & Quality</h4>
+        <div class="g2">
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Higher Resolution</div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>More pixels = more detail</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Sharper image when enlarged</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Larger file size</div></div>
+          </div>
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Lower Resolution</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Fewer pixels = less detail</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Pixelation when enlarged</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Smaller file size</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> When asked about the effect of changing resolution or colour depth, always mention BOTH quality AND file size. Increasing either improves quality but increases file size.</div>
+      </div>
+    </div>
+
+    <!-- 3.2.3 Sound -->
+    <div class="notes-sec" id="ns3">
+      <div class="notes-hdr" onclick="toggleSection('ns3')" style="background:linear-gradient(135deg,var(--coral),#e74c3c)">
+        <div class="notes-title">3.2.3 — Sound Representation</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Sound is an <strong class="hl-c">analogue</strong> signal — a continuous wave that varies smoothly over time. Computers are <strong>digital</strong> — they store discrete binary values. To store sound, we must <strong>convert the analogue signal to digital</strong> through a process called <strong>sampling</strong>.</p>
+
+        <div class="def-box" style="border-color:var(--coral)">
+          <span class="def-label" style="background:var(--coral)">DEFINITIONS</span>
+          <p><strong class="hl-c">Analogue</strong> — a continuous signal that varies smoothly over time (like a sound wave).<br><br>
+          <strong class="hl-c">Sampling</strong> — the process of measuring the amplitude (height) of an analogue sound wave at regular intervals.<br><br>
+          <strong class="hl-c">Sampling frequency (rate)</strong> — the number of samples taken per second, measured in Hertz (Hz).<br><br>
+          <strong class="hl-c">Sample resolution (bit depth)</strong> — the number of bits used to store each sample.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--coral)">📊 How Sampling Works</h4>
+        <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:14px;margin:12px 0">
+          <div class="nl"><span class="nd" style="background:var(--coral)">1</span><div>The analogue sound wave is measured at <strong>regular intervals</strong></div></div>
+          <div class="nl"><span class="nd" style="background:var(--coral)">2</span><div>Each measurement is called a <strong>sample</strong></div></div>
+          <div class="nl"><span class="nd" style="background:var(--coral)">3</span><div>Each sample is <strong>rounded to the nearest value</strong> that can be stored in the available bits</div></div>
+          <div class="nl"><span class="nd" style="background:var(--coral)">4</span><div>The sequence of binary samples is stored as a <strong>digital sound file</strong></div></div>
+        </div>
+
+        <!-- Wave diagram -->
+        <div style="text-align:center;margin:16px 0">
+          <svg viewBox="0 0 500 120" style="max-width:500px;width:100%" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#1a1a2e"/></marker></defs>
+            <!-- Axes -->
+            <line x1="30" y1="10" x2="30" y2="110" stroke="#1a1a2e" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="20" y1="60" x2="490" y2="60" stroke="#1a1a2e" stroke-width="1.5" marker-end="url(#arr)"/>
+            <text x="10" y="65" font-size="9" fill="#1a1a2e" font-family="sans-serif">0</text>
+            <text x="490" y="75" font-size="9" fill="#1a1a2e" font-family="sans-serif">Time</text>
+            <text x="15" y="15" font-size="9" fill="#1a1a2e" font-family="sans-serif">Amp</text>
+            <!-- Analogue wave -->
+            <path d="M30,60 C60,20 90,20 120,60 C150,100 180,100 210,60 C240,20 270,20 300,60 C330,100 360,100 390,60 C420,25 440,25 470,60" fill="none" stroke="var(--coral)" stroke-width="2.5" opacity="0.5"/>
+            <!-- Sample lines -->
+            <g stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="3,2">
+              <line x1="60" y1="60" x2="60" y2="30"/><line x1="90" y1="60" x2="90" y2="22"/>
+              <line x1="120" y1="60" x2="120" y2="42"/><line x1="150" y1="60" x2="150" y2="88"/>
+              <line x1="180" y1="60" x2="180" y2="98"/><line x1="210" y1="60" x2="210" y2="60"/>
+              <line x1="240" y1="60" x2="240" y2="30"/><line x1="270" y1="60" x2="270" y2="22"/>
+              <line x1="300" y1="60" x2="300" y2="42"/><line x1="330" y1="60" x2="330" y2="88"/>
+              <line x1="360" y1="60" x2="360" y2="98"/><line x1="390" y1="60" x2="390" y2="60"/>
+              <line x1="420" y1="60" x2="420" y2="32"/><line x1="450" y1="60" x2="450" y2="38"/>
+            </g>
+            <!-- Sample dots -->
+            <g fill="var(--blue)">
+              <circle cx="60" cy="30" r="4"/><circle cx="90" cy="22" r="4"/>
+              <circle cx="120" cy="42" r="4"/><circle cx="150" cy="88" r="4"/>
+              <circle cx="180" cy="98" r="4"/><circle cx="210" cy="60" r="4"/>
+              <circle cx="240" cy="30" r="4"/><circle cx="270" cy="22" r="4"/>
+              <circle cx="300" cy="42" r="4"/><circle cx="330" cy="88" r="4"/>
+              <circle cx="360" cy="98" r="4"/><circle cx="390" cy="60" r="4"/>
+              <circle cx="420" cy="32" r="4"/><circle cx="450" cy="38" r="4"/>
+            </g>
+            <!-- Stepped digital -->
+            <path d="M30,60 L60,30 L90,22 L120,42 L150,88 L180,98 L210,60 L240,30 L270,22 L300,42 L330,88 L360,98 L390,60 L420,32 L450,38 L470,60" fill="none" stroke="var(--blue)" stroke-width="2"/>
+            <!-- Legend -->
+            <line x1="50" y1="115" x2="80" y2="115" stroke="var(--coral)" stroke-width="2.5" opacity="0.5"/>
+            <text x="85" y="118" font-size="9" fill="var(--coral)" font-family="sans-serif">Analogue wave</text>
+            <line x1="200" y1="115" x2="230" y2="115" stroke="var(--blue)" stroke-width="2"/>
+            <text x="235" y="118" font-size="9" fill="var(--blue)" font-family="sans-serif">Digital samples</text>
+          </svg>
+        </div>
+
+        <h4 class="subh" style="color:var(--coral)">📐 Calculating Sound File Size</h4>
+        <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--coral);margin-bottom:8px">File Size Formula:</div>
+          <div style="font-family:monospace;font-size:1.05rem;text-align:center;padding:8px;background:white;border-radius:6px">
+            File size (bits) = Sample rate x Bit depth x Duration (seconds)
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> 44,100 Hz sample rate, 16-bit depth, 3 minutes:<br>
+            44,100 x 16 x 180 = 127,008,000 bits = 15,876,000 bytes ≈ 15.1 MB
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> CD-quality audio uses 44,100 Hz and 16-bit depth. This is a common exam reference point.</div>
+      </div>
+    </div>
+
+    <!-- 3.2.4 Limitations -->
+    <div class="notes-sec" id="ns4">
+      <div class="notes-hdr" onclick="toggleSection('ns4')" style="background:linear-gradient(135deg,var(--purple),#d946ef)">
+        <div class="notes-title">3.2.4 — Limitations of Binary Representation</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Every binary representation is limited by the <strong class="hl-p">number of bits available</strong>. More bits means more detail, but also more storage. Fewer bits means lower quality. This trade-off is fundamental to computing.</p>
+
+        <h4 class="subh" style="color:var(--purple)">🔤 Character Limitations</h4>
+        <div class="g2">
+          <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--blue);margin-bottom:6px">ASCII (7-bit) Limits</div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>Only 128 characters — English only</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>Cannot represent Chinese, Arabic, Hindi, etc.</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>No emojis or special symbols</div></div>
+          </div>
+          <div style="background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--purple);margin-bottom:6px">Unicode (16-bit+) Limits</div>
+            <div class="nl"><span class="nd" style="background:var(--purple)">1</span><div>100,000+ characters — covers all languages</div></div>
+            <div class="nl"><span class="nd" style="background:var(--purple)">2</span><div>But each character takes 2+ bytes (larger files)</div></div>
+            <div class="nl"><span class="nd" style="background:var(--purple)">3</span><div>Trade-off: more characters vs. more storage</div></div>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">🖼 Image Limitations</h4>
+        <div class="g2">
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Low Resolution</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Images appear <strong>pixelated</strong> (blocky)</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Edges look jagged (jaggy aliasing)</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Smaller file size</div></div>
+          </div>
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Low Colour Depth</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Fewer colours — <strong>banding</strong> (visible steps between colours)</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Subtle shades lost (e.g. skin tones)</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Smaller file size</div></div>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">🎵 Sound Limitations</h4>
+        <div class="g2">
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Low Sampling Frequency</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>High frequencies lost — sounds muffled</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div><strong>Aliasing</strong>: high frequencies appear as lower false frequencies</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Smaller file size</div></div>
+          </div>
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Low Sample Resolution (bit depth)</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Quieter sounds lost — <strong>quantisation error</strong></div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Background noise / hissing</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Smaller file size</div></div>
+          </div>
+        </div>
+
+        <div class="def-box" style="border-color:var(--purple)">
+          <span class="def-label" style="background:var(--purple)">KEY TERM</span>
+          <p><strong class="hl-p">Aliasing</strong> — when the sampling frequency is too low to accurately capture the sound wave, causing high-frequency sounds to be misrepresented as lower frequencies. This creates distortion and loss of detail.</p>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> The <strong>Nyquist theorem</strong> states that the sampling frequency must be at least <strong>twice the highest frequency</strong> in the sound to avoid aliasing. For human hearing (up to ~20,000 Hz), CD quality uses 44,100 Hz (just over 2 x 20,000).</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ QUIZ ════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div class="q-prog-wrap">
+      <div class="q-prog-bar"><div class="q-prog-fill" id="qprog" style="width:0%"></div></div>
+      <div class="q-score">Score: <span id="qscore">0</span>/<span id="qtotal">15</span></div>
+    </div>
+    <div id="quiz-area">
+      <div class="q-card">
+        <div class="q-num" id="qnum">Question 1 of 15</div>
+        <div class="q-text" id="qtext"></div>
+        <div class="q-opts" id="qopts"></div>
+        <div class="q-fb" id="qfb"></div>
+        <div style="text-align:right;margin-top:14px">
+          <button class="btn btn-teal" id="qnext" onclick="nextQ()" style="display:none">Next Question →</button>
+        </div>
+      </div>
+    </div>
+    <div id="quiz-result" style="display:none">
+      <div class="q-result">
+        <h2>Topic 3.2 Complete!</h2>
+        <div class="big-score" id="qfinal"></div>
+        <p style="font-family:'Kalam',cursive;font-size:1rem;margin:12px 0 20px" id="qmsg"></p>
+        <button class="btn btn-primary" onclick="restartQuiz()">↺ Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ ACTIVITIES ════════════ -->
+  <div class="tab-panel" id="tab-activities">
+
+    <!-- Activity 1: ASCII Table -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-blue)">
+        <span class="act-icon">🔤</span>
+        <div>
+          <div class="act-title" style="color:var(--blue)">Activity 1 — ASCII Character Lookup</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Enter a denary value (32–127) to see its ASCII character</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <input type="number" id="ascii-input" min="32" max="127" value="65" style="border:2px solid var(--ink);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:.95rem;width:100px">
+          <button class="btn btn-teal" onclick="lookupASCII()">Look Up →</button>
+          <span id="ascii-result" style="font-family:'Caveat',cursive;font-size:1.3rem;font-weight:700;color:var(--blue)"></span>
+        </div>
+        <div style="margin-top:12px;font-family:'Kalam',cursive;font-size:.85rem;color:#777">Try: 65 (A), 97 (a), 48 (0), 32 (space), 64 (@)</div>
+      </div>
+    </div>
+
+    <!-- Activity 2: Pixel Art -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-teal)">
+        <span class="act-icon">🖼</span>
+        <div>
+          <div class="act-title" style="color:#059669">Activity 2 — 1-bit Pixel Art</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Click pixels to toggle on/off (1-bit image: 1 = black, 0 = white)</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+          <div>
+            <div class="pixel-grid" id="pixel-grid" style="grid-template-columns:repeat(8,1fr)"></div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-teal" onclick="clearPixels()">Clear</button>
+              <button class="btn" onclick="randomPixels()" style="background:white">Random</button>
+            </div>
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555;max-width:260px">
+            <p><strong>How it works:</strong> Each pixel is 1 bit. 1 = black (on), 0 = white (off). An 8x8 image = 64 pixels = 64 bits = 8 bytes.</p>
+            <p style="margin-top:8px">Try drawing a letter or simple shape!</p>
+            <div id="pixel-binary" style="margin-top:10px;font-family:monospace;font-size:.75rem;background:#f5f5f5;padding:8px;border-radius:6px;word-break:break-all"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 3: Match -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-purple)">
+        <span class="act-icon">🔗</span>
+        <div>
+          <div class="act-title" style="color:var(--purple)">Activity 3 — Match Terms to Definitions</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Click a term, then click its matching definition</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="match-grid">
+          <div id="match-left"></div>
+          <div id="match-right"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <button class="btn" onclick="resetMatch()" style="background:white">↺ Reset</button>
+          <span id="match-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 4: Fill in the Blanks -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-teal)">
+        <span class="act-icon">✍️</span>
+        <div>
+          <div class="act-title" style="color:#059669">Activity 4 — Fill in the Blanks</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Click a word, then click a blank to place it</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="word-bank" id="word-bank"></div>
+        <div class="fill-para" id="fill-para"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn btn-primary" onclick="checkFill()">✓ Check</button>
+          <button class="btn btn-teal" onclick="revealFill()">👁 Reveal</button>
+          <button class="btn" onclick="resetFill()" style="background:white">↺ Reset</button>
+          <span id="fill-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal);align-self:center"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 5: True/False -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:#fff3e0">
+        <span class="act-icon">🧠</span>
+        <div>
+          <div class="act-title" style="color:var(--orange)">Activity 5 — True or False?</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Test your understanding of data representation</div>
+        </div>
+      </div>
+      <div class="act-bdy" id="tf-area"></div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ EXAM QUESTIONS ════════════ -->
+  <div class="tab-panel" id="tab-exam">
+    <div class="tip-box">📝 <strong>Exam Questions — Section 3.2:</strong> Write your answer, then reveal the mark scheme. Use precise technical vocabulary — examiners award marks for key terms.</div>
+
+    <!-- Q1 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c1">
+        <div class="eq-num"><span class="tag tag-easy">EASY</span> Question 1</div>
+        <div class="eq-marks">[2 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">State what is meant by the term 'ASCII'.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>American Standard Code for Information Interchange (1)</li>
+          <li>A 7-bit character set that can represent 128 characters (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c2">
+        <div class="eq-num"><span class="tag tag-easy">EASY</span> Question 2</div>
+        <div class="eq-marks">[2 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Give two differences between ASCII and Unicode.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 2):</div><ul>
+          <li>ASCII uses 7 bits per character; Unicode uses 16 bits or more (1)</li>
+          <li>ASCII can represent 128 characters; Unicode can represent over 100,000 (1)</li>
+          <li>ASCII only supports English; Unicode supports all world languages (1)</li>
+          <li>Unicode files are larger than ASCII files for the same text (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c3">
+        <div class="eq-num"><span class="tag tag-easy">EASY</span> Question 3</div>
+        <div class="eq-marks">[2 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">State what is meant by the term 'pixel'.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>The smallest identifiable element / smallest addressable element of a bitmap image (1)</li>
+          <li>Each pixel is stored as a binary number representing its colour (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c4">
+        <div class="eq-num"><span class="tag tag-med">MED</span> Question 4</div>
+        <div class="eq-marks">[3 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain what is meant by 'colour depth' and how it affects the quality and file size of a bitmap image.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>Colour depth is the number of bits used to represent the colour of each pixel (1)</li>
+          <li>Greater colour depth means more colours can be represented, improving image quality (1)</li>
+          <li>Greater colour depth increases the file size because more bits are stored per pixel (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c5">
+        <div class="eq-num"><span class="tag tag-med">MED</span> Question 5</div>
+        <div class="eq-marks">[3 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Calculate the file size in bytes of a bitmap image that is 640 pixels wide and 480 pixels high, with a colour depth of 24 bits. Show your working.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>File size = 640 x 480 x 24 = 7,372,800 bits (1)</li>
+          <li>7,372,800 / 8 = 921,600 bytes (1)</li>
+          <li>Answer: 921,600 bytes (or approx 900 KB) (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c6">
+        <div class="eq-num"><span class="tag tag-med">MED</span> Question 6</div>
+        <div class="eq-marks">[4 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain how an analogue sound wave is converted into a digital representation. In your answer, refer to sampling, sampling frequency and sample resolution.</div>
+        <textarea class="ans-ta" style="min-height:130px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 4):</div><ul>
+          <li>The analogue sound wave is measured at regular intervals — this is called sampling (1)</li>
+          <li>Sampling frequency is the number of samples taken per second, measured in Hz (1)</li>
+          <li>Each sample measures the amplitude (height) of the wave at that point (1)</li>
+          <li>Sample resolution (bit depth) is the number of bits used to store each sample (1)</li>
+          <li>Each sample is rounded to the nearest value that can be stored in the available bits (quantisation) (1)</li>
+          <li>The sequence of binary samples is stored as a digital sound file (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c7">
+        <div class="eq-num"><span class="tag tag-med">MED</span> Question 7</div>
+        <div class="eq-marks">[3 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Calculate the file size in bytes of a 30-second sound recording sampled at 22,050 Hz with a 16-bit sample resolution. Show your working.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>File size = 22,050 x 16 x 30 = 10,584,000 bits (1)</li>
+          <li>10,584,000 / 8 = 1,323,000 bytes (1)</li>
+          <li>Answer: 1,323,000 bytes (or approx 1.26 MB) (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c1">
+        <div class="eq-num"><span class="tag tag-hard">HARD</span> Question 8</div>
+        <div class="eq-marks">[4 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain the limitations of using a low sampling frequency when converting an analogue sound wave to digital. Refer to the concept of aliasing in your answer.</div>
+        <textarea class="ans-ta" style="min-height:130px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 4):</div><ul>
+          <li>A low sampling frequency means fewer samples are taken per second (1)</li>
+          <li>High-frequency sounds in the original wave may be missed between samples (1)</li>
+          <li>Aliasing occurs when the sampling frequency is too low to accurately capture the wave (1)</li>
+          <li>Aliasing causes high-frequency sounds to be misrepresented as lower false frequencies (1)</li>
+          <li>This results in distortion and loss of audio quality (1)</li>
+          <li>The Nyquist theorem states sampling frequency must be at least twice the highest frequency to avoid aliasing (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="eq-wrap">
+      <div class="eq-hdr c2">
+        <div class="eq-num"><span class="tag tag-hard">HARD</span> Question 9</div>
+        <div class="eq-marks">[6 marks]</div>
+      </div>
+      <div class="eq-bdy">
+        <div class="eq-ctx">A photographer takes a photo with a resolution of 4000 x 3000 pixels and a colour depth of 24 bits. They want to reduce the file size to send it by email.</div>
+        <div class="eq-txt">Discuss the effects of (a) reducing the resolution and (b) reducing the colour depth on the image quality and file size. In your answer, give the original file size in megabytes and explain the trade-offs.</div>
+        <textarea class="ans-ta" style="min-height:180px" placeholder="Write your extended answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li><strong>Original file size:</strong> 4000 x 3000 x 24 = 288,000,000 bits = 36,000,000 bytes ≈ 34.3 MB (1)</li>
+          <li><strong>Reducing resolution:</strong> fewer pixels means less detail / image appears pixelated when enlarged (1)</li>
+          <li>But file size decreases proportionally (e.g. half the dimensions = quarter the pixels) (1)</li>
+          <li><strong>Reducing colour depth:</strong> fewer bits per pixel means fewer available colours (1)</li>
+          <li>Causes banding — visible steps between similar colours, loss of subtle shades (1)</li>
+          <li><strong>Trade-off:</strong> both reduce file size but at the cost of quality. Resolution affects sharpness/detail; colour depth affects colour accuracy. The best approach depends on the image content and how it will be viewed (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ══ TABS ══
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ══ NOTES TOGGLE ══
+function toggleSection(id){
+  const bdy=document.getElementById(id).querySelector('.notes-bdy');
+  const tog=document.getElementById(id).querySelector('.notes-tog');
+  const open=bdy.classList.toggle('open');
+  tog.style.transform=open?'rotate(180deg)':'';
+}
+
+// ══ IMP BANNER ══
+function toggleImp(hdr){
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+  const tog=hdr.querySelector('.tog');
+  tog.textContent=body.classList.contains('open')?'▲ collapse':'▼ expand';
+}
+
+// ══ MARK SCHEME ══
+function toggleMS(btn){
+  const ms=btn.nextElementSibling;
+  const showing=ms.classList.toggle('show');
+  btn.textContent=showing?'🙈 Hide Mark Scheme':'👁 Show Mark Scheme';
+}
+
+// ══════════════════
+// QUIZ
+// ══════════════════
+const questions=[
+  {q:"How many characters can 7-bit ASCII represent?",opts:["64","128","256","65,536"],a:1,fb:"7 bits = 2^7 = 128 characters (0–127). This covers English letters, digits, and common symbols."},
+  {q:"What is the ASCII denary code for the letter 'A'?",opts:["48","65","97","32"],a:1,fb:"'A' = 65 in ASCII. 'a' = 97. Uppercase letters start at 65, lowercase at 97."},
+  {q:"Which character set can represent Chinese, Arabic and emoji characters?",opts:["ASCII","Extended ASCII","Unicode","Binary"],a:2,fb:"Unicode uses 16+ bits per character, allowing over 100,000 characters from all world languages plus emojis and symbols."},
+  {q:"What is a pixel?",opts:["A type of image file","The smallest element of a bitmap image","A colour code","A unit of file size"],a:1,fb:"A pixel (picture element) is the smallest identifiable element of a bitmap image. Each pixel stores a binary colour value."},
+  {q:"An image with 8-bit colour depth can represent how many colours?",opts:["8","16","256","65,536"],a:2,fb:"8 bits = 2^8 = 256 colours. Each pixel can be one of 256 different colours."},
+  {q:"What does 'resolution' mean for a bitmap image?",opts:["The number of colours","The number of bits per pixel","The width x height in pixels","The file size"],a:2,fb:"Resolution = width x height in pixels (e.g. 1920x1080). Higher resolution = more pixels = more detail."},
+  {q:"What is the formula for calculating bitmap image file size?",opts:["Width + Height + Colour depth","Width x Colour depth","Width x Height x Colour depth","Width x Height / Colour depth"],a:2,fb:"File size (bits) = Width x Height x Colour depth. This gives the total number of bits needed to store the image."},
+  {q:"Sound is an analogue signal. What process converts it to digital?",opts:["Compression","Sampling","Encryption","Modulation"],a:1,fb:"Sampling measures the amplitude of the analogue wave at regular intervals, converting it to discrete binary values."},
+  {q:"What is 'sampling frequency'?",opts:["The volume of the sound","The number of bits per sample","The number of samples taken per second","The length of the recording"],a:2,fb:"Sampling frequency = samples per second, measured in Hertz (Hz). CD quality uses 44,100 Hz."},
+  {q:"What is 'sample resolution' (bit depth)?",opts:["The frequency of sampling","The number of bits used to store each sample","The number of channels","The duration of the sound"],a:1,fb:"Sample resolution (bit depth) = bits per sample. More bits = more amplitude values = better quality. CD quality uses 16-bit."},
+  {q:"What happens if the sampling frequency is too low?",opts:["File size increases","Aliasing occurs — high frequencies are misrepresented","The sound gets louder","The bit depth increases"],a:1,fb:"Aliasing: when sampling frequency is too low, high-frequency sounds are misrepresented as lower false frequencies, causing distortion."},
+  {q:"What is the formula for calculating sound file size?",opts:["Sample rate x Bit depth x Duration","Sample rate + Bit depth + Duration","Sample rate x Bit depth / Duration","Sample rate / Bit depth x Duration"],a:0,fb:"File size (bits) = Sample rate x Bit depth x Duration (seconds). This gives the total bits needed to store the sound."},
+  {q:"Why does Unicode use more storage than ASCII for the same text?",opts:["Unicode is less efficient","Unicode uses more bits per character (16+ vs 7)","Unicode compresses data","Unicode uses hexadecimal"],a:1,fb:"Unicode uses 16+ bits per character vs ASCII's 7 bits. More bits = more characters possible, but larger file sizes."},
+  {q:"A 24-bit colour depth is also known as:",opts:["1-bit colour","8-bit colour","High colour","True colour"],a:3,fb:"24-bit = True colour (16.7 million colours). This is enough to represent colours that the human eye cannot distinguish between."},
+  {q:"According to the Nyquist theorem, what sampling frequency is needed for audio up to 20,000 Hz?",opts:["10,000 Hz","20,000 Hz","40,000 Hz","44,100 Hz"],a:2,fb:"Nyquist: sampling frequency must be at least 2x the highest frequency. 2 x 20,000 = 40,000 Hz minimum. CD uses 44,100 Hz (with margin)."},
+];
+
+let qIndex=0,qScore=0;
+document.getElementById('qtotal').textContent=questions.length;
+
+function loadQ(){
+  if(qIndex>=questions.length){showResult();return}
+  const q=questions[qIndex];
+  document.getElementById('qnum').textContent=`Question ${qIndex+1} of ${questions.length}`;
+  document.getElementById('qtext').textContent=q.q;
+  const fb=document.getElementById('qfb');fb.className='q-fb';fb.textContent='';
+  document.getElementById('qnext').style.display='none';
+  const opts=document.getElementById('qopts');opts.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');btn.className='q-opt';btn.textContent=opt;
+    btn.onclick=()=>{
+      if(btn.disabled)return;
+      opts.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+      if(i===q.a){btn.classList.add('correct');qScore++;document.getElementById('qscore').textContent=qScore;fb.className='q-fb show fb-ok';fb.textContent='Correct! '+q.fb}
+      else{btn.classList.add('wrong');opts.querySelectorAll('.q-opt')[q.a].classList.add('correct');fb.className='q-fb show fb-no';fb.textContent=q.fb}
+      const pct=((qIndex+1)/questions.length)*100;
+      document.getElementById('qprog').style.width=pct+'%';
+      document.getElementById('qnext').style.display='inline-block';
+    };
+    opts.appendChild(btn);
+  });
+}
+function nextQ(){qIndex++;loadQ()}
+function showResult(){
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-result').style.display='block';
+  document.getElementById('qfinal').textContent=`${qScore}/${questions.length}`;
+  const pct=qScore/questions.length;
+  document.getElementById('qmsg').textContent=pct<0.5?'Keep revising! Work through the Notes tab carefully.':pct<0.75?'Good effort! Review the explanations for questions you missed.':pct<0.9?'Strong performance! Almost there.':'Excellent! You have mastered Topic 3.2.';
+}
+function restartQuiz(){qIndex=0;qScore=0;document.getElementById('qscore').textContent='0';document.getElementById('qprog').style.width='0%';document.getElementById('quiz-result').style.display='none';document.getElementById('quiz-area').style.display='block';loadQ()}
+loadQ();
+
+// ══════════════════
+// ACTIVITY 1: ASCII LOOKUP
+// ══════════════════
+function lookupASCII(){
+  const val=parseInt(document.getElementById('ascii-input').value);
+  if(isNaN(val)||val<32||val>127){document.getElementById('ascii-result').textContent='Enter 32–127';return}
+  const ch=String.fromCharCode(val);
+  const bin=val.toString(2).padStart(8,'0');
+  document.getElementById('ascii-result').innerHTML=`Character: <strong>${ch}</strong> | Denary: ${val} | Binary: ${bin}`;
+}
+
+// ══════════════════
+// ACTIVITY 2: PIXEL ART
+// ══════════════════
+const pixelState=Array(64).fill(0);
+function buildPixelGrid(){
+  const grid=document.getElementById('pixel-grid');grid.innerHTML='';
+  for(let i=0;i<64;i++){
+    const cell=document.createElement('div');cell.className='pixel-cell '+(pixelState[i]?'on':'off');
+    cell.textContent=pixelState[i];
+    cell.onclick=()=>{pixelState[i]=pixelState[i]?0:1;buildPixelGrid()};
+    grid.appendChild(cell);
+  }
+  updatePixelBinary();
+}
+function updatePixelBinary(){
+  let bin=pixelState.join('');
+  let bytes=[];
+  for(let i=0;i<64;i+=8)bytes.push(bin.substr(i,8));
+  document.getElementById('pixel-binary').textContent=bytes.join(' ');
+}
+function clearPixels(){pixelState.fill(0);buildPixelGrid()}
+function randomPixels(){for(let i=0;i<64;i++)pixelState[i]=Math.random()>0.6?1:0;buildPixelGrid()}
+buildPixelGrid();
+
+// ══════════════════
+// ACTIVITY 3: MATCH
+// ══════════════════
+const matchPairs=[
+  {left:'ASCII',right:'7-bit character set with 128 characters'},
+  {left:'Unicode',right:'16-bit+ character set with 100,000+ characters'},
+  {left:'Pixel',right:'Smallest element of a bitmap image'},
+  {left:'Colour depth',right:'Number of bits used per pixel'},
+  {left:'Sampling frequency',right:'Number of samples taken per second (Hz)'},
+  {left:'Sample resolution',right:'Number of bits used per sample (bit depth)'},
+  {left:'Aliasing',right:'Distortion from sampling frequency too low'},
+  {left:'Resolution',right:'Width x height of an image in pixels'},
+];
+let matchSel=null,matchScore=0;
+function buildMatch(){
+  matchSel=null;matchScore=0;
+  const left=document.getElementById('match-left'),right=document.getElementById('match-right');
+  left.innerHTML='';right.innerHTML='';
+  const shuffRight=[...matchPairs].sort(()=>Math.random()-0.5);
+  matchPairs.forEach((p,i)=>{
+    const l=document.createElement('div');l.className='match-item';l.textContent=p.left;l.dataset.pair=i;l.onclick=()=>handleMatch(l,'left');left.appendChild(l);
+  });
+  shuffRight.forEach(p=>{
+    const r=document.createElement('div');r.className='match-item';r.textContent=p.right;r.dataset.pair=matchPairs.indexOf(p);r.onclick=()=>handleMatch(r,'right');right.appendChild(r);
+  });
+  document.getElementById('match-score').textContent='';
+}
+function handleMatch(el,side){
+  if(el.classList.contains('ok'))return;
+  if(!matchSel){
+    document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));
+    el.classList.add('sel');matchSel={el,side};
+  }else{
+    if(matchSel.side===side){document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');matchSel={el,side};return}
+    const a=matchSel.el,b=el;
+    if(a.dataset.pair===b.dataset.pair){
+      a.classList.remove('sel');a.classList.add('ok');b.classList.add('ok');matchScore++;
+      const sc=document.getElementById('match-score');
+      sc.textContent=matchScore===matchPairs.length?'All matched!':`${matchScore}/${matchPairs.length} matched`;
+      sc.style.color=matchScore===matchPairs.length?'var(--teal)':'var(--blue)';
+    }else{
+      a.classList.add('bad');b.classList.add('bad');
+      setTimeout(()=>{a.classList.remove('bad','sel');b.classList.remove('bad')},600);
+    }
+    matchSel=null;
+  }
+}
+function resetMatch(){buildMatch()}
+buildMatch();
+
+// ══════════════════
+// ACTIVITY 4: FILL BLANKS
+// ══════════════════
+const fillWords=['ASCII','Unicode','pixel','resolution','colour depth','sampling','sampling frequency','sample resolution','aliasing','quantisation'];
+const fillAnswers={B0:'ASCII',B1:'Unicode',B2:'pixel',B3:'resolution',B4:'colour depth',B5:'sampling',B6:'sampling frequency',B7:'sample resolution',B8:'aliasing',B9:'quantisation'};
+let fillState={};Object.keys(fillAnswers).forEach(k=>fillState[k]='');
+let fillSel=null;
+
+const fillTemplate=`Computers encode characters using <span class="blank" data-b="B0">__B0__</span> (7-bit, 128 characters) or <span class="blank" data-b="B1">__B1__</span> (16-bit+, 100,000+ characters). Bitmap images are made of a grid of <span class="blank" data-b="B2">__B2__</span> elements. Image quality depends on <span class="blank" data-b="B3">__B3__</span> (width x height) and <span class="blank" data-b="B4">__B4__</span> (bits per pixel). Sound is converted from analogue to digital through <span class="blank" data-b="B5">__B5__</span>. The <span class="blank" data-b="B6">__B6__</span> is the number of samples per second, and <span class="blank" data-b="B7">__B7__</span> is the bits per sample. If the sampling frequency is too low, <span class="blank" data-b="B8">__B8__</span> occurs. Rounding samples to the nearest available value is called <span class="blank" data-b="B9">__B9__</span>.`;
+
+function buildFill(){
+  const wb=document.getElementById('word-bank');wb.innerHTML='';
+  fillWords.forEach(w=>{
+    const d=document.createElement('span');d.className='word';d.textContent=w;d.dataset.word=w;
+    d.onclick=()=>{
+      if(!fillSel)return;
+      const prev=Object.keys(fillState).find(k=>fillState[k]===w);
+      if(prev)fillState[prev]='';
+      fillState[fillSel]=w;
+      document.querySelectorAll('.word').forEach(x=>x.classList.remove('sel'));
+      fillSel=null;renderFill();
+    };
+    wb.appendChild(d);
+  });
+  renderFill();
+}
+function renderFill(){
+  const wrap=document.getElementById('fill-para');
+  let html=fillTemplate;
+  Object.keys(fillAnswers).forEach(k=>{html=html.replace(`__${k}__`,fillState[k]||'&nbsp;&nbsp;&nbsp;')});
+  wrap.innerHTML=html;
+  wrap.querySelectorAll('.blank').forEach(b=>{
+    const k=b.dataset.b;
+    if(fillState[k])b.classList.add('filled');
+    if(fillSel===k)b.classList.add('sel-b');
+    b.onclick=()=>{fillSel=k;wrap.querySelectorAll('.blank').forEach(x=>x.classList.remove('sel-b'));b.classList.add('sel-b')};
+  });
+  document.querySelectorAll('#word-bank .word').forEach(w=>{
+    w.classList.toggle('used',Object.values(fillState).includes(w.dataset.word));
+  });
+}
+function checkFill(){
+  let ok=0;
+  Object.keys(fillAnswers).forEach(k=>{
+    const b=document.querySelector(`#fill-para [data-b="${k}"]`);if(!b)return;
+    if(fillState[k]===fillAnswers[k]){b.classList.add('ok');b.classList.remove('bad');ok++}
+    else if(fillState[k]){b.classList.add('bad');b.classList.remove('ok')}
+  });
+  const sc=document.getElementById('fill-score');
+  sc.textContent=`${ok}/10`;sc.style.color=ok===10?'var(--teal)':'var(--coral)';
+}
+function revealFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]=fillAnswers[k]);renderFill();checkFill()}
+function resetFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]='');fillSel=null;renderFill();document.getElementById('fill-score').textContent=''}
+buildFill();
+
+// ══════════════════
+// ACTIVITY 5: TRUE/FALSE
+// ══════════════════
+const tfItems=[
+  {q:'ASCII can represent characters from all world languages.',ans:false,exp:'False. ASCII only has 128 characters — enough for English. Unicode is needed for other languages.'},
+  {q:'Unicode is a superset of ASCII — the first 128 codes are identical.',ans:true,exp:'True! The first 128 Unicode code points match ASCII exactly, so any ASCII text is also valid Unicode.'},
+  {q:'Increasing the colour depth of an image reduces the file size.',ans:false,exp:'False. More bits per pixel = larger file size. Colour depth and file size are directly proportional.'},
+  {q:'A 1-bit colour depth image can only display 2 colours.',ans:true,exp:'True. 1 bit = 2^1 = 2 possible values (0 and 1), so only 2 colours (typically black and white).'},
+  {q:'Higher sampling frequency produces better sound quality but larger file sizes.',ans:true,exp:'True. More samples per second captures more detail (better quality) but requires more storage.'},
+  {q:'Aliasing occurs when the sampling frequency is too high.',ans:false,exp:'False. Aliasing occurs when the sampling frequency is too LOW to capture the wave accurately, causing distortion.'},
+  {q:'Reducing the resolution of an image makes it appear more pixelated.',ans:true,exp:'True. Fewer pixels means each pixel covers a larger area, making the image look blocky/pixelated.'},
+  {q:'Sample resolution (bit depth) affects how many different amplitude values can be stored.',ans:true,exp:'True. 16-bit depth = 65,536 possible amplitude values. More bits = finer detail in the sound wave.'},
+];
+function buildTF(){
+  const area=document.getElementById('tf-area');area.innerHTML='';
+  tfItems.forEach((item,i)=>{
+    const div=document.createElement('div');div.className='tf-card';
+    div.innerHTML=`<div class="tf-q">${i+1}. ${item.q}</div>
+      <div class="tf-btns">
+        <button class="tf-btn" onclick="checkTF(this,${i},true)">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,${i},false)">FALSE</button>
+      </div>
+      <div class="tf-exp" id="tf-exp-${i}"></div>`;
+    area.appendChild(div);
+  });
+}
+function checkTF(btn,i,ans){
+  const item=tfItems[i];
+  const btns=btn.closest('.tf-card').querySelectorAll('.tf-btn');
+  btns.forEach(b=>b.disabled=true);
+  const exp=document.getElementById(`tf-exp-${i}`);
+  if(ans===item.ans){
+    btn.classList.add('correct');
+    exp.className='tf-exp show';exp.style.cssText='background:#e0faf1;border-left:4px solid var(--teal)';
+  }else{
+    btn.classList.add('wrong');
+    btns.forEach(b=>{if((b.textContent==='TRUE')===item.ans)b.classList.add('correct')});
+    exp.className='tf-exp show';exp.style.cssText='background:var(--light-coral);border-left:4px solid var(--coral)';
+  }
+  exp.textContent=item.exp;
+}
+buildTF();
+</script>
+</body>
+</html>

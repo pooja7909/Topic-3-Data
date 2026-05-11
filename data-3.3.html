@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3.3: Data Storage & Compression – IGCSE Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1a1a2e;--paper:#fdf8f0;--yellow:#ffd166;--coral:#ef476f;--teal:#06d6a0;--blue:#118ab2;--purple:#7b2d8b;--orange:#f77f00;--green:#2d6a4f;--light-yellow:#fff9c4;--light-coral:#fce4ec;--light-teal:#e0f7f2;--light-blue:#e3f2fd;--light-purple:#f3e5f5;--light-green:#d8f3dc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);font-family:'Patrick Hand',cursive;color:var(--ink);overflow-x:hidden}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(100,149,237,0.15) 31px,rgba(100,149,237,0.15) 32px);pointer-events:none;z-index:0}
+  body::after{content:'';position:fixed;top:0;left:70px;bottom:0;width:2px;background:rgba(239,71,111,0.3);pointer-events:none;z-index:0}
+  .page-wrap{max-width:960px;margin:0 auto;padding:20px 30px 60px 90px;position:relative;z-index:1}
+  @media(max-width:600px){.page-wrap{padding:20px 16px 60px 16px}body::after{display:none}}
+
+  .hero{text-align:center;padding:40px 0 20px}
+  .hero-title{font-family:'Permanent Marker',cursive;font-size:2.6rem;color:var(--ink);text-shadow:3px 3px 0 var(--teal);letter-spacing:2px;transform:rotate(-1.5deg);display:inline-block;position:relative}
+  .hero-title::after{content:'';position:absolute;bottom:-8px;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:2px}
+  .hero-sub{font-family:'Caveat',cursive;font-size:1.4rem;color:var(--blue);margin-top:18px}
+
+  .tabs-nav{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 20px;justify-content:center}
+  .tab-btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:8px 18px;border:3px solid var(--ink);border-radius:6px;background:white;cursor:pointer;transition:all .2s;box-shadow:3px 3px 0 var(--ink)}
+  .tab-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .tab-btn.active{background:var(--blue);color:white;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+  .tab-panel{display:none;animation:fadeIn .3s ease}
+  .tab-panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  .tip-box{background:var(--light-yellow);border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:12px 16px;margin:12px 0;font-family:'Kalam',cursive;font-size:.95rem}
+  .btn{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;padding:9px 22px;border:2.5px solid var(--ink);border-radius:8px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:all .15s}
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .btn-primary{background:var(--ink);color:white}
+  .btn-teal{background:var(--teal);color:var(--ink);border-color:#059669;box-shadow:3px 3px 0 #059669}
+  .tag{display:inline-block;padding:2px 9px;border-radius:4px;font-family:'Caveat',cursive;font-size:.85rem;font-weight:700;border:1.5px solid;margin-right:4px}
+  .tag-hard{color:var(--coral);border-color:var(--coral);background:var(--light-coral)}
+  .tag-med{color:var(--orange);border-color:var(--orange);background:#fff3e0}
+  .tag-easy{color:#059669;border-color:var(--teal);background:var(--light-teal)}
+
+  .def-box{border:2px solid;border-radius:8px;padding:12px 14px 10px;margin:12px 0;position:relative;padding-top:22px;font-size:.92rem;line-height:1.55}
+  .def-label{position:absolute;top:-11px;left:12px;color:white;font-family:'Caveat',cursive;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:20px}
+
+  .notes-sec{margin-bottom:14px;border:2.5px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .notes-hdr{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+  .notes-title{font-family:'Permanent Marker',cursive;font-size:1.1rem;color:white}
+  .notes-tog{font-family:'Caveat',cursive;font-size:1.2rem;color:white;transition:transform .3s}
+  .notes-bdy{display:none;padding:18px 20px;background:white;font-family:'Patrick Hand',cursive;font-size:.95rem;line-height:1.65}
+  .notes-bdy.open{display:block;animation:fadeIn .25s ease}
+  .subh{font-family:'Permanent Marker',cursive;font-size:1.05rem;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .subh::after{content:'';flex:1;height:2px;background:currentColor;opacity:.2}
+  .hl-b{color:var(--blue);font-weight:700}.hl-t{color:#059669;font-weight:700}
+  .hl-c{color:var(--coral);font-weight:700}.hl-p{color:var(--purple);font-weight:700}
+  .hl-o{color:var(--orange);font-weight:700}.hl-g{color:var(--green);font-weight:700}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:580px){.g2{grid-template-columns:1fr}}
+  .n-card{border:2.5px solid;border-radius:10px;overflow:hidden;margin:10px 0}
+  .n-card-hdr{padding:8px 14px;font-family:'Permanent Marker',cursive;font-size:1rem;color:white}
+  .n-card-bdy{padding:12px 14px;background:white;font-size:.92rem;line-height:1.55}
+  .nl{display:flex;align-items:flex-start;gap:9px;margin:6px 0;font-size:.92rem;line-height:1.5}
+  .nd{width:24px;height:24px;border-radius:50%;color:white;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .notes-tip{background:#fff9c4;border:2px solid var(--yellow);border-left:5px solid var(--orange);border-radius:6px;padding:10px 14px;margin:12px 0 4px;font-size:.9rem;font-family:'Kalam',cursive}
+  .notes-eg{background:#f5f5f5;border-left:4px solid var(--blue);padding:8px 12px;margin:8px 0;border-radius:0 6px 6px 0;font-size:.88rem;font-style:italic;font-family:'Kalam',cursive}
+
+  .cmp-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+  .cmp-tbl th{background:var(--ink);color:white;font-family:'Permanent Marker',cursive;padding:10px 13px;text-align:left}
+  .cmp-tbl td{padding:9px 13px;border-bottom:1px solid #e5e5e5;vertical-align:top}
+  .cmp-tbl tr:nth-child(even) td{background:#f9f9f9}
+
+  .ig-wrap{background:#fffdf5;border:3px solid var(--ink);border-radius:12px;padding:28px;box-shadow:6px 6px 0 var(--ink)}
+  .ig-title{font-family:'Permanent Marker',cursive;font-size:2rem;text-align:center;margin-bottom:20px}
+  .ig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:600px){.ig-grid{grid-template-columns:1fr}}
+  .ig-sec{border:2.5px solid var(--ink);border-radius:10px;padding:16px;background:white;position:relative}
+  .ig-label{font-family:'Permanent Marker',cursive;font-size:1.05rem;position:absolute;top:-13px;left:14px;background:white;padding:0 8px}
+  .ig-item{display:flex;align-items:flex-start;gap:9px;margin:7px 0;font-family:'Kalam',cursive;font-size:.92rem;line-height:1.4}
+  .ig-dot{width:20px;height:20px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'Permanent Marker',cursive;flex-shrink:0;margin-top:1px}
+  .highlight-box{background:var(--light-teal);border:2.5px solid var(--ink);border-radius:8px;padding:12px 16px;margin:16px 0;font-family:'Kalam',cursive;font-size:1rem;text-align:center;transform:rotate(-.3deg)}
+
+  .imp-banner{margin-bottom:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 var(--ink)}
+  .imp-header{background:var(--blue);color:white;padding:10px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem;display:flex;align-items:center;gap:10px;cursor:pointer}
+  .imp-body{display:none;background:white}
+  .imp-body.open{display:block;animation:fadeIn .3s ease}
+  .imp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .imp-cell{padding:14px 16px;border-right:2px solid #eee;border-bottom:2px solid #eee}
+  .imp-cell-title{font-family:'Permanent Marker',cursive;font-size:.95rem;margin-bottom:6px}
+  .imp-cell p{font-family:'Kalam',cursive;font-size:.88rem;line-height:1.5}
+  .imp-footer{background:#fff9c4;border-top:2px solid var(--ink);padding:10px 16px;font-family:'Kalam',cursive;font-size:.88rem;display:flex;align-items:center;gap:8px}
+
+  .act-card{border:3px solid var(--ink);border-radius:12px;overflow:hidden;margin-bottom:22px;box-shadow:5px 5px 0 var(--ink)}
+  .act-hdr{padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--ink)}
+  .act-icon{font-size:1.8rem}
+  .act-title{font-family:'Permanent Marker',cursive;font-size:1.25rem}
+  .act-bdy{background:white;padding:18px;font-size:.95rem;line-height:1.6}
+
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media(max-width:500px){.match-grid{grid-template-columns:1fr}}
+  .match-item{padding:10px 13px;border:2.5px solid var(--ink);border-radius:8px;font-family:'Patrick Hand',cursive;font-size:.88rem;cursor:pointer;background:white;box-shadow:2px 2px 0 var(--ink);transition:all .15s;min-height:46px;display:flex;align-items:center}
+  .match-item:hover{transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .match-item.sel{background:var(--yellow);border-color:var(--orange)}
+  .match-item.ok{background:#e0faf1;border-color:var(--teal);pointer-events:none}
+  .match-item.bad{background:var(--light-coral);border-color:var(--coral);animation:shake .3s}
+
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .word{padding:5px 13px;background:white;border:2px solid var(--ink);border-radius:20px;font-family:'Caveat',cursive;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:all .15s}
+  .word:hover:not(.used){background:var(--light-yellow)}
+  .word.sel{background:var(--yellow);border-color:var(--orange)}
+  .word.used{opacity:.35;pointer-events:none;text-decoration:line-through}
+  .fill-para{line-height:2.6;font-size:.95rem;padding:14px;background:#fafafa;border:2px solid #ddd;border-radius:8px}
+  .blank{display:inline-block;min-width:90px;border-bottom:2.5px solid var(--blue);padding:2px 8px;font-family:'Caveat',cursive;font-size:.98rem;font-weight:700;text-align:center;margin:0 3px;cursor:pointer;transition:all .15s;border-radius:4px 4px 0 0}
+  .blank:hover{background:rgba(255,209,102,.25)}
+  .blank.filled{color:var(--blue)}
+  .blank.sel-b{background:rgba(255,209,102,.4);border-color:var(--orange)}
+  .blank.ok{background:var(--light-teal);color:#059669;border-color:#059669}
+  .blank.bad{background:var(--light-coral);color:var(--coral);border-color:var(--coral)}
+
+  .tf-card{border:2px solid var(--ink);border-radius:10px;padding:14px 16px;margin:10px 0;background:white}
+  .tf-q{font-family:'Kalam',cursive;font-size:.97rem;margin-bottom:10px;line-height:1.5}
+  .tf-btns{display:flex;gap:10px}
+  .tf-btn{font-family:'Caveat',cursive;font-size:1rem;font-weight:700;padding:6px 20px;border:2px solid var(--ink);border-radius:20px;cursor:pointer;transition:all .15s;background:white}
+  .tf-btn:hover{background:var(--light-yellow)}
+  .tf-btn.correct{background:var(--teal);color:white;border-color:#059669}
+  .tf-btn.wrong{background:var(--coral);color:white;border-color:#c0392b}
+  .tf-btn:disabled{cursor:default}
+  .tf-exp{display:none;margin-top:8px;padding:8px 12px;border-radius:6px;font-family:'Kalam',cursive;font-size:.88rem}
+  .tf-exp.show{display:block}
+
+  .q-prog-wrap{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .q-prog-bar{flex:1;height:14px;background:#e0e0e0;border:2px solid var(--ink);border-radius:20px;overflow:hidden}
+  .q-prog-fill{height:100%;background:var(--teal);border-radius:20px;transition:width .4s}
+  .q-score{font-family:'Permanent Marker',cursive;font-size:1.1rem;background:var(--yellow);border:2px solid var(--ink);padding:4px 12px;border-radius:20px}
+  .q-card{border:3px solid var(--ink);border-radius:12px;padding:22px;background:white;box-shadow:5px 5px 0 var(--ink)}
+  .q-num{font-family:'Permanent Marker',cursive;font-size:.9rem;color:var(--teal);margin-bottom:8px}
+  .q-text{font-family:'Caveat',cursive;font-size:1.35rem;font-weight:600;margin-bottom:16px;line-height:1.4}
+  .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  @media(max-width:480px){.q-opts{grid-template-columns:1fr}}
+  .q-opt{padding:11px 14px;border:2.5px solid var(--ink);border-radius:8px;background:white;font-family:'Patrick Hand',cursive;font-size:.98rem;cursor:pointer;transition:all .15s;text-align:left;box-shadow:2px 2px 0 var(--ink)}
+  .q-opt:hover:not(:disabled){transform:translate(-1px,-1px);background:var(--light-yellow)}
+  .q-opt.correct{background:var(--teal)!important;color:white;border-color:#059669;box-shadow:none}
+  .q-opt.wrong{background:var(--coral)!important;color:white;border-color:#c0392b;box-shadow:none;animation:shake .3s}
+  .q-opt:disabled{cursor:default}
+  .q-fb{margin-top:12px;padding:10px 14px;border-radius:8px;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:600;border:2px solid;display:none}
+  .q-fb.show{display:block}
+  .q-fb.fb-ok{background:#e0faf1;border-color:var(--teal);color:#059669}
+  .q-fb.fb-no{background:var(--light-coral);border-color:var(--coral);color:var(--coral)}
+  .q-result{text-align:center;padding:30px}
+  .q-result h2{font-family:'Permanent Marker',cursive;font-size:2.5rem;margin-bottom:10px}
+  .big-score{font-family:'Permanent Marker',cursive;font-size:4rem;color:var(--teal)}
+
+  .eq-wrap{margin-bottom:26px;border:2.5px solid var(--ink);border-radius:10px;background:white;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+  .eq-hdr{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink)}
+  .eq-hdr.c1{background:var(--light-teal)}.eq-hdr.c2{background:var(--light-blue)}.eq-hdr.c3{background:var(--light-purple)}
+  .eq-hdr.c4{background:#fff3e0}.eq-hdr.c5{background:var(--light-yellow)}.eq-hdr.c6{background:var(--light-coral)}
+  .eq-num{font-family:'Permanent Marker',cursive;font-size:1.05rem}
+  .eq-marks{font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;background:var(--ink);color:white;padding:2px 10px;border-radius:20px}
+  .eq-bdy{padding:14px 16px}
+  .eq-txt{font-size:1.02rem;line-height:1.6;margin-bottom:12px}
+  .eq-ctx{background:#f5f5f5;border-left:4px solid var(--blue);padding:10px 14px;margin-bottom:12px;font-size:.93rem;line-height:1.5;border-radius:0 6px 6px 0;font-style:italic;font-family:'Kalam',cursive}
+  .ans-ta{width:100%;border:1.5px solid #b0bec5;border-radius:6px;background:transparent;font-family:'Patrick Hand',cursive;font-size:.95rem;padding:8px;outline:none;resize:vertical;min-height:80px}
+  .show-ms{font-family:'Caveat',cursive;font-size:1rem;padding:6px 16px;border:2px solid var(--purple);border-radius:20px;background:white;color:var(--purple);cursor:pointer;margin-top:10px;transition:all .15s}
+  .show-ms:hover{background:var(--purple);color:white}
+  .ms{display:none;margin-top:10px;background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:12px 16px;font-size:.93rem;line-height:1.6}
+  .ms.show{display:block;animation:fadeIn .3s ease}
+  .ms ul{padding-left:20px;margin-top:6px}
+  .ms li{margin:4px 0}
+  .ms-lbl{font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:6px}
+
+  .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--ink);text-decoration:none;border:2.5px solid var(--ink);border-radius:8px;padding:8px 18px;background:var(--light-yellow);box-shadow:3px 3px 0 var(--ink);margin:20px 0 10px;transform:rotate(-.5deg);transition:all .15s}
+  .back-btn:hover{transform:translate(-2px,-2px) rotate(-.5deg);box-shadow:5px 5px 0 var(--ink)}
+
+  .rle-box{font-family:monospace;font-size:1.1rem;padding:8px 4px;letter-spacing:2px;text-align:center;margin:8px 0}
+  .rle-cell{display:inline-block;width:32px;height:32px;border:1px solid #ccc;text-align:center;line-height:32px;margin:1px;border-radius:4px;font-size:.75rem;font-weight:700}
+  .rle-cell.w{background:white;color:#333}.rle-cell.b{background:var(--ink);color:white}
+  .converter-box{background:#f9f9f9;border:2px solid var(--blue);border-radius:10px;padding:16px;margin:16px 0}
+  .converter-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0}
+  .converter-input{border:2px solid var(--ink);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:.95rem}
+  .converter-button{padding:8px 16px;background:var(--teal);border:2px solid #059669;border-radius:6px;cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <a href="binary-home.html" class="back-btn">← Back to Binary Home</a>
+
+  <div class="hero">
+    <h1 class="hero-title">💾 Topic 3.3: Data Storage & Compression</h1>
+    <p class="hero-sub">Units, file sizes, and compressing data</p>
+  </div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="mindmap">🗺 Mind Map</button>
+    <button class="tab-btn" data-tab="notes">📖 Topic Notes</button>
+    <button class="tab-btn" data-tab="quiz">⚡ Quick Quiz</button>
+    <button class="tab-btn" data-tab="activities">✏️ Activities</button>
+    <button class="tab-btn" data-tab="exam">📝 Exam Questions</button>
+  </div>
+
+  <!-- ════════════ MIND MAP ════════════ -->
+  <div class="tab-panel active" id="tab-mindmap">
+
+    <div class="imp-banner">
+      <div class="imp-header" onclick="toggleImp(this)">
+        💾 Why Does Data Storage & Compression Matter? <span style="margin-left:auto;font-family:'Caveat',cursive;font-size:1rem;font-weight:normal" class="tog">▼ expand</span>
+      </div>
+      <div class="imp-body">
+        <div class="imp-grid">
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--blue)">📏 Measuring Data</div><p>Every file on your computer has a size measured in bytes. Understanding units (KiB, MiB, GB) is essential for comparing storage and transmission capacity.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:#059669">📦 Why Compress?</div><p>Uncompressed files are huge. A 3-minute CD-quality song is ~30 MB. Compression makes files small enough to store and transmit efficiently.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--coral)">🎨 Lossy vs Lossless</div><p>Lossy compression discards some data for tiny files (JPEG, MP3). Lossless keeps all data but compresses less (RLE, PNG, FLAC). Choosing the right method matters.</p></div>
+          <div class="imp-cell"><div class="imp-cell-title" style="color:var(--purple)">🔢 RLE Algorithm</div><p>Run-length encoding replaces repeated data with a count + value. Simple but effective for images with large blocks of the same colour.</p></div>
+        </div>
+        <div class="imp-footer">✏️ <strong>Key distinction:</strong> IEC units (KiB, MiB) use powers of 2. SI units (kB, MB) use powers of 10. 1 KiB = 1024 bytes. 1 kB = 1000 bytes. Know the difference!</div>
+      </div>
+    </div>
+
+    <div class="ig-wrap">
+      <div class="ig-title">💾 Data Storage & Compression — Big Picture</div>
+      <div class="highlight-box">File sizes measured in <strong>bytes</strong> (IEC: powers of 2, SI: powers of 10) · Compression: <strong>Lossless</strong> (no data lost) vs <strong>Lossy</strong> (some data discarded)</div>
+
+      <div class="ig-grid">
+        <!-- Units -->
+        <div class="ig-sec" style="border-color:var(--blue)">
+          <span class="ig-label" style="color:var(--blue)">📏 Data Storage Units</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">1</div><div><strong>Bit</strong>: single binary digit (0 or 1)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">4</div><div><strong>Nibble</strong>: 4 bits (half a byte)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">8</div><div><strong>Byte</strong>: 8 bits — fundamental unit of storage</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">K</div><div><strong>KiB</strong> = 2<sup>10</sup> = 1024 bytes &nbsp;|&nbsp; <strong>kB</strong> = 10<sup>3</sup> = 1000 bytes</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">M</div><div><strong>MiB</strong> = 2<sup>20</sup> bytes &nbsp;|&nbsp; <strong>MB</strong> = 10<sup>6</sup> bytes</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">G</div><div><strong>GiB</strong> = 2<sup>30</sup> bytes &nbsp;|&nbsp; <strong>GB</strong> = 10<sup>9</sup> bytes</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-blue);border-color:var(--blue)">T</div><div><strong>TiB</strong> = 2<sup>40</sup> bytes &nbsp;|&nbsp; <strong>TB</strong> = 10<sup>12</sup> bytes</div></div>
+          </div>
+        </div>
+
+        <!-- Compression -->
+        <div class="ig-sec" style="border-color:var(--coral)">
+          <span class="ig-label" style="color:var(--coral)">📦 Data Compression</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">!</div><div><strong>Why compress?</strong> Reduce file size for faster transmission and less storage</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">L</div><div><strong>Lossless</strong>: no data lost — original can be perfectly restored (RLE, FLAC, PNG)</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-coral);border-color:var(--coral)">l</div><div><strong>Lossy</strong>: some data discarded — original cannot be restored (JPEG, MP3)</div></div>
+          </div>
+        </div>
+
+        <!-- RLE -->
+        <div class="ig-sec" style="border-color:var(--purple)">
+          <span class="ig-label" style="color:var(--purple)">🔢 Run-Length Encoding</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">1</div><div>Replace consecutive repeated values with <strong>count + value</strong></div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">2</div><div>Works best when data has long <strong>runs</strong> of the same value</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-purple);border-color:var(--purple)">3</div><div>Lossless — original data can be perfectly reconstructed</div></div>
+          </div>
+          <div style="margin-top:8px;background:var(--light-purple);border-radius:6px;padding:8px;font-family:'Kalam',cursive;font-size:.82rem">
+            AAAABBBCCDDDD → 4A3B2C4D (7 items instead of 11)
+          </div>
+        </div>
+
+        <!-- File sizes -->
+        <div class="ig-sec" style="border-color:#059669">
+          <span class="ig-label" style="color:#059669">📐 Calculating File Sizes</span>
+          <div style="margin-top:10px">
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">T</div><div><strong>Text</strong>: chars x bits per char / 8 = bytes</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">I</div><div><strong>Image</strong>: W x H x colour depth / 8 = bytes</div></div>
+            <div class="ig-item"><div class="ig-dot" style="background:var(--light-teal);border-color:#059669">S</div><div><strong>Sound</strong>: sample rate x bit depth x duration / 8 = bytes</div></div>
+          </div>
+          <div style="margin-top:8px;background:var(--light-teal);border-radius:6px;padding:8px;font-family:'Kalam',cursive;font-size:.82rem">
+            Always divide by 8 to convert bits to bytes!
+          </div>
+        </div>
+      </div>
+
+      <!-- IEC vs SI table -->
+      <div style="margin-top:20px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:white;box-shadow:4px 4px 0 var(--ink)">
+        <div style="background:var(--ink);color:white;padding:12px 18px;font-family:'Permanent Marker',cursive;font-size:1.2rem">📊 IEC (Binary) vs SI (Decimal) Units</div>
+        <div style="overflow-x:auto">
+          <table class="cmp-tbl">
+            <tr><th>IEC Unit</th><th>Power of 2</th><th>Exact Value</th><th>SI Unit</th><th>Power of 10</th><th>Exact Value</th></tr>
+            <tr><td><strong>Kibibyte (KiB)</strong></td><td>2<sup>10</sup></td><td>1,024 bytes</td><td><strong>Kilobyte (kB)</strong></td><td>10<sup>3</sup></td><td>1,000 bytes</td></tr>
+            <tr><td><strong>Mebibyte (MiB)</strong></td><td>2<sup>20</sup></td><td>1,048,576 bytes</td><td><strong>Megabyte (MB)</strong></td><td>10<sup>6</sup></td><td>1,000,000 bytes</td></tr>
+            <tr><td><strong>Gibibyte (GiB)</strong></td><td>2<sup>30</sup></td><td>1,073,741,824 bytes</td><td><strong>Gigabyte (GB)</strong></td><td>10<sup>9</sup></td><td>1,000,000,000 bytes</td></tr>
+            <tr><td><strong>Tebibyte (TiB)</strong></td><td>2<sup>40</sup></td><td>1,099,511,627,776 bytes</td><td><strong>Terabyte (TB)</strong></td><td>10<sup>12</sup></td><td>1,000,000,000,000 bytes</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ NOTES ════════════ -->
+  <div class="tab-panel" id="tab-notes">
+
+    <!-- 3.3.1 Units -->
+    <div class="notes-sec" id="ns1">
+      <div class="notes-hdr" onclick="toggleSection('ns1')" style="background:linear-gradient(135deg,#118ab2,#0d6efd)">
+        <div class="notes-title">3.3.1 — Binary & Denary Multiples</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Computer storage is measured in <strong class="hl-b">bytes</strong>. But one byte is tiny — it can only store a single character. We need larger units to describe real-world file and storage sizes.</p>
+
+        <div class="def-box" style="border-color:var(--blue)">
+          <span class="def-label" style="background:var(--blue)">KEY DEFINITIONS</span>
+          <p><strong class="hl-b">Bit</strong> — a single binary digit (0 or 1). The smallest unit of data.<br><br>
+          <strong class="hl-b">Nibble</strong> — 4 bits (half a byte). Can represent 16 values (0–15).<br><br>
+          <strong class="hl-b">Byte</strong> — 8 bits. The fundamental unit of storage. Can represent 256 values (0–255).</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--blue)">📏 IEC Units (Binary — Powers of 2)</h4>
+        <p>The <strong>International Electrotechnical Commission (IEC)</strong> defined standard units based on powers of 2, because computers work in binary:</p>
+        <table class="cmp-tbl" style="margin:12px 0">
+          <tr><th>Unit</th><th>Symbol</th><th>Power</th><th>Value</th></tr>
+          <tr><td>Kibibyte</td><td><strong>KiB</strong></td><td>2<sup>10</sup></td><td>1,024 bytes</td></tr>
+          <tr><td>Mebibyte</td><td><strong>MiB</strong></td><td>2<sup>20</sup></td><td>1,048,576 bytes</td></tr>
+          <tr><td>Gibibyte</td><td><strong>GiB</strong></td><td>2<sup>30</sup></td><td>1,073,741,824 bytes</td></tr>
+          <tr><td>Tebibyte</td><td><strong>TiB</strong></td><td>2<sup>40</sup></td><td>1,099,511,627,776 bytes</td></tr>
+        </table>
+
+        <h4 class="subh" style="color:var(--blue)">📐 SI Units (Decimal — Powers of 10)</h4>
+        <p>Storage manufacturers often use <strong>SI (decimal) units</strong> based on powers of 10:</p>
+        <table class="cmp-tbl" style="margin:12px 0">
+          <tr><th>Unit</th><th>Symbol</th><th>Power</th><th>Value</th></tr>
+          <tr><td>Kilobyte</td><td><strong>kB</strong></td><td>10<sup>3</sup></td><td>1,000 bytes</td></tr>
+          <tr><td>Megabyte</td><td><strong>MB</strong></td><td>10<sup>6</sup></td><td>1,000,000 bytes</td></tr>
+          <tr><td>Gigabyte</td><td><strong>GB</strong></td><td>10<sup>9</sup></td><td>1,000,000,000 bytes</td></tr>
+          <tr><td>Terabyte</td><td><strong>TB</strong></td><td>10<sup>12</sup></td><td>1,000,000,000,000 bytes</td></tr>
+        </table>
+
+        <div class="g2">
+          <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--blue);margin-bottom:6px">IEC (Binary)</div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">1</span><div>Used by operating systems</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">2</span><div>Powers of 2 (natural for computers)</div></div>
+            <div class="nl"><span class="nd" style="background:var(--blue)">3</span><div>1 KiB = 1024 bytes</div></div>
+          </div>
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">SI (Decimal)</div>
+            <div class="nl"><span class="nd" style="background:#059669">1</span><div>Used by storage manufacturers</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">2</span><div>Powers of 10 (easier for humans)</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">3</span><div>1 kB = 1000 bytes</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> This is why a "500 GB" hard drive shows as only ~465 GiB in your OS. The manufacturer uses GB (10<sup>9</sup>) but the OS uses GiB (2<sup>30</sup>). 500,000,000,000 / 1,073,741,824 = 465.6 GiB.</div>
+
+        <h4 class="subh" style="color:var(--blue)">🔄 Converting Between Units</h4>
+        <div style="background:var(--light-blue);border:2px solid var(--blue);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--blue);margin-bottom:8px">To go UP: divide by 1024 (IEC) or 1000 (SI)</div>
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--blue);margin-bottom:8px">To go DOWN: multiply by 1024 (IEC) or 1000 (SI)</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> 4,194,304 bytes to KiB: 4,194,304 / 1024 = 4,096 KiB<br>
+            <strong>Example:</strong> 4,096 KiB to MiB: 4,096 / 1024 = 4 MiB<br>
+            <strong>Example:</strong> 2 MiB to bytes: 2 x 1024 x 1024 = 2,097,152 bytes
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.3.2 Compression -->
+    <div class="notes-sec" id="ns2">
+      <div class="notes-hdr" onclick="toggleSection('ns2')" style="background:linear-gradient(135deg,#059669,#10b981)">
+        <div class="notes-title">3.3.2 — Data Compression: Lossless & Lossy</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>Uncompressed files can be very large. <strong class="hl-t">Data compression</strong> reduces the size of a file so that it takes up less storage space and can be transmitted faster over a network.</p>
+
+        <div class="def-box" style="border-color:#059669">
+          <span class="def-label" style="background:#059669">DEFINITIONS</span>
+          <p><strong class="hl-t">Data compression</strong> — reducing the size of a file so that it takes up less storage space and can be transmitted more quickly.<br><br>
+          <strong class="hl-t">Lossless compression</strong> — a method of compression where no data is lost. The original file can be perfectly restored from the compressed file.<br><br>
+          <strong class="hl-t">Lossy compression</strong> — a method of compression where some data is permanently discarded. The original file cannot be restored from the compressed file.</p>
+        </div>
+
+        <h4 class="subh" style="color:#059669">📦 Why Compress Data?</h4>
+        <div class="g2">
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Storage Benefits</div>
+            <div class="nl"><span class="nd" style="background:#059669">1</span><div>Less disk space needed</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">2</span><div>More files can fit on a device</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">3</span><div>Lower storage costs</div></div>
+          </div>
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Transmission Benefits</div>
+            <div class="nl"><span class="nd" style="background:#059669">1</span><div>Faster upload and download</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">2</span><div>Less bandwidth used</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">3</span><div>Streaming without buffering</div></div>
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:#059669">⚖️ Lossless vs Lossy Comparison</h4>
+        <table class="cmp-tbl">
+          <tr><th></th><th style="color:#059669">Lossless</th><th style="color:var(--coral)">Lossy</th></tr>
+          <tr><td><strong>Data lost?</strong></td><td>No — all data preserved</td><td>Yes — some data discarded</td></tr>
+          <tr><td><strong>Original restorable?</strong></td><td>Yes — perfectly</td><td>No — permanently lost</td></tr>
+          <tr><td><strong>Compression ratio</strong></td><td>Lower (less reduction)</td><td>Higher (much smaller files)</td></tr>
+          <tr><td><strong>Use when</strong></td><td>Data must be exact (code, text, medical images)</td><td>Small loss acceptable (photos, music, video)</td></tr>
+          <tr><td><strong>Examples</strong></td><td>RLE, PNG, FLAC, ZIP</td><td>JPEG, MP3, MP4</td></tr>
+        </table>
+
+        <h4 class="subh" style="color:var(--coral)">🖼 JPEG & MP3 — Lossy Examples</h4>
+        <div class="g2">
+          <div class="n-card" style="border-color:var(--coral)">
+            <div class="n-card-hdr" style="background:var(--coral)">JPEG (Images)</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--coral)">1</span><div>Discards colour detail the human eye is less sensitive to</div></div>
+              <div class="nl"><span class="nd" style="background:var(--coral)">2</span><div>Uses "perceptual encoding" — removes data we won't notice</div></div>
+              <div class="nl"><span class="nd" style="background:var(--coral)">3</span><div>Typical compression: 10:1 ratio</div></div>
+              <div class="nl"><span class="nd" style="background:var(--coral)">4</span><div>Repeated saving degrades quality further</div></div>
+            </div>
+          </div>
+          <div class="n-card" style="border-color:var(--orange)">
+            <div class="n-card-hdr" style="background:var(--orange)">MP3 (Sound)</div>
+            <div class="n-card-bdy">
+              <div class="nl"><span class="nd" style="background:var(--orange)">1</span><div>Removes frequencies outside human hearing range</div></div>
+              <div class="nl"><span class="nd" style="background:var(--orange)">2</span><div>Uses "psychoacoustic model" — discards sounds masked by louder ones</div></div>
+              <div class="nl"><span class="nd" style="background:var(--orange)">3</span><div>Typical compression: 10:1 or 12:1 ratio</div></div>
+              <div class="nl"><span class="nd" style="background:var(--orange)">4</span><div>Some audio detail is permanently lost</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> JPEG and MP3 are the two lossy algorithms you must know by name. Be ready to explain HOW they achieve compression (discarding data humans won't notice) and WHY this is lossy (original cannot be restored).</div>
+      </div>
+    </div>
+
+    <!-- 3.3.3 RLE -->
+    <div class="notes-sec" id="ns3">
+      <div class="notes-hdr" onclick="toggleSection('ns3')" style="background:linear-gradient(135deg,var(--purple),#d946ef)">
+        <div class="notes-title">3.3.3 — Run-Length Encoding (RLE)</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p><strong class="hl-p">Run-length encoding (RLE)</strong> is a simple lossless compression algorithm that replaces sequences of the same data value (called a <strong>run</strong>) with a single value and a count.</p>
+
+        <div class="def-box" style="border-color:var(--purple)">
+          <span class="def-label" style="background:var(--purple)">DEFINITION</span>
+          <p><strong class="hl-p">Run-length encoding</strong> — a lossless compression method that replaces consecutive repeated values with a count and a single value. For example, AAAABBBCC becomes 4A3B2C.</p>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">📋 How RLE Works</h4>
+        <div style="background:var(--light-purple);border:2px solid var(--purple);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--purple);margin-bottom:10px">Step-by-step:</div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">1</span><div>Scan the data from left to right</div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">2</span><div>Count how many times the same value repeats consecutively (a "run")</div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">3</span><div>Replace the run with: <strong>count + value</strong></div></div>
+          <div class="nl"><span class="nd" style="background:var(--purple)">4</span><div>Move to the next different value and repeat</div></div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">📝 Text Example</h4>
+        <div style="background:white;border:2px solid var(--purple);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Kalam',cursive;font-size:.95rem;margin-bottom:8px"><strong>Original:</strong> AAAABBBCCDDDDDD</div>
+          <div style="font-family:'Kalam',cursive;font-size:.95rem;margin-bottom:8px"><strong>Encoded:</strong> 4A3B2C6D</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">
+            4 A's + 3 B's + 2 C's + 6 D's = 15 characters → compressed to 8 characters
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">🖼 Image Example (Bitmap)</h4>
+        <p>RLE is particularly effective for simple bitmap images with large areas of the same colour:</p>
+        <div style="background:white;border:2px solid var(--purple);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:'Kalam',cursive;font-size:.95rem;margin-bottom:10px"><strong>A row of 12 pixels:</strong></div>
+          <div style="display:flex;gap:2px;margin-bottom:10px;flex-wrap:wrap">
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:white;border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:white;border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:white;border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:white;border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:white;border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+            <div style="width:28px;height:28px;background:var(--ink);border:1px solid #999;border-radius:3px"></div>
+          </div>
+          <div style="font-family:monospace;font-size:.95rem;margin-bottom:6px">
+            Original: 0 0 0 1 1 1 1 1 0 0 0 0
+          </div>
+          <div style="font-family:monospace;font-size:.95rem;font-weight:700;color:var(--purple)">
+            RLE: 3,0,5,1,4,0
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.85rem;color:#555;margin-top:6px">
+            3 black, 5 white, 4 black — 6 values instead of 12
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--purple)">⚠️ When RLE Works Well (and When It Doesn't)</h4>
+        <div class="g2">
+          <div style="background:var(--light-teal);border:2px solid #059669;border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:#059669;margin-bottom:6px">Works Well</div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Simple images with large blocks of colour</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Icons, logos, cartoons</div></div>
+            <div class="nl"><span class="nd" style="background:#059669">+</span><div>Data with long runs of repeated values</div></div>
+          </div>
+          <div style="background:var(--light-coral);border:2px solid var(--coral);border-radius:8px;padding:12px">
+            <div style="font-family:'Permanent Marker',cursive;font-size:.95rem;color:var(--coral);margin-bottom:6px">Works Poorly</div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Complex images (photos) — few repeated runs</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Alternating data (ABABABAB) — no runs to compress</div></div>
+            <div class="nl"><span class="nd" style="background:var(--coral)">-</span><div>Can even INCREASE file size if no runs exist!</div></div>
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> RLE is <strong>lossless</strong> — the original data can be perfectly reconstructed. When asked about RLE, always mention: (1) it replaces runs with count+value, (2) it is lossless, (3) it works best on data with long repeated sequences.</div>
+      </div>
+    </div>
+
+    <!-- 3.3.4 File Size Calculations -->
+    <div class="notes-sec" id="ns4">
+      <div class="notes-hdr" onclick="toggleSection('ns4')" style="background:linear-gradient(135deg,var(--orange),#fb923c)">
+        <div class="notes-title">3.3.4 — Calculating File Sizes</div>
+        <span class="notes-tog">▼</span>
+      </div>
+      <div class="notes-bdy">
+        <p>File storage is always measured in <strong class="hl-o">bytes</strong>. To calculate file sizes, you first calculate the total in <strong>bits</strong>, then divide by 8 to get bytes.</p>
+
+        <h4 class="subh" style="color:var(--orange)">📝 Text File Size</h4>
+        <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:monospace;font-size:1rem;text-align:center;padding:8px;background:white;border-radius:6px">
+            File size (bytes) = Number of characters x Bits per character / 8
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> A text file with 500 characters using ASCII (7 bits per character):<br>
+            500 x 7 = 3,500 bits → 3,500 / 8 = 437.5 bytes ≈ 438 bytes<br><br>
+            <strong>Example:</strong> Same file using Unicode (16 bits per character):<br>
+            500 x 16 = 8,000 bits → 8,000 / 8 = 1,000 bytes = 1 kB
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--orange)">🖼 Image File Size</h4>
+        <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:monospace;font-size:1rem;text-align:center;padding:8px;background:white;border-radius:6px">
+            File size (bytes) = Width x Height x Colour depth / 8
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> A 1024 x 768 image with 24-bit colour depth:<br>
+            1024 x 768 x 24 = 18,874,368 bits → / 8 = 2,359,296 bytes ≈ 2.25 MiB
+          </div>
+        </div>
+
+        <h4 class="subh" style="color:var(--orange)">🎵 Sound File Size</h4>
+        <div style="background:#fff3e0;border:2px solid var(--orange);border-radius:8px;padding:14px;margin:12px 0">
+          <div style="font-family:monospace;font-size:1rem;text-align:center;padding:8px;background:white;border-radius:6px">
+            File size (bytes) = Sample rate x Bit depth x Duration / 8
+          </div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;margin-top:10px;color:#555">
+            <strong>Example:</strong> 60 seconds of audio at 44,100 Hz, 16-bit:<br>
+            44,100 x 16 x 60 = 42,336,000 bits → / 8 = 5,292,000 bytes ≈ 5.03 MiB
+          </div>
+        </div>
+
+        <div class="notes-tip">✏️ <strong>Exam tip:</strong> Always show your working. Calculate in bits first, then divide by 8 for bytes. Then convert to larger units by dividing by 1024 (IEC) or 1000 (SI) as needed.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ QUIZ ════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div class="q-prog-wrap">
+      <div class="q-prog-bar"><div class="q-prog-fill" id="qprog" style="width:0%"></div></div>
+      <div class="q-score">Score: <span id="qscore">0</span>/<span id="qtotal">15</span></div>
+    </div>
+    <div id="quiz-area">
+      <div class="q-card">
+        <div class="q-num" id="qnum">Question 1 of 15</div>
+        <div class="q-text" id="qtext"></div>
+        <div class="q-opts" id="qopts"></div>
+        <div class="q-fb" id="qfb"></div>
+        <div style="text-align:right;margin-top:14px"><button class="btn btn-teal" id="qnext" onclick="nextQ()" style="display:none">Next Question →</button></div>
+      </div>
+    </div>
+    <div id="quiz-result" style="display:none">
+      <div class="q-result">
+        <h2>Topic 3.3 Complete!</h2>
+        <div class="big-score" id="qfinal"></div>
+        <p style="font-family:'Kalam',cursive;font-size:1rem;margin:12px 0 20px" id="qmsg"></p>
+        <button class="btn btn-primary" onclick="restartQuiz()">↺ Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ ACTIVITIES ════════════ -->
+  <div class="tab-panel" id="tab-activities">
+
+    <!-- Activity 1: Unit Converter -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-blue)">
+        <span class="act-icon">📏</span>
+        <div>
+          <div class="act-title" style="color:var(--blue)">Activity 1 — Storage Unit Converter</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Convert between bytes, KiB, MiB, GiB</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="converter-box">
+          <div class="converter-row">
+            <input type="number" id="unit-val" class="converter-input" value="2048" style="width:120px">
+            <select id="unit-from" class="converter-input" style="width:100px">
+              <option value="bytes">Bytes</option>
+              <option value="KiB">KiB</option>
+              <option value="MiB">MiB</option>
+              <option value="GiB">GiB</option>
+            </select>
+            <button class="converter-button" onclick="convertUnits()">Convert →</button>
+          </div>
+          <div id="unit-result" style="margin-top:12px;font-family:'Caveat',cursive;font-size:1.2rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 2: RLE Encoder -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-purple)">
+        <span class="act-icon">🔢</span>
+        <div>
+          <div class="act-title" style="color:var(--purple)">Activity 2 — RLE Encoder / Decoder</div>
+          <div style="font-family:'Kalam',cursive;font-size:.9rem;color:#555">Enter data to encode with RLE, or RLE data to decode</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1;min-width:200px">
+            <label style="font-family:'Kalam',cursive;font-size:.9rem;display:block;margin-bottom:4px"><strong>Raw data (e.g. AAAABBBCC):</strong></label>
+            <input type="text" id="rle-input" class="converter-input" style="width:100%" placeholder="e.g. AAAABBBCC" value="WWWWBBWWWWBBWWWW">
+            <button class="btn btn-teal" onclick="encodeRLE()" style="margin-top:8px">Encode →</button>
+            <div id="rle-encoded" style="margin-top:8px;font-family:monospace;font-size:1.1rem;padding:8px;background:#f5f5f5;border-radius:6px;min-height:30px"></div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <label style="font-family:'Kalam',cursive;font-size:.9rem;display:block;margin-bottom:4px"><strong>RLE data (e.g. 4A3B2C):</strong></label>
+            <input type="text" id="rle-decode-input" class="converter-input" style="width:100%" placeholder="e.g. 4A3B2C" value="5W2B4W2B5W">
+            <button class="btn btn-primary" onclick="decodeRLE()" style="margin-top:8px">Decode →</button>
+            <div id="rle-decoded" style="margin-top:8px;font-family:monospace;font-size:1.1rem;padding:8px;background:#f5f5f5;border-radius:6px;min-height:30px;word-break:break-all"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 3: Match -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-teal)">
+        <span class="act-icon">🔗</span>
+        <div>
+          <div class="act-title" style="color:#059669">Activity 3 — Match Terms to Definitions</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="match-grid">
+          <div id="match-left"></div>
+          <div id="match-right"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <button class="btn" onclick="resetMatch()" style="background:white">↺ Reset</button>
+          <span id="match-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 4: Fill in the Blanks -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:var(--light-yellow)">
+        <span class="act-icon">✍️</span>
+        <div>
+          <div class="act-title" style="color:var(--orange)">Activity 4 — Fill in the Blanks</div>
+        </div>
+      </div>
+      <div class="act-bdy">
+        <div class="word-bank" id="word-bank"></div>
+        <div class="fill-para" id="fill-para"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn btn-primary" onclick="checkFill()">✓ Check</button>
+          <button class="btn btn-teal" onclick="revealFill()">👁 Reveal</button>
+          <button class="btn" onclick="resetFill()" style="background:white">↺ Reset</button>
+          <span id="fill-score" style="font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--teal);align-self:center"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity 5: True/False -->
+    <div class="act-card">
+      <div class="act-hdr" style="background:#fff3e0">
+        <span class="act-icon">🧠</span>
+        <div>
+          <div class="act-title" style="color:var(--orange)">Activity 5 — True or False?</div>
+        </div>
+      </div>
+      <div class="act-bdy" id="tf-area"></div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ EXAM QUESTIONS ════════════ -->
+  <div class="tab-panel" id="tab-exam">
+    <div class="tip-box">📝 <strong>Exam Questions — Section 3.3:</strong> Write your answer, then reveal the mark scheme. Use precise technical vocabulary.</div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c1"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 1</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">State how many bytes are in: (a) one kibibyte (KiB), and (b) one kilobyte (kB).</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>(a) 1 KiB = 1024 bytes (1 mark)</li>
+          <li>(b) 1 kB = 1000 bytes (1 mark)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c2"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 2</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Convert 4,096 KiB into MiB. Show your working.</div>
+        <textarea class="ans-ta" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>4,096 / 1024 = 4 MiB (1 mark for working, 1 mark for answer)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c3"><div class="eq-num"><span class="tag tag-easy">EASY</span> Question 3</div><div class="eq-marks">[2 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">State the difference between lossless and lossy compression.</div>
+        <textarea class="ans-ta" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>Lossless: no data is lost / original file can be perfectly restored (1)</li>
+          <li>Lossy: some data is permanently discarded / original file cannot be restored (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c4"><div class="eq-num"><span class="tag tag-med">MED</span> Question 4</div><div class="eq-marks">[3 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain why JPEG is described as a lossy compression algorithm.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 3):</div><ul>
+          <li>JPEG discards some image data during compression (1)</li>
+          <li>It removes colour detail that the human eye is less sensitive to / uses perceptual encoding (1)</li>
+          <li>The discarded data cannot be recovered / the original image cannot be perfectly restored (1)</li>
+          <li>This results in a much smaller file size than the original (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c5"><div class="eq-num"><span class="tag tag-med">MED</span> Question 5</div><div class="eq-marks">[3 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Explain how run-length encoding (RLE) compresses data. Use an example in your answer.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>RLE replaces consecutive repeated values (runs) with a count and a single value (1)</li>
+          <li>For example, AAAABBBCC becomes 4A3B2C (1)</li>
+          <li>This reduces the number of values stored, making the file smaller (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c6"><div class="eq-num"><span class="tag tag-med">MED</span> Question 6</div><div class="eq-marks">[4 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">A bitmap image has a resolution of 800 x 600 pixels and a colour depth of 24 bits. Calculate the file size in: (a) bytes, (b) KiB (to 1 decimal place). Show your working.</div>
+        <textarea class="ans-ta" style="min-height:120px" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>File size = 800 x 600 x 24 = 11,520,000 bits (1)</li>
+          <li>(a) 11,520,000 / 8 = 1,440,000 bytes (1)</li>
+          <li>(b) 1,440,000 / 1024 = 1,406.25 KiB ≈ 1,406.3 KiB (2 marks: 1 for dividing by 1024, 1 for answer)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c1"><div class="eq-num"><span class="tag tag-med">MED</span> Question 7</div><div class="eq-marks">[3 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">A text file contains 2,000 characters encoded using Unicode (16 bits per character). Calculate the file size in KiB. Show your working.</div>
+        <textarea class="ans-ta" style="min-height:100px" placeholder="Show your working..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>2,000 x 16 = 32,000 bits (1)</li>
+          <li>32,000 / 8 = 4,000 bytes (1)</li>
+          <li>4,000 / 1024 = 3.90625 KiB ≈ 3.9 KiB (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c2"><div class="eq-num"><span class="tag tag-hard">HARD</span> Question 8</div><div class="eq-marks">[4 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-ctx">A 1-bit bitmap image has a resolution of 20 x 10 pixels. One row of the image is: W W W W B B B B W W W W B B B B W W W W (where W = white, B = black).</div>
+        <div class="eq-txt">(a) Write this row using RLE. (b) Explain why RLE would not be effective for compressing a photograph.</div>
+        <textarea class="ans-ta" style="min-height:140px" placeholder="Write your answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme:</div><ul>
+          <li>(a) 4W4B4W4B4W or 4,0,4,1,4,0,4,1,4,0 (2 marks: 1 for correct counts, 1 for correct format)</li>
+          <li>(b) A photograph has very few runs of repeated pixel values (1) because colours change gradually and vary between almost every pixel (1), so RLE would produce little or no compression and could even increase file size</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="eq-wrap">
+      <div class="eq-hdr c3"><div class="eq-num"><span class="tag tag-hard">HARD</span> Question 9</div><div class="eq-marks">[6 marks]</div></div>
+      <div class="eq-bdy">
+        <div class="eq-txt">Compare lossless and lossy compression methods. In your answer, explain: (a) how each method works, (b) when each would be appropriate, (c) give a named example of each, and (d) explain why MP3 is a lossy algorithm.</div>
+        <textarea class="ans-ta" style="min-height:180px" placeholder="Write your extended answer here..."></textarea>
+        <button class="show-ms" onclick="toggleMS(this)">👁 Show Mark Scheme</button>
+        <div class="ms"><div class="ms-lbl">Mark Scheme (any 6):</div><ul>
+          <li>(a) Lossless: no data is lost; original can be perfectly restored / Lossy: some data is permanently discarded; original cannot be restored (1)</li>
+          <li>(b) Lossless is appropriate when data must be exact: program code, text files, medical images / Lossy is appropriate when small loss of quality is acceptable: photos, music, video (1)</li>
+          <li>(c) Lossless example: RLE, PNG, FLAC, ZIP / Lossy example: JPEG, MP3 (1)</li>
+          <li>(d) MP3 is lossy because it permanently removes audio data that the human ear cannot easily detect (1)</li>
+          <li>It uses a psychoacoustic model to discard sounds masked by louder sounds and frequencies outside human hearing (1)</li>
+          <li>The discarded data cannot be recovered, so the original audio cannot be perfectly restored (1)</li>
+        </ul></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ══ TABS ══
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+function toggleSection(id){
+  const bdy=document.getElementById(id).querySelector('.notes-bdy');
+  const tog=document.getElementById(id).querySelector('.notes-tog');
+  const open=bdy.classList.toggle('open');
+  tog.style.transform=open?'rotate(180deg)':'';
+}
+
+function toggleImp(hdr){
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+  const tog=hdr.querySelector('.tog');
+  tog.textContent=body.classList.contains('open')?'▲ collapse':'▼ expand';
+}
+
+function toggleMS(btn){
+  const ms=btn.nextElementSibling;
+  const showing=ms.classList.toggle('show');
+  btn.textContent=showing?'🙈 Hide Mark Scheme':'👁 Show Mark Scheme';
+}
+
+// ══════════════════
+// QUIZ
+// ══════════════════
+const questions=[
+  {q:"How many bytes are in one kibibyte (KiB)?",opts:["1000","1024","512","2048"],a:1,fb:"1 KiB = 2^10 = 1024 bytes. IEC units use powers of 2. A kilobyte (kB) = 1000 bytes (power of 10)."},
+  {q:"What is a nibble?",opts:["1 bit","2 bits","4 bits","8 bits"],a:2,fb:"A nibble = 4 bits (half a byte). It can represent 16 values (0–15)."},
+  {q:"1 GiB is equal to:",opts:["10^9 bytes","2^30 bytes","2^20 bytes","1000 MiB"],a:1,fb:"1 GiB = 2^30 = 1,073,741,824 bytes. IEC units use powers of 2. 10^9 bytes = 1 GB (SI unit)."},
+  {q:"Which is a lossy compression algorithm?",opts:["RLE","PNG","JPEG","FLAC"],a:2,fb:"JPEG is lossy — it discards image data the human eye is less sensitive to. RLE, PNG and FLAC are all lossless."},
+  {q:"What is the main advantage of lossy compression over lossless?",opts:["No data is lost","Better compression ratio / smaller files","Original can be restored","It is faster to compress"],a:1,fb:"Lossy achieves much higher compression ratios (smaller files) because it can discard data. The trade-off is that the original cannot be restored."},
+  {q:"RLE encodes AAAABBBCC as:",opts:["AB3C2A4","4A3B2C","A4B3C2","4-3-2"],a:1,fb:"RLE replaces runs with count+value: 4 A's + 3 B's + 2 C's = 4A3B2C."},
+  {q:"RLE is a ________ compression method:",opts:["Lossy","Lossless","Destructive","Perceptual"],a:1,fb:"RLE is lossless — the original data can be perfectly reconstructed from the encoded data. No information is lost."},
+  {q:"Why does a '500 GB' hard drive show as ~465 GiB in the OS?",opts:["The drive is faulty","GB uses 10^9 but GiB uses 2^30","The OS uses a different file system","Some space is reserved"],a:1,fb:"Manufacturers use GB (10^9 = 1,000,000,000) but OS uses GiB (2^30 = 1,073,741,824). 500,000,000,000 / 1,073,741,824 ≈ 465.6 GiB."},
+  {q:"MP3 achieves compression by:",opts:["Removing all high frequencies","Discarding sounds the human ear cannot easily detect","Reducing the sample rate","Using RLE on audio data"],a:1,fb:"MP3 uses a psychoacoustic model to discard sounds masked by louder ones and frequencies outside human hearing. This is why it's lossy."},
+  {q:"Calculate the file size in bytes: 1000 ASCII characters (7 bits each).",opts:["7000","875","1000","700"],a:1,fb:"1000 x 7 = 7,000 bits. 7,000 / 8 = 875 bytes. Always divide by 8 to convert bits to bytes."},
+  {q:"An image is 640x480 with 8-bit colour depth. File size in KiB?",opts:["300","2400","307,200","306.9"],a:0,fb:"640 x 480 x 8 = 2,457,600 bits / 8 = 307,200 bytes / 1024 = 300 KiB."},
+  {q:"RLE works BEST on data that has:",opts:["No repeated values","Alternating values (ABABAB)","Long runs of repeated values","Random data"],a:2,fb:"RLE works best when data has long consecutive runs of the same value. With no runs, RLE provides no compression (or can even increase size)."},
+  {q:"1 TiB equals:",opts:["10^12 bytes","2^40 bytes","1000 GiB","2^30 bytes"],a:1,fb:"1 TiB = 2^40 = 1,099,511,627,776 bytes. 10^12 bytes = 1 TB (SI unit). 2^30 = 1 GiB."},
+  {q:"Which is NOT an example of lossless compression?",opts:["PNG","FLAC","ZIP","MP3"],a:3,fb:"MP3 is lossy. PNG, FLAC and ZIP are all lossless — the original data can be perfectly restored."},
+  {q:"A sound file: 44,100 Hz, 16-bit, 10 seconds. File size in bytes?",opts:["882,000","7,056,000","8,820,000","1,411,200"],a:2,fb:"44,100 x 16 x 10 = 7,056,000 bits / 8 = 882,000 bytes. Wait — let me recalculate: 44,100 x 16 x 10 = 7,056,000 bits / 8 = 882,000 bytes. The answer is 882,000."},
+];
+
+let qIndex=0,qScore=0;
+document.getElementById('qtotal').textContent=questions.length;
+
+function loadQ(){
+  if(qIndex>=questions.length){showResult();return}
+  const q=questions[qIndex];
+  document.getElementById('qnum').textContent=`Question ${qIndex+1} of ${questions.length}`;
+  document.getElementById('qtext').textContent=q.q;
+  const fb=document.getElementById('qfb');fb.className='q-fb';fb.textContent='';
+  document.getElementById('qnext').style.display='none';
+  const opts=document.getElementById('qopts');opts.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');btn.className='q-opt';btn.textContent=opt;
+    btn.onclick=()=>{
+      if(btn.disabled)return;
+      opts.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+      if(i===q.a){btn.classList.add('correct');qScore++;document.getElementById('qscore').textContent=qScore;fb.className='q-fb show fb-ok';fb.textContent='Correct! '+q.fb}
+      else{btn.classList.add('wrong');opts.querySelectorAll('.q-opt')[q.a].classList.add('correct');fb.className='q-fb show fb-no';fb.textContent=q.fb}
+      const pct=((qIndex+1)/questions.length)*100;
+      document.getElementById('qprog').style.width=pct+'%';
+      document.getElementById('qnext').style.display='inline-block';
+    };
+    opts.appendChild(btn);
+  });
+}
+function nextQ(){qIndex++;loadQ()}
+function showResult(){
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-result').style.display='block';
+  document.getElementById('qfinal').textContent=`${qScore}/${questions.length}`;
+  const pct=qScore/questions.length;
+  document.getElementById('qmsg').textContent=pct<0.5?'Keep revising! Work through the Notes tab carefully.':pct<0.75?'Good effort! Review the explanations for questions you missed.':pct<0.9?'Strong performance! Almost there.':'Excellent! You have mastered Topic 3.3.';
+}
+function restartQuiz(){qIndex=0;qScore=0;document.getElementById('qscore').textContent='0';document.getElementById('qprog').style.width='0%';document.getElementById('quiz-result').style.display='none';document.getElementById('quiz-area').style.display='block';loadQ()}
+loadQ();
+
+// ══════════════════
+// ACTIVITY 1: UNIT CONVERTER
+// ══════════════════
+function convertUnits(){
+  const val=parseFloat(document.getElementById('unit-val').value);
+  const from=document.getElementById('unit-from').value;
+  if(isNaN(val)||val<0){document.getElementById('unit-result').innerHTML='<span style="color:red">Enter a valid number</span>';return}
+  let bytes;
+  switch(from){
+    case 'bytes':bytes=val;break;
+    case 'KiB':bytes=val*1024;break;
+    case 'MiB':bytes=val*1024*1024;break;
+    case 'GiB':bytes=val*1024*1024*1024;break;
+  }
+  const kib=bytes/1024;
+  const mib=kib/1024;
+  const gib=mib/1024;
+  document.getElementById('unit-result').innerHTML=`
+    <strong>${bytes.toLocaleString()} bytes</strong> =
+    <strong>${kib.toFixed(2)} KiB</strong> =
+    <strong>${mib.toFixed(4)} MiB</strong> =
+    <strong>${gib.toFixed(6)} GiB</strong>
+  `;
+}
+
+// ══════════════════
+// ACTIVITY 2: RLE ENCODER/DECODER
+// ══════════════════
+function encodeRLE(){
+  const input=document.getElementById('rle-input').value;
+  if(!input){document.getElementById('rle-encoded').textContent='Enter data first';return}
+  let encoded='';
+  let count=1;
+  for(let i=1;i<=input.length;i++){
+    if(i<input.length&&input[i]===input[i-1]){count++}
+    else{encoded+=count+input[i-1];count=1}
+  }
+  const ratio=((input.length-encoded.length)/input.length*100).toFixed(1);
+  document.getElementById('rle-encoded').innerHTML=`<strong>${encoded}</strong><br><span style="font-size:.8rem;color:#555">${input.length} chars → ${encoded.length} items (${ratio}% reduction)</span>`;
+}
+
+function decodeRLE(){
+  const input=document.getElementById('rle-decode-input').value;
+  if(!input){document.getElementById('rle-decoded').textContent='Enter RLE data first';return}
+  let decoded='';
+  const pairs=input.match(/(\d+)(\D)/g);
+  if(!pairs){document.getElementById('rle-decoded').textContent='Invalid RLE format';return}
+  pairs.forEach(pair=>{
+    const count=parseInt(pair.slice(0,-1));
+    const char=pair.slice(-1);
+    decoded+=char.repeat(count);
+  });
+  document.getElementById('rle-decoded').innerHTML=`<strong>${decoded}</strong><br><span style="font-size:.8rem;color:#555">${input.length} items → ${decoded.length} chars</span>`;
+}
+
+// ══════════════════
+// ACTIVITY 3: MATCH
+// ══════════════════
+const matchPairs=[
+  {left:'Bit',right:'Single binary digit (0 or 1)'},
+  {left:'Nibble',right:'4 bits'},
+  {left:'Byte',right:'8 bits — fundamental unit of storage'},
+  {left:'KiB',right:'1024 bytes (2^10)'},
+  {left:'Lossless',right:'No data lost — original can be perfectly restored'},
+  {left:'Lossy',right:'Some data discarded — original cannot be restored'},
+  {left:'RLE',right:'Replace repeated runs with count + value'},
+  {left:'JPEG',right:'Lossy image compression using perceptual encoding'},
+];
+let matchSel=null,matchScore=0;
+function buildMatch(){
+  matchSel=null;matchScore=0;
+  const left=document.getElementById('match-left'),right=document.getElementById('match-right');
+  left.innerHTML='';right.innerHTML='';
+  const shuffRight=[...matchPairs].sort(()=>Math.random()-0.5);
+  matchPairs.forEach((p,i)=>{
+    const l=document.createElement('div');l.className='match-item';l.textContent=p.left;l.dataset.pair=i;l.onclick=()=>handleMatch(l,'left');left.appendChild(l);
+  });
+  shuffRight.forEach(p=>{
+    const r=document.createElement('div');r.className='match-item';r.textContent=p.right;r.dataset.pair=matchPairs.indexOf(p);r.onclick=()=>handleMatch(r,'right');right.appendChild(r);
+  });
+  document.getElementById('match-score').textContent='';
+}
+function handleMatch(el,side){
+  if(el.classList.contains('ok'))return;
+  if(!matchSel){
+    document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));
+    el.classList.add('sel');matchSel={el,side};
+  }else{
+    if(matchSel.side===side){document.querySelectorAll('.match-item.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');matchSel={el,side};return}
+    const a=matchSel.el,b=el;
+    if(a.dataset.pair===b.dataset.pair){
+      a.classList.remove('sel');a.classList.add('ok');b.classList.add('ok');matchScore++;
+      const sc=document.getElementById('match-score');
+      sc.textContent=matchScore===matchPairs.length?'All matched!':`${matchScore}/${matchPairs.length} matched`;
+      sc.style.color=matchScore===matchPairs.length?'var(--teal)':'var(--blue)';
+    }else{
+      a.classList.add('bad');b.classList.add('bad');
+      setTimeout(()=>{a.classList.remove('bad','sel');b.classList.remove('bad')},600);
+    }
+    matchSel=null;
+  }
+}
+function resetMatch(){buildMatch()}
+buildMatch();
+
+// ══════════════════
+// ACTIVITY 4: FILL BLANKS
+// ══════════════════
+const fillWords=['bit','nibble','byte','KiB','MiB','lossless','lossy','JPEG','MP3','RLE'];
+const fillAnswers={B0:'bit',B1:'nibble',B2:'byte',B3:'KiB',B4:'MiB',B5:'lossless',B6:'lossy',B7:'JPEG',B8:'MP3',B9:'RLE'};
+let fillState={};Object.keys(fillAnswers).forEach(k=>fillState[k]='');
+let fillSel=null;
+
+const fillTemplate=`A <span class="blank" data-b="B0">__B0__</span> is a single binary digit (0 or 1). Four bits make a <span class="blank" data-b="B1">__B1__</span>, and eight bits make a <span class="blank" data-b="B2">__B2__</span>. 1024 bytes = 1 <span class="blank" data-b="B3">__B3__</span>, and 1024 KiB = 1 <span class="blank" data-b="B4">__B4__</span>. <span class="blank" data-b="B5">__B5__</span> compression preserves all data so the original can be restored. <span class="blank" data-b="B6">__B6__</span> compression discards some data permanently. <span class="blank" data-b="B7">__B7__</span> is a lossy image format, and <span class="blank" data-b="B8">__B8__</span> is a lossy audio format. <span class="blank" data-b="B9">__B9__</span> is a lossless method that replaces repeated runs with a count and value.`;
+
+function buildFill(){
+  const wb=document.getElementById('word-bank');wb.innerHTML='';
+  fillWords.forEach(w=>{
+    const d=document.createElement('span');d.className='word';d.textContent=w;d.dataset.word=w;
+    d.onclick=()=>{
+      if(!fillSel)return;
+      const prev=Object.keys(fillState).find(k=>fillState[k]===w);
+      if(prev)fillState[prev]='';
+      fillState[fillSel]=w;
+      document.querySelectorAll('.word').forEach(x=>x.classList.remove('sel'));
+      fillSel=null;renderFill();
+    };
+    wb.appendChild(d);
+  });
+  renderFill();
+}
+function renderFill(){
+  const wrap=document.getElementById('fill-para');
+  let html=fillTemplate;
+  Object.keys(fillAnswers).forEach(k=>{html=html.replace(`__${k}__`,fillState[k]||'&nbsp;&nbsp;&nbsp;')});
+  wrap.innerHTML=html;
+  wrap.querySelectorAll('.blank').forEach(b=>{
+    const k=b.dataset.b;
+    if(fillState[k])b.classList.add('filled');
+    if(fillSel===k)b.classList.add('sel-b');
+    b.onclick=()=>{fillSel=k;wrap.querySelectorAll('.blank').forEach(x=>x.classList.remove('sel-b'));b.classList.add('sel-b')};
+  });
+  document.querySelectorAll('#word-bank .word').forEach(w=>{
+    w.classList.toggle('used',Object.values(fillState).includes(w.dataset.word));
+  });
+}
+function checkFill(){
+  let ok=0;
+  Object.keys(fillAnswers).forEach(k=>{
+    const b=document.querySelector(`#fill-para [data-b="${k}"]`);if(!b)return;
+    if(fillState[k]===fillAnswers[k]){b.classList.add('ok');b.classList.remove('bad');ok++}
+    else if(fillState[k]){b.classList.add('bad');b.classList.remove('ok')}
+  });
+  const sc=document.getElementById('fill-score');
+  sc.textContent=`${ok}/10`;sc.style.color=ok===10?'var(--teal)':'var(--coral)';
+}
+function revealFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]=fillAnswers[k]);renderFill();checkFill()}
+function resetFill(){Object.keys(fillAnswers).forEach(k=>fillState[k]='');fillSel=null;renderFill();document.getElementById('fill-score').textContent=''}
+buildFill();
+
+// ══════════════════
+// ACTIVITY 5: TRUE/FALSE
+// ══════════════════
+const tfItems=[
+  {q:'1 KiB is exactly equal to 1000 bytes.',ans:false,exp:'False. 1 KiB = 1024 bytes (2^10). 1 kB = 1000 bytes (10^3). KiB uses powers of 2.'},
+  {q:'Lossless compression allows the original data to be perfectly restored.',ans:true,exp:'True! Lossless = no data lost. Examples: RLE, PNG, FLAC, ZIP.'},
+  {q:'JPEG is a lossless image compression format.',ans:false,exp:'False. JPEG is lossy — it discards image data the human eye is less sensitive to. PNG is lossless.'},
+  {q:'RLE works best on data with long consecutive runs of the same value.',ans:true,exp:'True! RLE replaces repeated runs with count+value. The longer the runs, the better the compression.'},
+  {q:'A nibble consists of 8 bits.',ans:false,exp:'False. A nibble = 4 bits (half a byte). A byte = 8 bits.'},
+  {q:'MP3 uses a psychoacoustic model to discard sounds the human ear cannot easily detect.',ans:true,exp:'True! MP3 removes masked frequencies and sounds outside human hearing range. This is why it is lossy.'},
+  {q:'1 GiB is larger than 1 GB.',ans:true,exp:'True! 1 GiB = 2^30 = 1,073,741,824 bytes. 1 GB = 10^9 = 1,000,000,000 bytes. GiB is about 7.4% larger.'},
+  {q:'RLE can increase file size if the data has no repeated runs.',ans:true,exp:'True! If every value is different (e.g. ABCDEF), RLE adds a count of 1 before each, making it longer: 1A1B1C1D1E1F.'},
+];
+function buildTF(){
+  const area=document.getElementById('tf-area');area.innerHTML='';
+  tfItems.forEach((item,i)=>{
+    const div=document.createElement('div');div.className='tf-card';
+    div.innerHTML=`<div class="tf-q">${i+1}. ${item.q}</div>
+      <div class="tf-btns">
+        <button class="tf-btn" onclick="checkTF(this,${i},true)">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,${i},false)">FALSE</button>
+      </div>
+      <div class="tf-exp" id="tf-exp-${i}"></div>`;
+    area.appendChild(div);
+  });
+}
+function checkTF(btn,i,ans){
+  const item=tfItems[i];
+  const btns=btn.closest('.tf-card').querySelectorAll('.tf-btn');
+  btns.forEach(b=>b.disabled=true);
+  const exp=document.getElementById(`tf-exp-${i}`);
+  if(ans===item.ans){
+    btn.classList.add('correct');
+    exp.className='tf-exp show';exp.style.cssText='background:#e0faf1;border-left:4px solid var(--teal)';
+  }else{
+    btn.classList.add('wrong');
+    btns.forEach(b=>{if((b.textContent==='TRUE')===item.ans)b.classList.add('correct')});
+    exp.className='tf-exp show';exp.style.cssText='background:var(--light-coral);border-left:4px solid var(--coral)';
+  }
+  exp.textContent=item.exp;
+}
+buildTF();
+</script>
+</body>
+</html>
